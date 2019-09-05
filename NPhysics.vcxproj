@@ -154,18 +154,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="NPhysicsEngine.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="source\Particle.h" />
+    <ClInclude Include="source\particle\forceGenerators\ParticleDrag.h" />
+    <ClInclude Include="source\particle\forceGenerators\ParticleGravity.h" />
+    <ClInclude Include="source\particle\Particle.h" />
+    <ClInclude Include="source\particle\IParticleForceGenerator.h" />
+    <ClInclude Include="source\particle\ParticleForceRegistry.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NPhysics.cpp" />
+    <ClCompile Include="NPhysicsEngine.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="source\Particle.cpp" />
+    <ClCompile Include="source\particle\forceGenerators\ParticleDrag.cpp" />
+    <ClCompile Include="source\particle\forceGenerators\ParticleGravity.cpp" />
+    <ClCompile Include="source\particle\Particle.cpp" />
+    <ClCompile Include="source\particle\ParticleForceRegistry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

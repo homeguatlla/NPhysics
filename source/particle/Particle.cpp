@@ -7,7 +7,8 @@ namespace NPhysics
 		mPosition(initialPosition),
 		mVelocity(initialVelocity),
 		mAcceleration(0.0f),
-		mDamping(0.995f)
+		mDamping(0.995f),
+		mInverseMass(0.0f) //by default inmovable particle
 	{
 	}
 
@@ -38,6 +39,8 @@ namespace NPhysics
 	{
 		assert(duration > 0.0f);
 
+		if (HasInfinteMass()) return;
+
 		//Update linear position
 		mPosition += mVelocity * duration;
 
@@ -52,5 +55,29 @@ namespace NPhysics
 		//WARNING this line can be removed or replaced directly by mVelocity *= mDamping;
 		//Refer to book: Game Physics Engine Development (GPED) page 52
 		mVelocity *= glm::pow(mDamping, duration);
+
+		ResetForceAccumulated();
+	}
+
+	void Particle::AddForce(const glm::vec3& force)
+	{
+		mForceAccumulated += force;
+	}
+
+	real Particle::GetMass() const
+	{
+		if (mInverseMass == 0.0f) 
+		{
+			return MAX_REAL;
+		}
+		else
+		{
+			return 1.0f / mInverseMass; 
+		}
+	}
+
+	void Particle::ResetForceAccumulated()
+	{
+		mForceAccumulated = glm::vec3(0.0f);
 	}
 }

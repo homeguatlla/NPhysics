@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\particle">
+      <UniqueIdentifier>{bc77ba1a-e9f9-4a6b-907b-29cc1899524e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\particle\forceGenerators">
+      <UniqueIdentifier>{2be3d313-f4cb-4f0c-b3e9-64da46fc8984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\particle">
+      <UniqueIdentifier>{09b76ec8-f00f-40dd-96fb-2222317e2a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\particle\forceGenerator">
+      <UniqueIdentifier>{fa2a36cb-418b-4b47-838b-e21c8955f7fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -21,18 +33,42 @@
     <ClInclude Include="pch.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="source\Particle.h">
+    <ClInclude Include="source\particle\Particle.h">
+      <Filter>Archivos de encabezado\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\IParticleForceGenerator.h">
+      <Filter>Archivos de encabezado\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\ParticleForceRegistry.h">
+      <Filter>Archivos de encabezado\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\forceGenerators\ParticleDrag.h">
+      <Filter>Archivos de encabezado\particle\forceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\forceGenerators\ParticleGravity.h">
+      <Filter>Archivos de encabezado\particle\forceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="NPhysicsEngine.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NPhysics.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="source\Particle.cpp">
+    <ClCompile Include="source\particle\Particle.cpp">
+      <Filter>Archivos de origen\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\ParticleForceRegistry.cpp">
+      <Filter>Archivos de origen\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\forceGenerators\ParticleDrag.cpp">
+      <Filter>Archivos de origen\particle\forceGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\forceGenerators\ParticleGravity.cpp">
+      <Filter>Archivos de origen\particle\forceGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="NPhysicsEngine.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
