@@ -6,6 +6,7 @@ namespace NPhysics
 	class NPhysicsEngine
 	{
 	public:
+		void AddParticle(std::shared_ptr<Particle>& particle);
 		void RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IParticleForceGenerator>& forceGenerator);
 		void Update(real duration);
 

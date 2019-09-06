@@ -10,7 +10,7 @@
 
 namespace NPhysics
 {
-	void NPhysicsEngine::RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IParticleForceGenerator>& forceGenerator)
+	void NPhysicsEngine::AddParticle(std::shared_ptr<Particle>& particle)
 	{
 		bool found = std::find(mParticles.begin(), mParticles.end(), particle) != mParticles.end();
 
@@ -18,7 +18,11 @@ namespace NPhysics
 		{
 			mParticles.push_back(particle);
 		}
+	}
 
+	void NPhysicsEngine::RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IParticleForceGenerator>& forceGenerator)
+	{
+		AddParticle(particle);
 		mRegistry.Add(particle, forceGenerator);
 	}
 

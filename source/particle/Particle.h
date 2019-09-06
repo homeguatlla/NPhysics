@@ -14,6 +14,10 @@ namespace NPhysics {
 		void SetDamping(real damping);
 		void SetMass(real mass);
 		void SetInfiniteMass();
+		void SetPosition(const glm::vec3& position);
+
+		//TODO This method must be removed and only set from constructor
+		void SetInitialVelocity(const glm::vec3& velocity);
 
 		void Integrate(real duration);
 		void AddForce(const glm::vec3& force);

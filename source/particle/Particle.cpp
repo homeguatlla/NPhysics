@@ -35,6 +35,16 @@ namespace NPhysics
 		mInverseMass = 0.0f;
 	}
 
+	void Particle::SetPosition(const glm::vec3& position)
+	{
+		mPosition = position;
+	}
+
+	void Particle::SetInitialVelocity(const glm::vec3& velocity)
+	{
+		mVelocity = velocity;
+	}
+
 	void Particle::Integrate(real duration)
 	{
 		assert(duration > 0.0f);
