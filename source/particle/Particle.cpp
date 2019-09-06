@@ -39,7 +39,7 @@ namespace NPhysics
 	{
 		assert(duration > 0.0f);
 
-		if (HasInfinteMass()) return;
+		if (!HasFiniteMass()) return;
 
 		//Update linear position
 		mPosition += mVelocity * duration;

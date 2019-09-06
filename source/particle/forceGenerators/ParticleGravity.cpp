@@ -9,7 +9,7 @@ namespace NPhysics
 
 	void ParticleGravity::UpdateForce(std::shared_ptr<Particle> particle, real duration)
 	{
-		if (!particle->HasInfinteMass()) return;
+		if (!particle->HasFiniteMass()) return;
 
 		particle->AddForce(mGravity * particle->GetMass());
 	}

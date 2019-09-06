@@ -18,7 +18,7 @@ namespace NPhysics {
 		void Integrate(real duration);
 		void AddForce(const glm::vec3& force);
 
-		bool HasInfinteMass() const { return mInverseMass <= 0.0f; }
+		bool HasFiniteMass() const { return mInverseMass > 0.0f; }
 		glm::vec3 GetPosition() const { return mPosition; }
 		glm::vec3 GetVelocity() const { return mVelocity; }
 		glm::vec3 GetAcceleration() const { return mAcceleration; }

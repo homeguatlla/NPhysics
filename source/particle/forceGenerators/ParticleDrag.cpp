@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ParticleDrag.h"
+#include <glm/gtx/norm.hpp>
 
 namespace NPhysics
 {
@@ -14,7 +15,12 @@ namespace NPhysics
 		real dragCoeff = glm::length(force);
 		dragCoeff = mK1 * dragCoeff + mK2 * dragCoeff * dragCoeff;
 		
-		force = glm::normalize(force);
+		//We can not normalize a force = 0.0f vector
+		if (glm::length2(force) >= EPSILON * EPSILON)
+		{
+			force = glm::normalize(force);
+		}
+
 		force *= -dragCoeff;
 
 		particle->AddForce(force);
