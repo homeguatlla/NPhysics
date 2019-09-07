@@ -7,6 +7,7 @@ namespace NPhysics
 	{
 	public:
 		explicit ParticleGravity(const glm::vec3& gravity);
+		virtual ~ParticleGravity() = default;
 
 		// Heredado vía IParticleForceGenerator
 		void UpdateForce(std::shared_ptr<Particle> particle, real duration) override;

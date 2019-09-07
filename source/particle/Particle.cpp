@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Particle.h"
 
+#include <iostream>
+
 namespace NPhysics
 {
 	NPhysics::Particle::Particle(const glm::vec3& initialPosition, const glm::vec3& initialVelocity) :
@@ -50,7 +52,7 @@ namespace NPhysics
 		assert(duration > 0.0f);
 
 		if (!HasFiniteMass()) return;
-
+	
 		//Update linear position
 		mPosition += mVelocity * duration;
 
@@ -65,6 +67,8 @@ namespace NPhysics
 		//WARNING this line can be removed or replaced directly by mVelocity *= mDamping;
 		//Refer to book: Game Physics Engine Development (GPED) page 52
 		mVelocity *= glm::pow(mDamping, duration);
+
+		//std::cout << "Velocity: " << mVelocity.y << "\n";
 
 		ResetForceAccumulated();
 	}

@@ -51,6 +51,9 @@
     <ClInclude Include="NPhysicsEngine.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="source\particle\forceGenerators\ParticleBuoyancy.h">
+      <Filter>Archivos de encabezado\particle\forceGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="NPhysicsEngine.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\forceGenerators\ParticleBuoyancy.cpp">
+      <Filter>Archivos de origen\particle\forceGenerator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

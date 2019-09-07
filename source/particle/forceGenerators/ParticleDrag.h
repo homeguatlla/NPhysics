@@ -7,6 +7,7 @@ namespace NPhysics
 	{
 	public:
 		explicit ParticleDrag(real k1, real k2);
+		virtual ~ParticleDrag() = default;
 
 		// Heredado vía IParticleForceGenerator
 		void UpdateForce(std::shared_ptr<Particle> particle, real duration) override;
