@@ -68,8 +68,6 @@ namespace NPhysics
 		//Refer to book: Game Physics Engine Development (GPED) page 52
 		mVelocity *= glm::pow(mDamping, duration);
 
-		//std::cout << "Velocity: " << mVelocity.y << "\n";
-
 		ResetForceAccumulated();
 	}
 
