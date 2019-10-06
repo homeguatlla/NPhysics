@@ -7,6 +7,7 @@
 
 #include <glm/glm.hpp>
 #include <algorithm>
+#include <iostream>
 
 namespace NPhysics
 {
@@ -22,6 +23,8 @@ namespace NPhysics
 
 	void NPhysicsEngine::RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IParticleForceGenerator>& forceGenerator)
 	{
+		assert(particle);
+
 		AddParticle(particle);
 		mRegistry.Add(particle, forceGenerator);
 	}
@@ -33,6 +36,7 @@ namespace NPhysics
 		for (auto particle : mParticles)
 		{
 			particle->Integrate(duration);
+			//std::cout << "velocity: " << particle->GetVelocity().x << ", " << particle->GetVelocity().y << ", " << particle->GetVelocity().z << "\n";
 		}
 	}
 }

@@ -88,6 +88,11 @@ namespace NPhysics
 		}
 	}
 
+	real Particle::GetInverseMass() const
+	{
+		return mInverseMass;
+	}
+
 	void Particle::ResetForceAccumulated()
 	{
 		mForceAccumulated = glm::vec3(0.0f);

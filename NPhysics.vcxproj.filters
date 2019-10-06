@@ -25,6 +25,12 @@
     <Filter Include="Archivos de origen\particle\forceGenerator">
       <UniqueIdentifier>{fa2a36cb-418b-4b47-838b-e21c8955f7fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\particle\collisionProcessing">
+      <UniqueIdentifier>{0c4e05fc-d57d-45cd-9824-773a0662dd65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\particle\collisionProcessing">
+      <UniqueIdentifier>{ceaa33d2-d25f-4e91-86f7-b2106e388de6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -54,6 +60,15 @@
     <ClInclude Include="source\particle\forceGenerators\ParticleBuoyancy.h">
       <Filter>Archivos de encabezado\particle\forceGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="source\particle\forceGenerators\ParticleImpulse.h">
+      <Filter>Archivos de encabezado\particle\forceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\collisionProcessing\ParticleContact.h">
+      <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\collisionProcessing\ParticleContactResolver.h">
+      <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -76,6 +91,15 @@
     </ClCompile>
     <ClCompile Include="source\particle\forceGenerators\ParticleBuoyancy.cpp">
       <Filter>Archivos de origen\particle\forceGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\forceGenerators\ParticleImpulse.cpp">
+      <Filter>Archivos de origen\particle\forceGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\collisionProcessing\ParticleContact.cpp">
+      <Filter>Archivos de origen\particle\collisionProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\collisionProcessing\ParticleContactResolver.cpp">
+      <Filter>Archivos de origen\particle\collisionProcessing</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

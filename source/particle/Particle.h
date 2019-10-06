@@ -16,7 +16,6 @@ namespace NPhysics {
 		void SetInfiniteMass();
 		void SetPosition(const glm::vec3& position);
 
-		//TODO This method must be removed and only set from constructor
 		void SetInitialVelocity(const glm::vec3& velocity);
 
 		void Integrate(real duration);
@@ -27,6 +26,7 @@ namespace NPhysics {
 		glm::vec3 GetVelocity() const { return mVelocity; }
 		glm::vec3 GetAcceleration() const { return mAcceleration; }
 		real GetMass() const;
+		real GetInverseMass() const;
 
 	private:
 		void ResetForceAccumulated();

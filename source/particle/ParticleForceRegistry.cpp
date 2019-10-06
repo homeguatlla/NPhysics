@@ -6,6 +6,9 @@
 namespace NPhysics {
 	void ParticleForceRegistry::Add(std::shared_ptr<Particle>& particle, std::shared_ptr<IParticleForceGenerator>& forceGenerator)
 	{
+		assert(particle);
+		assert(forceGenerator);
+
 		ParticleForceRegistration registry(particle, forceGenerator);
 		mRegistrations.push_back(registry);
 	}
