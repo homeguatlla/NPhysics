@@ -69,6 +69,24 @@
     <ClInclude Include="source\particle\collisionProcessing\ParticleContactResolver.h">
       <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleLink.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleCable.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleRod.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\collisionProcessing\ParticleCable.h">
+      <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\collisionProcessing\ParticleLink.h">
+      <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\collisionProcessing\ParticleRod.h">
+      <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -99,6 +117,15 @@
       <Filter>Archivos de origen\particle\collisionProcessing</Filter>
     </ClCompile>
     <ClCompile Include="source\particle\collisionProcessing\ParticleContactResolver.cpp">
+      <Filter>Archivos de origen\particle\collisionProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\collisionProcessing\ParticleCable.cpp">
+      <Filter>Archivos de origen\particle\collisionProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\collisionProcessing\ParticleLink.cpp">
+      <Filter>Archivos de origen\particle\collisionProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\collisionProcessing\ParticleRod.cpp">
       <Filter>Archivos de origen\particle\collisionProcessing</Filter>
     </ClCompile>
   </ItemGroup>
