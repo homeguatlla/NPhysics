@@ -1,9 +1,12 @@
 #pragma once
-#include "../IParticleForceGenerator.h"
+#include "../../IForceGenerator.h"
+#include <glm/glm.hpp>
 
 namespace NPhysics
 {
-	class ParticleGravity : public IParticleForceGenerator
+	class Particle;
+
+	class ParticleGravity : public IForceGenerator<Particle>
 	{
 	public:
 		explicit ParticleGravity(const glm::vec3& gravity);

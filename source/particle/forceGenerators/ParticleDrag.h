@@ -1,9 +1,12 @@
 #pragma once
-#include "../IParticleForceGenerator.h"
+#include "../../framework.h"
+#include "../../IForceGenerator.h"
 
 namespace NPhysics
 {
-	class ParticleDrag : public IParticleForceGenerator
+	class Particle;
+
+	class ParticleDrag : public IForceGenerator<Particle>
 	{
 	public:
 		explicit ParticleDrag(real k1, real k2);

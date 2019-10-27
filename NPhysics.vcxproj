@@ -158,10 +158,9 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="NPhysicsEngine.h" />
-    <ClInclude Include="ParticleCable.h" />
-    <ClInclude Include="ParticleLink.h" />
-    <ClInclude Include="ParticleRod.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="source\ForceRegistry.h" />
+    <ClInclude Include="source\IForceGenerator.h" />
     <ClInclude Include="source\particle\collisionProcessing\ParticleCable.h" />
     <ClInclude Include="source\particle\collisionProcessing\ParticleContact.h" />
     <ClInclude Include="source\particle\collisionProcessing\ParticleContactResolver.h" />
@@ -172,8 +171,10 @@
     <ClInclude Include="source\particle\forceGenerators\ParticleGravity.h" />
     <ClInclude Include="source\particle\forceGenerators\ParticleImpulse.h" />
     <ClInclude Include="source\particle\Particle.h" />
-    <ClInclude Include="source\particle\IParticleForceGenerator.h" />
-    <ClInclude Include="source\particle\ParticleForceRegistry.h" />
+    <ClInclude Include="source\particle\ParticlePhysicsEngine.h" />
+    <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyGravity.h" />
+    <ClInclude Include="source\rigidbody\RigidBody.h" />
+    <ClInclude Include="source\rigidbody\RigidBodyPhysicsEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NPhysicsEngine.cpp" />
@@ -193,7 +194,10 @@
     <ClCompile Include="source\particle\forceGenerators\ParticleGravity.cpp" />
     <ClCompile Include="source\particle\forceGenerators\ParticleImpulse.cpp" />
     <ClCompile Include="source\particle\Particle.cpp" />
-    <ClCompile Include="source\particle\ParticleForceRegistry.cpp" />
+    <ClCompile Include="source\particle\ParticlePhysicsEngine.cpp" />
+    <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyGravity.cpp" />
+    <ClCompile Include="source\rigidbody\RigidBody.cpp" />
+    <ClCompile Include="source\rigidbody\RigidBodyPhysicsEngine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

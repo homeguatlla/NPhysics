@@ -31,6 +31,24 @@
     <Filter Include="Archivos de encabezado\particle\collisionProcessing">
       <UniqueIdentifier>{ceaa33d2-d25f-4e91-86f7-b2106e388de6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\rigidbody">
+      <UniqueIdentifier>{6cda92bf-c5b0-40da-876e-094575cc8e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\rigidbody">
+      <UniqueIdentifier>{f8690261-981f-47e0-84e7-202ab89071e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\rigidbody\forceGenerators">
+      <UniqueIdentifier>{94c2e277-03d0-4a3f-82f1-5bd202876385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\rigidbody\collisionProcessing">
+      <UniqueIdentifier>{3fc004d3-cf71-4440-9742-3436919c98d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\rigidbody\forceGenerators">
+      <UniqueIdentifier>{ee48d13b-1f1d-4946-aa01-8ccf1bff0647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\rigidbody\collisionProcessing">
+      <UniqueIdentifier>{79eb7580-624e-4e4d-96cb-9300f6435685}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -40,12 +58,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="source\particle\Particle.h">
-      <Filter>Archivos de encabezado\particle</Filter>
-    </ClInclude>
-    <ClInclude Include="source\particle\IParticleForceGenerator.h">
-      <Filter>Archivos de encabezado\particle</Filter>
-    </ClInclude>
-    <ClInclude Include="source\particle\ParticleForceRegistry.h">
       <Filter>Archivos de encabezado\particle</Filter>
     </ClInclude>
     <ClInclude Include="source\particle\forceGenerators\ParticleDrag.h">
@@ -69,15 +81,6 @@
     <ClInclude Include="source\particle\collisionProcessing\ParticleContactResolver.h">
       <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleLink.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleCable.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleRod.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="source\particle\collisionProcessing\ParticleCable.h">
       <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
     </ClInclude>
@@ -87,15 +90,30 @@
     <ClInclude Include="source\particle\collisionProcessing\ParticleRod.h">
       <Filter>Archivos de encabezado\particle\collisionProcessing</Filter>
     </ClInclude>
+    <ClInclude Include="source\rigidbody\RigidBody.h">
+      <Filter>Archivos de encabezado\rigidbody</Filter>
+    </ClInclude>
+    <ClInclude Include="source\particle\ParticlePhysicsEngine.h">
+      <Filter>Archivos de encabezado\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="source\rigidbody\RigidBodyPhysicsEngine.h">
+      <Filter>Archivos de encabezado\rigidbody</Filter>
+    </ClInclude>
+    <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyGravity.h">
+      <Filter>Archivos de encabezado\rigidbody\forceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IForceGenerator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ForceRegistry.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="source\particle\Particle.cpp">
-      <Filter>Archivos de origen\particle</Filter>
-    </ClCompile>
-    <ClCompile Include="source\particle\ParticleForceRegistry.cpp">
       <Filter>Archivos de origen\particle</Filter>
     </ClCompile>
     <ClCompile Include="source\particle\forceGenerators\ParticleDrag.cpp">
@@ -127,6 +145,18 @@
     </ClCompile>
     <ClCompile Include="source\particle\collisionProcessing\ParticleRod.cpp">
       <Filter>Archivos de origen\particle\collisionProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rigidbody\RigidBody.cpp">
+      <Filter>Archivos de origen\rigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="source\particle\ParticlePhysicsEngine.cpp">
+      <Filter>Archivos de origen\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rigidbody\RigidBodyPhysicsEngine.cpp">
+      <Filter>Archivos de origen\rigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyGravity.cpp">
+      <Filter>Archivos de origen\rigidbody\forceGenerators</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,9 +1,11 @@
 #pragma once
-#include "../IParticleForceGenerator.h"
+#include "../../IForceGenerator.h"
 
 namespace NPhysics
 {
-	class ParticleBuoyancy : public IParticleForceGenerator
+	class Particle;
+
+	class ParticleBuoyancy : public IForceGenerator<Particle>
 	{
 	public:
 		explicit ParticleBuoyancy(real maxDepth, real volume, real waterHeight, real liquidDensity);

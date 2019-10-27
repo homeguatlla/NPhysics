@@ -1,9 +1,10 @@
 #pragma once
-#include "../IParticleForceGenerator.h"
+#include "../../IForceGenerator.h"
+#include "../Particle.h"
 
 namespace NPhysics
 {
-	class ParticleImpulse : public IParticleForceGenerator
+	class ParticleImpulse : public IForceGenerator<Particle>
 	{
 	public:
 		explicit ParticleImpulse(const glm::vec3& force);

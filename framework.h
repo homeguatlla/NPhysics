@@ -8,6 +8,6 @@
 using real = float;
 
 #undef max
-const real MAX_REAL = std::numeric_limits<float>::max();
 
+const real MAX_REAL = std::numeric_limits<float>::max();
 const real EPSILON = glm::epsilon<float>();

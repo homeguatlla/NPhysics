@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ParticleGravity.h"
+#include "../Particle.h"
 
 namespace NPhysics
 {
