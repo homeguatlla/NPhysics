@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ParticleDrag.h"
+#include "../Particle.h"
 #include <glm/gtx/norm.hpp>
 
 namespace NPhysics

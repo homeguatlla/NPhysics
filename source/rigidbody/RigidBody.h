@@ -24,13 +24,14 @@ namespace NPhysics
 		bool HasFiniteMass() const { return mInverseMass > 0.0f; }
 		real GetMass() const;
 
+		void Integrate(real duration);
+
 	private:
 		void CalculateDerivedData();
 		void CalculateTransformationMatrix(glm::mat4& matrix, const glm::vec3& position, const glm::quat& orientation);
 		void SetInertiaTensor(const glm::mat3& inertiaTensor);
 		void CalculateTransformInertiaTensor(glm::mat3& iiWorld, const glm::quat& q, const glm::mat3& iiBody, glm::mat4& rotmat);
-		void Integrate(real duration);
-
+		
 		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
 		glm::vec3 GetPointInWorldSpace(const glm::vec3& point);
 

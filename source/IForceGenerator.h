@@ -1,10 +1,10 @@
 #pragma once
-#include "framework.h"
+#include "../framework.h"
 #include <memory>
 
-namespace NPhysics {
-
-	template<typename PhysicsObject>
+namespace NPhysics 
+{
+	template<class PhysicsObject>
 	class IForceGenerator
 	{
 	public:
