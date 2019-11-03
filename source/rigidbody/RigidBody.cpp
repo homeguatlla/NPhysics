@@ -4,6 +4,12 @@
 
 namespace NPhysics
 {
+	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& initialVelocity) : 
+		PhysicsObject(position, initialVelocity),
+		mAngularDamping(0.995f)
+	{
+	}
+
 	void RigidBody::AddForce(const glm::vec3& force)
 	{
 		mForceAccumulated += force;
@@ -31,29 +37,26 @@ namespace NPhysics
 		return mTransformationMatrix * glm::vec4(point, 1.0f);
 	}
 
+	void RigidBody::DoResetForceAccumulated()
+	{
+		ResetForceAndTorqueAccumulated();
+	}
+
 	void RigidBody::ResetForceAndTorqueAccumulated()
 	{
 		mForceAccumulated = glm::vec3(0.0f);
 		mTorqueAccumulated = glm::vec3(0.0f);
 	}
 
-	real RigidBody::GetMass() const
+	void RigidBody::SetInertiaTensorMatrix(const glm::mat3& matrix)
 	{
-		if (mInverseMass == 0.0f)
-		{
-			return MAX_REAL;
-		}
-		else
-		{
-			return 1.0f / mInverseMass;
-		}
+		mInverseInertiaTensor = glm::inverse(matrix);
 	}
 
 	void NPhysics::RigidBody::CalculateDerivedData()
 	{
 		CalculateTransformationMatrix(mTransformationMatrix, mPosition, mOrientation);
-		glm::mat3 inverseInertiaTensorWorld;
-		CalculateTransformInertiaTensor(inverseInertiaTensorWorld, mOrientation, mInverseInertiaTensor, mTransformationMatrix);
+		CalculateTransformInertiaTensor(mInverseInertiaTensorWorld, mOrientation, mInverseInertiaTensor, mTransformationMatrix);
 	}
 
 	void RigidBody::CalculateTransformationMatrix(glm::mat4& matrix, const glm::vec3& position, const glm::quat& orientation)
@@ -79,6 +82,10 @@ namespace NPhysics
 
 	void RigidBody::Integrate(real duration)
 	{
+		assert(duration > 0.0f);
+
+		if (!HasFiniteMass()) return;
+
 		//Calculate the linear accelareation frome force inputs
 		mLastFrameAcceleration = mAcceleration;
 		mLastFrameAcceleration += mForceAccumulated * mInverseMass;
@@ -94,7 +101,7 @@ namespace NPhysics
 		mRotation += angularAcceleration * duration;
 
 		//Impose drag
-		mVelocity *= glm::pow(mLinearDamping, duration);
+		mVelocity *= glm::pow(mDamping, duration);
 		mRotation *= glm::pow(mAngularDamping, duration);
 
 		//Adjust positions

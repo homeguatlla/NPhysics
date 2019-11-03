@@ -108,6 +108,15 @@
     <ClInclude Include="source\ForceRegistry.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyBuoyancy.h">
+      <Filter>Archivos de encabezado\rigidbody\forceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyDrag.h">
+      <Filter>Archivos de encabezado\rigidbody\forceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PhysicsObject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -157,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyGravity.cpp">
       <Filter>Archivos de origen\rigidbody\forceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyBuoyancy.cpp">
+      <Filter>Archivos de origen\rigidbody\forceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyDrag.cpp">
+      <Filter>Archivos de origen\rigidbody\forceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PhysicsObject.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

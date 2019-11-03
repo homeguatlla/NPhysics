@@ -14,7 +14,7 @@ namespace NPhysics
 
 	public:
 		void AddParticle(std::shared_ptr<Particle>& particle);
-		void RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IForceGenerator<Particle>>& forceGenerator);
+		void RegisterForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IForceGenerator<Particle>>& forceGenerator);
 		void Update(real duration);
 	};
 };

@@ -6,45 +6,8 @@
 namespace NPhysics
 {
 	NPhysics::Particle::Particle(const glm::vec3& initialPosition, const glm::vec3& initialVelocity) :
-		mPosition(initialPosition),
-		mVelocity(initialVelocity),
-		mAcceleration(0.0f),
-		mDamping(0.995f),
-		mInverseMass(0.0f) //by default inmovable particle
+		PhysicsObject(initialPosition, initialVelocity)
 	{
-	}
-
-	void Particle::SetAcceleration(const glm::vec3& acceleration)
-	{
-		mAcceleration = acceleration;
-	}
-
-	void Particle::SetDamping(real damping)
-	{
-		mDamping = damping;
-	}
-
-	void Particle::SetMass(real mass)
-	{
-		assert(mass != 0.0f);
-
-		mInverseMass = 1.0f / mass;
-	}
-
-	//inmovable particle
-	void Particle::SetInfiniteMass()
-	{
-		mInverseMass = 0.0f;
-	}
-
-	void Particle::SetPosition(const glm::vec3& position)
-	{
-		mPosition = position;
-	}
-
-	void Particle::SetInitialVelocity(const glm::vec3& velocity)
-	{
-		mVelocity = velocity;
 	}
 
 	void Particle::Integrate(real duration)
@@ -68,7 +31,7 @@ namespace NPhysics
 		//Refer to book: Game Physics Engine Development (GPED) page 52
 		mVelocity *= glm::pow(mDamping, duration);
 
-		ResetForceAccumulated();
+		DoResetForceAccumulated();
 	}
 
 	void Particle::AddForce(const glm::vec3& force)
@@ -76,24 +39,7 @@ namespace NPhysics
 		mForceAccumulated += force;
 	}
 
-	real Particle::GetMass() const
-	{
-		if (mInverseMass == 0.0f) 
-		{
-			return MAX_REAL;
-		}
-		else
-		{
-			return 1.0f / mInverseMass; 
-		}
-	}
-
-	real Particle::GetInverseMass() const
-	{
-		return mInverseMass;
-	}
-
-	void Particle::ResetForceAccumulated()
+	void Particle::DoResetForceAccumulated()
 	{
 		mForceAccumulated = glm::vec3(0.0f);
 	}

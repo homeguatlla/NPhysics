@@ -172,6 +172,9 @@
     <ClInclude Include="source\particle\forceGenerators\ParticleImpulse.h" />
     <ClInclude Include="source\particle\Particle.h" />
     <ClInclude Include="source\particle\ParticlePhysicsEngine.h" />
+    <ClInclude Include="source\PhysicsObject.h" />
+    <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyBuoyancy.h" />
+    <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyDrag.h" />
     <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyGravity.h" />
     <ClInclude Include="source\rigidbody\RigidBody.h" />
     <ClInclude Include="source\rigidbody\RigidBodyPhysicsEngine.h" />
@@ -195,6 +198,9 @@
     <ClCompile Include="source\particle\forceGenerators\ParticleImpulse.cpp" />
     <ClCompile Include="source\particle\Particle.cpp" />
     <ClCompile Include="source\particle\ParticlePhysicsEngine.cpp" />
+    <ClCompile Include="source\PhysicsObject.cpp" />
+    <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyBuoyancy.cpp" />
+    <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyDrag.cpp" />
     <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyGravity.cpp" />
     <ClCompile Include="source\rigidbody\RigidBody.cpp" />
     <ClCompile Include="source\rigidbody\RigidBodyPhysicsEngine.cpp" />

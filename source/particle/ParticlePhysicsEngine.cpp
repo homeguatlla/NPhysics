@@ -13,7 +13,7 @@ namespace NPhysics
 		}
 	}
 
-	void ParticlePhysicsEngine::RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IForceGenerator<Particle>>& forceGenerator)
+	void ParticlePhysicsEngine::RegisterForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IForceGenerator<Particle>>& forceGenerator)
 	{
 		assert(particle);
 
