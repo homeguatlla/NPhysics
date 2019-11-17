@@ -26,7 +26,6 @@ namespace NPhysics
 		glm::vec3 GetAcceleration() const { return mAcceleration; }
 
 	private:
-		void ResetForceAccumulated();
 		virtual void DoResetForceAccumulated() = 0;
 
 	protected:

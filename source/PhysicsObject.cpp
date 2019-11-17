@@ -61,9 +61,4 @@ namespace NPhysics
 	{
 		return mInverseMass;
 	}
-
-	void PhysicsObject::ResetForceAccumulated()
-	{
-		DoResetForceAccumulated();
-	}
 }
