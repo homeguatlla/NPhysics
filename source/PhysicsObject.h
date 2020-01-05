@@ -27,6 +27,7 @@ namespace NPhysics
 
 	private:
 		virtual void DoResetForceAccumulated() = 0;
+		virtual void DoSetPosition(const glm::vec3& position) {}
 
 	protected:
 

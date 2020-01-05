@@ -11,7 +11,7 @@ namespace NPhysics
 	class RigidBody : public PhysicsObject
 	{
 	public:
-		explicit RigidBody(const glm::vec3& position, const glm::vec3& initialVelocity);
+		explicit RigidBody(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& initialVelocity);
 
 		//Adds the given force to the center of mass of the rigid body.
 		//The force is expressed int world coordinates.
@@ -30,11 +30,16 @@ namespace NPhysics
 
 		void DoResetForceAccumulated() override;
 
+		void SetRotation(const glm::vec3& initialRotation);
+		glm::vec3 GetRotation() const { return mRotation; }
+
 	private:
+		void DoSetPosition(const glm::vec3& position) override;
+
 		void CalculateDerivedData();
-		void CalculateTransformationMatrix(glm::mat4& matrix, const glm::vec3& position, const glm::quat& orientation);
+		glm::mat4 CalculateTransformationMatrix(const glm::vec3& position, const glm::quat& orientation);
 		void SetInertiaTensor(const glm::mat3& inertiaTensor);
-		void CalculateTransformInertiaTensor(glm::mat3& iiWorld, const glm::quat& q, const glm::mat3& iiBody, glm::mat4& rotmat);
+		glm::mat3 CalculateTransformInertiaTensor(const glm::quat& q, const glm::mat3& iiBody, glm::mat4& rotmat);
 		
 		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
 		void ResetForceAndTorqueAccumulated();

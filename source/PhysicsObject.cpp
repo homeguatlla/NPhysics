@@ -39,6 +39,8 @@ namespace NPhysics
 	void PhysicsObject::SetPosition(const glm::vec3& position)
 	{
 		mPosition = position;
+		//in order the rigidbody calculate matrices
+		DoSetPosition(position);
 	}
 
 	void PhysicsObject::SetInitialVelocity(const glm::vec3& velocity)

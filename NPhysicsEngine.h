@@ -17,12 +17,12 @@ namespace NPhysics
 		void AddRigidBody(std::shared_ptr<RigidBody>& body);
 		void RegisterRigidBodyForceGenerator(std::shared_ptr<RigidBody>& body, std::shared_ptr<IForceGenerator<RigidBody>>& forceGenerator);
 
-		static glm::mat3 GetInertiaTensorMatrix(real mass, glm::vec3 size)
+		static glm::mat3 GetInertiaTensorMatrix(real mass, const glm::vec3& size)
 		{
 			real dx = size.x * size.x;
 			real dy = size.y * size.y;
 			real dz = size.z * size.z;
-			real k = 1.0f / 12.0f * mass;
+			real k = mass / 12.0f;
 
 			glm::mat3 inertiaTensorMatrix = glm::scale(glm::vec3(k * (dy + dz), k * (dx + dz), k * (dx + dy)));
 
