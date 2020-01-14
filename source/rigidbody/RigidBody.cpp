@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "RigidBody.h"
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include "../utils/Math.h"
 
 namespace NPhysics
 {
-	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& initialVelocity) : 
+	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity) : 
 		PhysicsObject(position, initialVelocity),
-		mRotation(rotation),
+		mAngularVelocity(angularVelocity),
 		mAngularDamping(0.995f),
 		mTransformationMatrix(1.0f)
 	{
@@ -47,14 +49,29 @@ namespace NPhysics
 
 	void RigidBody::SetRotation(const glm::vec3& initialRotation)
 	{
-		mRotation = initialRotation;
+		mOrientation = NMath::FromEulerAnglesToQuaternion(initialRotation);
 		CalculateDerivedData();
+	}
+
+	glm::vec3 RigidBody::GetRotation() const
+	{
+		return NMath::FromQuatToEulerAngles(mOrientation);
+	}
+
+	void RigidBody::SetAngularDamping(float damping)
+	{
+		mAngularDamping = damping;
 	}
 
 	void RigidBody::ResetForceAndTorqueAccumulated()
 	{
 		mForceAccumulated = glm::vec3(0.0f);
 		mTorqueAccumulated = glm::vec3(0.0f);
+	}
+
+	glm::vec3 RigidBody::DoGetRotation() const
+	{
+		return GetRotation();
 	}
 
 	void RigidBody::SetInertiaTensorMatrix(const glm::mat3& matrix)
@@ -67,15 +84,31 @@ namespace NPhysics
 		CalculateDerivedData();
 	}
 
+	void RigidBody::DoSetRotation(const glm::vec3& rotation)
+	{
+		SetRotation(rotation);
+	}
+
 	void NPhysics::RigidBody::CalculateDerivedData()
 	{
+		mOrientation = glm::normalize(mOrientation);
 		mTransformationMatrix = CalculateTransformationMatrix(mPosition, mOrientation);
 		mInverseInertiaTensorWorld = CalculateTransformInertiaTensor(mOrientation, mInverseInertiaTensor, mTransformationMatrix);
 	}
 
 	glm::mat4 RigidBody::CalculateTransformationMatrix(const glm::vec3& position, const glm::quat& orientation)
 	{
-		glm::mat4 rotationMatrix = glm::toMat4(orientation);
+		glm::vec3 eulerAngles = NMath::FromQuatToEulerAngles(orientation);
+		glm::mat4 rotationMatrix = glm::eulerAngleXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+		/*
+		for (int i = 0; i < 4; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				rotationMatrix[i][j] = glm::abs(rotationMatrix[i][j]) < NMath::FLOAT_TOLERANCE ? 0.0f : rotationMatrix[i][j];
+			}
+		}*/
+
 		glm::mat4 translationMatrix = glm::translate(glm::mat4(), position);
 		return translationMatrix * rotationMatrix;
 	}
@@ -112,19 +145,19 @@ namespace NPhysics
 		mVelocity += mLastFrameAcceleration * duration;
 
 		//Update angular velocity from both acceleration and impulse
-		mRotation += angularAcceleration * duration;
+		mAngularVelocity += angularAcceleration * duration;
 
 		//Impose drag
 		mVelocity *= glm::pow(mDamping, duration);
-		mRotation *= glm::pow(mAngularDamping, duration);
+		mAngularVelocity *= glm::pow(mAngularDamping, duration);
 
 		//Adjust positions
 		//Update linear position
 		mPosition += mVelocity * duration;
 
 		//Update angular position
-		//TODO validate this operation is OK
-		mOrientation *= glm::quat(mRotation * duration);
+		mOrientation *= NMath::FromEulerAnglesToQuaternion(mAngularVelocity * duration);
+		//mOrientation *= glm::quat(mAngularVelocity * duration);
 
 		//Normalise the orientation, and update the matrices with the new position and orientation
 		CalculateDerivedData();

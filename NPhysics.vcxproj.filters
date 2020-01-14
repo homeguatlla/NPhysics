@@ -49,6 +49,12 @@
     <Filter Include="Archivos de origen\rigidbody\collisionProcessing">
       <UniqueIdentifier>{79eb7580-624e-4e4d-96cb-9300f6435685}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\utils">
+      <UniqueIdentifier>{4d74ec79-6fe6-4aeb-96dd-e9ac03e861ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\utils">
+      <UniqueIdentifier>{43c67250-065b-4c3a-8e38-1f799f2cc014}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -117,6 +123,9 @@
     <ClInclude Include="source\PhysicsObject.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="source\utils\Math.h">
+      <Filter>Archivos de encabezado\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -175,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="source\PhysicsObject.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\Math.cpp">
+      <Filter>Archivos de origen\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

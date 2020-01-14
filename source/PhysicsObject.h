@@ -13,6 +13,7 @@ namespace NPhysics
 		void SetMass(real mass);
 		void SetInfiniteMass();
 		void SetPosition(const glm::vec3& position);
+		void SetRotation(const glm::vec3& rotation);
 
 		void SetInitialVelocity(const glm::vec3& velocity);
 
@@ -24,10 +25,13 @@ namespace NPhysics
 		glm::vec3 GetPosition() const { return mPosition; }
 		glm::vec3 GetVelocity() const { return mVelocity; }
 		glm::vec3 GetAcceleration() const { return mAcceleration; }
+		glm::vec3 GetRotation() const { return DoGetRotation(); }
 
 	private:
 		virtual void DoResetForceAccumulated() = 0;
 		virtual void DoSetPosition(const glm::vec3& position) {}
+		virtual glm::vec3 DoGetRotation() const { return glm::vec3(0.0f); }
+		virtual void DoSetRotation(const glm::vec3& rotation) {}
 
 	protected:
 

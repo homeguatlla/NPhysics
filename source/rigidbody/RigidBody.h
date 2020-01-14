@@ -4,14 +4,13 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 
-
 namespace NPhysics
 {
 	//A RigidBody is the basic simulation object in the physics core.
 	class RigidBody : public PhysicsObject
 	{
 	public:
-		explicit RigidBody(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& initialVelocity);
+		explicit RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity);
 
 		//Adds the given force to the center of mass of the rigid body.
 		//The force is expressed int world coordinates.
@@ -30,11 +29,15 @@ namespace NPhysics
 
 		void DoResetForceAccumulated() override;
 
+
 		void SetRotation(const glm::vec3& initialRotation);
-		glm::vec3 GetRotation() const { return mRotation; }
+		glm::vec3 GetRotation() const;
+
+		void SetAngularDamping(float damping);
 
 	private:
 		void DoSetPosition(const glm::vec3& position) override;
+		void DoSetRotation(const glm::vec3& rotation) override;
 
 		void CalculateDerivedData();
 		glm::mat4 CalculateTransformationMatrix(const glm::vec3& position, const glm::quat& orientation);
@@ -48,7 +51,7 @@ namespace NPhysics
 		glm::quat mOrientation;
 
 		//Holds the angular velocity or rotation of the rigid body in world space
-		glm::vec3 mRotation;
+		glm::vec3 mAngularVelocity;
 
 		//Holds a transform matrix for converting body space into world space
 		//and vice versa. 
@@ -68,6 +71,9 @@ namespace NPhysics
 
 		//Holds the amount of damping applied to angular motion.
 		real mAngularDamping;
+
+		// Heredado vía PhysicsObject
+		virtual glm::vec3 DoGetRotation() const override;
 	};
 };
 

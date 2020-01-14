@@ -178,6 +178,7 @@
     <ClInclude Include="source\rigidbody\forceGenerators\RigidBodyGravity.h" />
     <ClInclude Include="source\rigidbody\RigidBody.h" />
     <ClInclude Include="source\rigidbody\RigidBodyPhysicsEngine.h" />
+    <ClInclude Include="source\utils\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NPhysicsEngine.cpp" />
@@ -204,6 +205,7 @@
     <ClCompile Include="source\rigidbody\forceGenerators\RigidBodyGravity.cpp" />
     <ClCompile Include="source\rigidbody\RigidBody.cpp" />
     <ClCompile Include="source\rigidbody\RigidBodyPhysicsEngine.cpp" />
+    <ClCompile Include="source\utils\Math.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
