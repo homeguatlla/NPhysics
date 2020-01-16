@@ -32,7 +32,7 @@ namespace NPhysics
 			double y = s1 * c2 * c3 + c1 * s2 * s3;
 			double z = c1 * s2 * c3 - s1 * c2 * s3;
 
-			return glm::quat(w, x, y, z);
+			return glm::normalize(glm::quat(w, x, y, z));
 		}
 
 		static glm::vec3 FromQuatToEulerAngles(const glm::quat& q) {

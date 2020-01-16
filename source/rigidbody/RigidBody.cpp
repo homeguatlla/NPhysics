@@ -34,7 +34,18 @@ namespace NPhysics
 		mForceAccumulated += force;
 		mTorqueAccumulated += glm::cross(pt, force);
 
-		//mIsAwake = true;
+		if (glm::abs(mTorqueAccumulated.x) < NMath::FLOAT_TOLERANCE)
+		{
+			mTorqueAccumulated.x = 0.0f;
+		}
+		if (glm::abs(mTorqueAccumulated.y) < NMath::FLOAT_TOLERANCE)
+		{
+			mTorqueAccumulated.y = 0.0f;
+		}
+		if (glm::abs(mTorqueAccumulated.z) < NMath::FLOAT_TOLERANCE)
+		{
+			mTorqueAccumulated.z = 0.0f;
+		}
 	}
 
 	glm::vec3 RigidBody::GetPointInWorldSpace(const glm::vec3& point)
@@ -156,7 +167,7 @@ namespace NPhysics
 		mPosition += mVelocity * duration;
 
 		//Update angular position
-		mOrientation *= NMath::FromEulerAnglesToQuaternion(mAngularVelocity * duration);
+		mOrientation  *= NMath::FromEulerAnglesToQuaternion(mAngularVelocity * duration);
 		//mOrientation *= glm::quat(mAngularVelocity * duration);
 
 		//Normalise the orientation, and update the matrices with the new position and orientation
