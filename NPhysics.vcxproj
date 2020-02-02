@@ -159,6 +159,10 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="NPhysicsEngine.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="source\bvh\BoundingVolumeHierarchyNode.h" />
+    <ClInclude Include="source\bvh\boundingVolumes\IBoundingVolume.h" />
+    <ClInclude Include="source\bvh\boundingVolumes\SphereBoundingVolume.h" />
+    <ClInclude Include="source\collision\PotentialContact.h" />
     <ClInclude Include="source\ForceRegistry.h" />
     <ClInclude Include="source\IForceGenerator.h" />
     <ClInclude Include="source\particle\collisionProcessing\ParticleCable.h" />
@@ -188,6 +192,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="source\bvh\BoundingVolumeHierarchyNode.cpp" />
+    <ClCompile Include="source\bvh\boundingVolumes\IBoundingVolume.cpp" />
+    <ClCompile Include="source\bvh\boundingVolumes\SphereBoundingVolume.cpp" />
+    <ClCompile Include="source\collision\PotentialContact.cpp" />
     <ClCompile Include="source\particle\collisionProcessing\ParticleCable.cpp" />
     <ClCompile Include="source\particle\collisionProcessing\ParticleContact.cpp" />
     <ClCompile Include="source\particle\collisionProcessing\ParticleContactResolver.cpp" />

@@ -55,6 +55,24 @@
     <Filter Include="Archivos de origen\utils">
       <UniqueIdentifier>{43c67250-065b-4c3a-8e38-1f799f2cc014}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\bvh">
+      <UniqueIdentifier>{47917d8e-d92e-4a93-ba2f-257586cefb14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\bvh">
+      <UniqueIdentifier>{311322ec-a5cc-4049-9c23-d397d978b98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\bvh\boundingVolumes">
+      <UniqueIdentifier>{3da2dddd-ea0b-4407-976e-021a5bc6ccd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\bvh\boundingVolumes">
+      <UniqueIdentifier>{8e24c4d1-b90c-40a9-b3aa-1206ecf0df87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\collision">
+      <UniqueIdentifier>{784c01e9-1bbf-4253-9927-9da7ec62532a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\collision">
+      <UniqueIdentifier>{9609ba68-d401-4d38-b60f-a33e5093917a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -126,6 +144,18 @@
     <ClInclude Include="source\utils\Math.h">
       <Filter>Archivos de encabezado\utils</Filter>
     </ClInclude>
+    <ClInclude Include="source\bvh\boundingVolumes\IBoundingVolume.h">
+      <Filter>Archivos de encabezado\bvh\boundingVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\bvh\boundingVolumes\SphereBoundingVolume.h">
+      <Filter>Archivos de encabezado\bvh\boundingVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\bvh\BoundingVolumeHierarchyNode.h">
+      <Filter>Archivos de encabezado\bvh</Filter>
+    </ClInclude>
+    <ClInclude Include="source\collision\PotentialContact.h">
+      <Filter>Archivos de encabezado\collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -187,6 +217,18 @@
     </ClCompile>
     <ClCompile Include="source\utils\Math.cpp">
       <Filter>Archivos de origen\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\bvh\boundingVolumes\IBoundingVolume.cpp">
+      <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\bvh\boundingVolumes\SphereBoundingVolume.cpp">
+      <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\bvh\BoundingVolumeHierarchyNode.cpp">
+      <Filter>Archivos de origen\bvh</Filter>
+    </ClCompile>
+    <ClCompile Include="source\collision\PotentialContact.cpp">
+      <Filter>Archivos de origen\collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
