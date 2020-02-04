@@ -2,6 +2,7 @@
 #include "boundingVolumes/IBoundingVolume.h"
 #include "../PhysicsObject.h"
 #include "../collision/PotentialContact.h"
+#include "../utils/Math.h"
 
 #include <memory>
 #include <vector>
@@ -12,7 +13,10 @@ namespace NPhysics
 	class BoundingVolumeHierarchyNode
 	{
 	public:
-		explicit BoundingVolumeHierarchyNode(std::shared_ptr<PhysicsObject> object, boundingVolumeT volume);
+		BoundingVolumeHierarchyNode() = default;
+		BoundingVolumeHierarchyNode(std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> parent, std::shared_ptr<PhysicsObject> object, boundingVolumeT volume);
+		~BoundingVolumeHierarchyNode() = default;
+		
 		std::shared_ptr<PhysicsObject> GetPhysicsObject() const { return mPhysicsObject; }
 
 		//Checks if this node is at the bottom of the hierarchy.
@@ -32,10 +36,15 @@ namespace NPhysics
 			std::shared_ptr<BoundingVolumeHierarchyNode> other, 
 			std::vector<std::shared_ptr<PotentialContact>>& contacts,
 			unsigned int limit);
+		void RecalculateBoungingVolume();
+		bool HasParent() const { mParent != nullptr; }
 
 	private:
+		//Holds parent reference
+		std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> mParent;
+
 		//Holds the child nodes of this node. Binary tree.
-		std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> mChildren[2];
+		std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> mChildren[2]{ nullptr, nullptr };
 
 		//Holds a single bounding volume encompassing all the descendets of this node
 		boundingVolumeT mVolume;
@@ -45,9 +54,11 @@ namespace NPhysics
 		std::shared_ptr<PhysicsObject> mPhysicsObject{ nullptr };
 	};
 	template<class boundingVolumeT>
-	inline BoundingVolumeHierarchyNode<boundingVolumeT>::BoundingVolumeHierarchyNode(std::shared_ptr<PhysicsObject> object, boundingVolumeT volume) :
-		mPhysicsObject { object },
-		mVolume { volume }
+	inline BoundingVolumeHierarchyNode<boundingVolumeT>::BoundingVolumeHierarchyNode(std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> parent, std::shared_ptr<PhysicsObject> object, boundingVolumeT volume) :
+		mParent { parent },
+		mVolume{ volume },
+		mPhysicsObject { object }
+		
 	{
 	}
 
@@ -77,8 +88,16 @@ namespace NPhysics
 		}
 		else
 		{
-			unsigned int childIndex = mChildren[0]->GetVolume().GetGrowth(volume) < mChildren[1]->GetVolume().GetGrowth(volume) ? 0 : 1;
-			mChildren[childIndex]->Insert(object, volume);
+			if (mChildren[0] == nullptr && mChildren[1] == nullptr)
+			{
+				mVolume = volume;
+				mPhysicsObject = object;
+			}
+			else
+			{
+				unsigned int childIndex = mChildren[0]->GetVolume().GetGrowth(volume) < mChildren[1]->GetVolume().GetGrowth(volume) ? 0 : 1;
+				mChildren[childIndex]->Insert(object, volume);
+			}
 		}
 	}
 
@@ -132,6 +151,20 @@ namespace NPhysics
 			else
 			{
 				return count;
+			}
+		}
+	}
+
+	template<class boundingVolumeT>
+	inline void BoundingVolumeHierarchyNode<boundingVolumeT>::RecalculateBoungingVolume()
+	{
+		if (!IsLeaf())
+		{
+			mVolume = NMath::MergeBoundingVolumes(mChildren[0]->GetVolume(), mChildren[1]->GetVolume());
+			// Recurse up the tree
+			if (HasParent())
+			{
+				mParent->RecalculateBoundingVolume();
 			}
 		}
 	}

@@ -7,12 +7,24 @@ namespace NPhysics
 {
 	class SphereBoundingVolume : public IBoundingVolume
 	{
-		glm::vec3 mCenter;
-		real mRadius;
+	public:
+		SphereBoundingVolume() = default;
+		SphereBoundingVolume(const glm::vec3& center, real radius);
+		SphereBoundingVolume(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2);
+
+		~SphereBoundingVolume() = default;
 
 		// Heredado vía IBoundingVolume
-		bool Overlaps(IBoundingVolume& volume) const override;
-		real GetSize() const override;
+		bool IsOverlapping(const SphereBoundingVolume& volume) const override;
+		real GetVolume() const override;
+		real GetGrowth(const SphereBoundingVolume& volume) const override;
+
+		glm::vec3 GetCenter() const { return mCenter; }
+		real GetRadius() const { return mRadius; }
+
+	private:
+		glm::vec3 mCenter;
+		real mRadius;
 	};
 };
 

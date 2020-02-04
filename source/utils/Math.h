@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include "../bvh/boundingVolumes/SphereBoundingVolume.h"
 
 namespace NPhysics
 {
@@ -64,6 +65,17 @@ namespace NPhysics
 			bank = atan2(2 * q.x * q.w - 2 * q.y * q.z, -sqx + sqy - sqz + sqw);
 
 			return glm::vec3(attitude, heading, bank);
+		}
+
+		static bool IsOverlapping(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		{
+			real distance = glm::distance(sphere1.GetCenter(), sphere2.GetCenter());
+			return distance < sphere1.GetRadius() + sphere2.GetRadius();
+		}
+
+		static SphereBoundingVolume MergeBoundingVolumes(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		{
+			return SphereBoundingVolume(sphere1, sphere2);
 		}
 	};
 };

@@ -2,6 +2,8 @@
 #include "../ForceRegistry.h"
 #include <memory>
 #include <vector>
+#include "../bvh/BoundingVolumeHierarchyNode.h"
+#include "../bvh/boundingVolumes/SphereBoundingVolume.h"
 
 namespace NPhysics
 {
@@ -17,5 +19,6 @@ namespace NPhysics
 	private:
 		std::vector<std::shared_ptr<RigidBody>> mBodies;
 		ForceRegistry<RigidBody> mRegistry;
+		BoundingVolumeHierarchyNode<SphereBoundingVolume> mBoundingVolumeHierarchyRoot;
 	};
 };
