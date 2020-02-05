@@ -7,6 +7,7 @@ namespace NPhysics
 {
 	class PotentialContact
 	{
+	public:
 		explicit PotentialContact(std::shared_ptr<PhysicsObject>& obj1, std::shared_ptr<PhysicsObject>& obj2);
 
 	private:

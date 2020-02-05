@@ -4,6 +4,12 @@
 
 namespace NPhysics
 {
+	SphereBoundingVolume::SphereBoundingVolume() : 
+		mCenter { glm::vec3(0.0f) },
+		mRadius { 0.0f }
+	{
+	}
+
 	SphereBoundingVolume::SphereBoundingVolume(const glm::vec3& center, real radius) :
 		mCenter{center},
 		mRadius{ radius }

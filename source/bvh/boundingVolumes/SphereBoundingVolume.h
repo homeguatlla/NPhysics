@@ -8,7 +8,7 @@ namespace NPhysics
 	class SphereBoundingVolume : public IBoundingVolume
 	{
 	public:
-		SphereBoundingVolume() = default;
+		SphereBoundingVolume();
 		SphereBoundingVolume(const glm::vec3& center, real radius);
 		SphereBoundingVolume(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2);
 
