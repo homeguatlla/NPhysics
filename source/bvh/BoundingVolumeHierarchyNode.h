@@ -10,7 +10,7 @@
 namespace NPhysics
 {
 	template<class boundingVolumeT>
-	class BoundingVolumeHierarchyNode
+	class BoundingVolumeHierarchyNode : public std::enable_shared_from_this<BoundingVolumeHierarchyNode<boundingVolumeT>>
 	{
 	public:
 		BoundingVolumeHierarchyNode() = default;
@@ -25,19 +25,23 @@ namespace NPhysics
 		unsigned int GetPotentialContacts(
 			std::vector<std::shared_ptr<PotentialContact>>& contacts, 
 			unsigned int limit);
-		std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> GetChildren(unsigned int index)
-				{ assert(index >= 0 && index < 2);  return mChildren[index]; }
 		void Insert(
-			std::shared_ptr<PhysicsObject>& object,
+			std::shared_ptr<PhysicsObject> object,
 			const boundingVolumeT& volume);
 	private:
 		bool IsOverlapping(const std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> node) const;
 		unsigned int GetPotentialContactsWith(
 			std::shared_ptr<BoundingVolumeHierarchyNode> other, 
 			std::vector<std::shared_ptr<PotentialContact>>& contacts,
-			unsigned int limit);
-		void RecalculateBoungingVolume();
-		bool HasParent() const { mParent != nullptr; }
+			unsigned int limit, bool shouldDescend);
+		bool HasParent() const { return mParent != nullptr; }
+
+	protected:
+		std::shared_ptr<BoundingVolumeHierarchyNode<boundingVolumeT>> GetChildren(unsigned int index)
+		{
+			assert(index >= 0 && index < 2);  return mChildren[index];
+		}
+		void RecalculateBoundingVolume();
 
 	private:
 		//Holds parent reference
@@ -77,21 +81,22 @@ namespace NPhysics
 			}
 			else
 			{
-				return mChildren[0]->GetPotentialContactsWith(mChildren[1], contacts, limit);
+				return mChildren[0]->GetPotentialContactsWith(mChildren[1], contacts, limit, true);
 			}
 		}
 	}
 
 	template<class boundingVolumeT>
-	inline void BoundingVolumeHierarchyNode<boundingVolumeT>::Insert(std::shared_ptr<PhysicsObject>& object, const boundingVolumeT& volume)
+	inline void BoundingVolumeHierarchyNode<boundingVolumeT>::Insert(std::shared_ptr<PhysicsObject> object, const boundingVolumeT& volume)
 	{
 		//If we are a leaf, then the only option is to spawn two new children and place the new body in one
 		if (IsLeaf())
 		{
-			mChildren[0] = std::make_shared<BoundingVolumeHierarchyNode>(this, mVolume, mPhysicsObject);
-			mChildren[1] = std::make_shared<BoundingVolumeHierarchyNode>(this, volume, object);
+			auto mySelf = this->shared_from_this();
+			mChildren[0] = std::make_shared<BoundingVolumeHierarchyNode>(mySelf, mPhysicsObject, mVolume);
+			mChildren[1] = std::make_shared<BoundingVolumeHierarchyNode>(mySelf, object, volume);
 			mPhysicsObject = nullptr;
-			RecalculateBoungingVolume();
+			RecalculateBoundingVolume();
 		}
 		else
 		{
@@ -102,7 +107,9 @@ namespace NPhysics
 			}
 			else
 			{
-				unsigned int childIndex = mChildren[0]->GetBoundingVolume().GetGrowth(volume) < mChildren[1]->GetBoundingVolume().GetGrowth(volume) ? 0 : 1;
+				real growth0 = mChildren[0]->GetBoundingVolume().GetGrowth(volume);
+				real growth1 = mChildren[1]->GetBoundingVolume().GetGrowth(volume);
+				unsigned int childIndex =  growth0 < growth1 ? 0 : 1;
 				mChildren[childIndex]->Insert(object, volume);
 			}
 		}
@@ -115,12 +122,27 @@ namespace NPhysics
 	}
 
 	template<class boundingVolumeT>
-	inline unsigned int BoundingVolumeHierarchyNode<boundingVolumeT>::GetPotentialContactsWith(std::shared_ptr<BoundingVolumeHierarchyNode> other, std::vector<std::shared_ptr<PotentialContact>>& contacts, unsigned int limit)
+	inline unsigned int BoundingVolumeHierarchyNode<boundingVolumeT>::GetPotentialContactsWith(std::shared_ptr<BoundingVolumeHierarchyNode> other, std::vector<std::shared_ptr<PotentialContact>>& contacts, unsigned int limit, bool shouldDescend)
 	{
+		auto count = 0;
+
+		if (shouldDescend)
+		{
+			if (!IsLeaf())
+			{
+				count += mChildren[0]->GetPotentialContactsWith(mChildren[1], contacts, limit - count, shouldDescend);
+			}
+			
+			if(!other->IsLeaf())
+			{
+				count += other->GetChildren(0)->GetPotentialContactsWith(other->GetChildren(1), contacts, limit - count, shouldDescend);
+			}
+		}
+
 		//Early out, if we don't overlap or if we have no room to report contacts
 		if (!IsOverlapping(other) || limit == 0)
 		{
-			return 0;
+			return count;
 		}
 
 		//if we're both at leaf nodes, then we have a potential contact
@@ -136,11 +158,11 @@ namespace NPhysics
 		if (other->IsLeaf() || (!IsLeaf() && mVolume.GetVolume() >= other->GetBoundingVolume().GetVolume()))
 		{
 			//Recurse into ourself
-			auto count = mChildren[0]->GetPotentialContactsWith(other, contacts, limit);
+			count += mChildren[0]->GetPotentialContactsWith(other, contacts, limit, false);
 			//Checks whether we have enough slots to do the other side too
 			if (limit > count)
 			{
-				return count + mChildren[1]->GetPotentialContactsWith(other, contacts, limit - count);
+				return count + mChildren[1]->GetPotentialContactsWith(other, contacts, limit - count, false);
 			}
 			else
 			{
@@ -150,20 +172,22 @@ namespace NPhysics
 		else
 		{
 			//Recurse into the other node
-			auto count = GetPotentialContactsWith(other->GetChildren(0), contacts, limit);
+			count += GetPotentialContactsWith(other->GetChildren(0), contacts, limit, false);
 			if (limit > count)
 			{
-				return count + GetPotentialContactsWith(other->GetChildren(1), contacts, limit - count);
+				return count + GetPotentialContactsWith(other->GetChildren(1), contacts, limit - count, false);
 			}
 			else
 			{
 				return count;
 			}
 		}
+
+		return count;
 	}
 
 	template<class boundingVolumeT>
-	inline void BoundingVolumeHierarchyNode<boundingVolumeT>::RecalculateBoungingVolume()
+	inline void BoundingVolumeHierarchyNode<boundingVolumeT>::RecalculateBoundingVolume()
 	{
 		if (!IsLeaf())
 		{

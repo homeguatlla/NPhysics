@@ -35,7 +35,6 @@ namespace NPhysics
 		}
 
 		// Otherwise we are partly submerged
-		//force.y = mLiquidDensity * mVolume * (depth - mMaxDepth - mWaterHeight) / (2 * mMaxDepth);
 		float depthOverWater = depth + mMaxDepth - mWaterHeight;
 		float depthBelowWater = (2.0f * mMaxDepth) - depthOverWater;
 		force.y = mLiquidDensity * mVolume * (depthBelowWater / (2.0f * mMaxDepth));

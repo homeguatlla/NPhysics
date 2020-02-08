@@ -33,7 +33,7 @@ namespace NPhysics
 			double y = s1 * c2 * c3 + c1 * s2 * s3;
 			double z = c1 * s2 * c3 - s1 * c2 * s3;
 
-			return glm::normalize(glm::quat(w, x, y, z));
+			return glm::normalize(glm::quat((float)w, (float)x, (float)y, (float)z));
 		}
 
 		static glm::vec3 FromQuatToEulerAngles(const glm::quat& q) {
@@ -44,7 +44,7 @@ namespace NPhysics
 			double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
 			double test = q.x * q.y + q.z * q.w;
 
-			float heading, attitude, bank;
+			double heading, attitude, bank;
 
 			if (test > 0.499 * unit) { // singularity at north pole
 				heading = 2 * atan2(q.x, q.w);
