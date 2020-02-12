@@ -1,11 +1,11 @@
 #pragma once
 #include "IBoundingVolume.h"
-#include "../../framework.h"
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace NPhysics
 {
-	class SphereBoundingVolume : public IBoundingVolume
+	class SphereBoundingVolume : public IBoundingVolume, std::enable_shared_from_this<SphereBoundingVolume>
 	{
 	public:
 		SphereBoundingVolume();
@@ -15,9 +15,10 @@ namespace NPhysics
 		~SphereBoundingVolume() = default;
 
 		// Heredado vía IBoundingVolume
-		bool IsOverlapping(const SphereBoundingVolume& volume) const override;
+		bool IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const override;
 		real GetVolume() const override;
-		real GetGrowth(const SphereBoundingVolume& volume) const override;
+		real GetGrowth(std::shared_ptr<IBoundingVolume> volume) const override;
+		std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(std::shared_ptr<IBoundingVolume> volume) const override;
 
 		glm::vec3 GetCenter() const { return mCenter; }
 		real GetRadius() const { return mRadius; }

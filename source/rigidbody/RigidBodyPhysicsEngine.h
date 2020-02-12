@@ -2,23 +2,25 @@
 #include "../ForceRegistry.h"
 #include <memory>
 #include <vector>
-#include "../bvh/BoundingVolumeHierarchyNode.h"
-#include "../bvh/boundingVolumes/SphereBoundingVolume.h"
 
 namespace NPhysics
 {
 	class RigidBody;
+	class BoundingVolumeHierarchyNode;
+	class IBoundingVolume;
 
 	class RigidBodyPhysicsEngine
 	{
 	public:
-		void AddRigidBody(std::shared_ptr<RigidBody>& body);
-		void RegisterForceGenerator(std::shared_ptr<RigidBody>& body, std::shared_ptr<IForceGenerator<RigidBody>>& forceGenerator);
+		RigidBodyPhysicsEngine();
+
+		void AddRigidBody(std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume);
+		void RegisterForceGenerator(std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume, std::shared_ptr<IForceGenerator<RigidBody>> forceGenerator);
 		void Update(real duration);
 
 	private:
 		std::vector<std::shared_ptr<RigidBody>> mBodies;
 		ForceRegistry<RigidBody> mRegistry;
-		BoundingVolumeHierarchyNode<SphereBoundingVolume> mBoundingVolumeHierarchyRoot;
+		std::shared_ptr<BoundingVolumeHierarchyNode> mBoundingVolumeHierarchyRoot;
 	};
 };

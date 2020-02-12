@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "SphereBoundingVolume.h"
-#include "../../utils/Math.h"
+#include "../BoundingVolumeIntersectionResolverMap.h"
 
 namespace NPhysics
 {
@@ -48,9 +48,15 @@ namespace NPhysics
 		}
 	}
 
-	bool SphereBoundingVolume::IsOverlapping(const SphereBoundingVolume& volume) const
+	bool SphereBoundingVolume::IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const
 	{
-		return NMath::IsOverlapping(*this, volume);
+		auto intersectionFunction = BoundingVolumeIntersectionResolverMap::GetInstance().LookupOverlappingFunction(
+			typeid(*this).name(), 
+			typeid(volume).name());
+	
+		assert(intersectionFunction);
+
+		return intersectionFunction(shared_from_this(), volume);
 	}
 
 	real SphereBoundingVolume::GetVolume() const
@@ -58,9 +64,19 @@ namespace NPhysics
 		return 4.0f / 3.0f * glm::pi<float>() * mRadius * mRadius * mRadius;
 	}
 
-	real SphereBoundingVolume::GetGrowth(const SphereBoundingVolume& volume) const
+	real SphereBoundingVolume::GetGrowth(std::shared_ptr<IBoundingVolume> volume) const
 	{
-		SphereBoundingVolume newVolume(*this, volume);
-		return newVolume.GetVolume() - GetVolume();
+		auto newVolume = MergeBoundingVolumes(volume);
+		return newVolume->GetVolume() - GetVolume();
+	}
+	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::MergeBoundingVolumes(std::shared_ptr<IBoundingVolume> volume) const
+	{
+		auto mergeFunction = BoundingVolumeIntersectionResolverMap::GetInstance().LookupMergeFunction(
+			typeid(*this).name(),
+			typeid(volume).name());
+
+		assert(mergeFunction);
+
+		return mergeFunction(shared_from_this(), volume);
 	}
 }

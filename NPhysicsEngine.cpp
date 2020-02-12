@@ -5,12 +5,12 @@
 
 namespace NPhysics
 {
-	void NPhysicsEngine::AddParticle(std::shared_ptr<Particle>& particle)
+	void NPhysicsEngine::AddParticle(std::shared_ptr<Particle> particle)
 	{
 		mParticlePhysicsEngine.AddParticle(particle);
 	}
 
-	void NPhysicsEngine::RegisterParticleForceGenerator(std::shared_ptr<Particle>& particle, std::shared_ptr<IForceGenerator<Particle>>& forceGenerator)
+	void NPhysicsEngine::RegisterParticleForceGenerator(std::shared_ptr<Particle> particle, std::shared_ptr<IForceGenerator<Particle>> forceGenerator)
 	{
 		mParticlePhysicsEngine.RegisterForceGenerator(particle, forceGenerator);
 	}
@@ -21,13 +21,13 @@ namespace NPhysics
 		mRigidBodyPhysicsEngine.Update(duration);
 	}
 
-	void NPhysicsEngine::AddRigidBody(std::shared_ptr<RigidBody>& body)
+	void NPhysicsEngine::AddRigidBody(std::shared_ptr<RigidBody> body, std::shared_ptr<IBoundingVolume> volume)
 	{
-		mRigidBodyPhysicsEngine.AddRigidBody(body);
+		mRigidBodyPhysicsEngine.AddRigidBody(body, volume);
 	}
 
-	void NPhysicsEngine::RegisterRigidBodyForceGenerator(std::shared_ptr<RigidBody>& body, std::shared_ptr<IForceGenerator<RigidBody>>& forceGenerator)
+	void NPhysicsEngine::RegisterRigidBodyForceGenerator(std::shared_ptr<RigidBody> body, std::shared_ptr<IBoundingVolume> volume, std::shared_ptr<IForceGenerator<RigidBody>> forceGenerator)
 	{
-		mRigidBodyPhysicsEngine.RegisterForceGenerator(body, forceGenerator);
+		mRigidBodyPhysicsEngine.RegisterForceGenerator(body, volume, forceGenerator);
 	}
 }

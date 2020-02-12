@@ -3,7 +3,7 @@
 
 namespace NPhysics
 {
-	PotentialContact::PotentialContact(std::shared_ptr<PhysicsObject>& obj1, std::shared_ptr<PhysicsObject>& obj2)
+	PotentialContact::PotentialContact(std::shared_ptr<PhysicsObject> obj1, std::shared_ptr<PhysicsObject> obj2)
 	{
 		mObjects.push_back(obj1);
 		mObjects.push_back(obj2);

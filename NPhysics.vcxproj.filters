@@ -156,6 +156,9 @@
     <ClInclude Include="source\collision\PotentialContact.h">
       <Filter>Archivos de encabezado\collision</Filter>
     </ClInclude>
+    <ClInclude Include="source\bvh\BoundingVolumeIntersectionResolverMap.h">
+      <Filter>Archivos de encabezado\bvh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -218,9 +221,6 @@
     <ClCompile Include="source\utils\Math.cpp">
       <Filter>Archivos de origen\utils</Filter>
     </ClCompile>
-    <ClCompile Include="source\bvh\boundingVolumes\IBoundingVolume.cpp">
-      <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
-    </ClCompile>
     <ClCompile Include="source\bvh\boundingVolumes\SphereBoundingVolume.cpp">
       <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
     </ClCompile>
@@ -229,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="source\collision\PotentialContact.cpp">
       <Filter>Archivos de origen\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="source\bvh\BoundingVolumeIntersectionResolverMap.cpp">
+      <Filter>Archivos de origen\bvh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

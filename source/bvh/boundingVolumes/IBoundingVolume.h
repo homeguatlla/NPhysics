@@ -1,17 +1,15 @@
 #pragma once
 #include "../../../framework.h"
-
-namespace NPhysics {
-	class SphereBoundingVolume;
-}
+#include <memory>
 
 namespace NPhysics
 {
 	class IBoundingVolume
 	{
-		virtual bool IsOverlapping(const SphereBoundingVolume& volume) const = 0;
-		//virtual bool Overlaps(const BoxBoundingVolume& volume) const = 0;
-		virtual real GetGrowth(const SphereBoundingVolume& volume) const = 0;
+	public:
+		virtual bool IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const = 0;
+		virtual real GetGrowth(std::shared_ptr<IBoundingVolume> volume) const = 0;
+		virtual std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(std::shared_ptr<IBoundingVolume> volume) const = 0;
 		virtual real GetVolume() const = 0;
 	};
 };
