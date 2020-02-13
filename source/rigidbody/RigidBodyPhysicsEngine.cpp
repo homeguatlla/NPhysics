@@ -3,19 +3,37 @@
 #include "RigidBody.h"
 #include "../bvh/BoundingVolumeHierarchyNode.h"
 #include "../bvh/BoundingVolumeIntersectionResolverMap.h"
-#include "../utils/Math.h"
+#include "../bvh/boundingVolumes/SphereBoundingVolume.h"
+
 
 namespace NPhysics
 {
 	RigidBodyPhysicsEngine::RigidBodyPhysicsEngine()
 	{
 		BoundingVolumeIntersectionResolverMap::GetInstance().AddEntry(
-			std::string("SphereBoundingVolume"), 
-			std::string("SphereBouningVolume"),
-			std::bind<bool>(&NMath::IsOverlapping, std::placeholders::_1, std::placeholders::_2),
-			std::bind<std::shared_ptr<IBoundingVolume>>(&NMath::MergeBoundingVolumes, std::placeholders::_1, std::placeholders::_2));
+			typeid(SphereBoundingVolume).name(), 
+			typeid(SphereBoundingVolume).name(),
+			std::bind<bool>(&RigidBodyPhysicsEngine::IsOverlapping, this, std::placeholders::_1, std::placeholders::_2),
+			std::bind<std::shared_ptr<IBoundingVolume>>(&RigidBodyPhysicsEngine::MergeBoundingVolumes, this, std::placeholders::_1, std::placeholders::_2));
+			
 		mBoundingVolumeHierarchyRoot = std::make_shared<BoundingVolumeHierarchyNode>();
+	}
 
+	bool RigidBodyPhysicsEngine::IsOverlapping(std::shared_ptr<const IBoundingVolume> volume1, std::shared_ptr<const IBoundingVolume> volume2) const
+	{
+		auto sphere1 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume1);
+		auto sphere2 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume2);
+		real distance = glm::distance(sphere1->GetCenter(), sphere2->GetCenter());
+		return distance < sphere1->GetRadius() + sphere2->GetRadius();
+	}
+
+	std::shared_ptr<IBoundingVolume> RigidBodyPhysicsEngine::MergeBoundingVolumes(std::shared_ptr<const IBoundingVolume> volume1, std::shared_ptr<const IBoundingVolume> volume2) const
+	{
+		auto sphere1 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume1);
+		auto sphere2 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume2);
+		auto newVolume = SphereBoundingVolume(*sphere1.get(), *sphere2.get());
+
+		return std::make_shared<SphereBoundingVolume>(newVolume);
 	}
 
 	void NPhysics::RigidBodyPhysicsEngine::AddRigidBody(std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume)
