@@ -2,6 +2,7 @@
 #include "BoundingVolumeHierarchyNode.h"
 #include "../collision/PotentialContact.h"
 #include "../utils/Math.h"
+#include "../PhysicsObject.h"
 
 namespace NPhysics
 {
@@ -36,6 +37,8 @@ namespace NPhysics
 
 	void BoundingVolumeHierarchyNode::Insert(const std::shared_ptr<PhysicsObject> object, const std::shared_ptr<IBoundingVolume> volume)
 	{
+		volume->SetPosition(object->GetPosition());
+
 		//If we are a leaf, then the only option is to spawn two new children and place the new body in one
 		if (IsLeaf())
 		{

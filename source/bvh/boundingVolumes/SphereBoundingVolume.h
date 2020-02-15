@@ -2,6 +2,7 @@
 #include "IBoundingVolume.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <string>
 
 namespace NPhysics
 {
@@ -19,9 +20,17 @@ namespace NPhysics
 		real GetVolume() const override;
 		real GetGrowth(std::shared_ptr<IBoundingVolume> volume) const override;
 		std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(std::shared_ptr<IBoundingVolume> volume) const override;
+		const glm::mat3 GetInertiaTensorMatrix(float mass) const override;
+		void SetPosition(const glm::vec3& position) { mCenter = position; }
 
 		glm::vec3 GetCenter() const { return mCenter; }
 		real GetRadius() const { return mRadius; }
+
+		void SetRadius(real radius) { mRadius = radius; }
+		void SetCenter(const glm::vec3& center) { mCenter = center; }
+
+		static std::string GetClassName() { return std::string("SphereBoundingVolume"); }
+		static std::shared_ptr<IBoundingVolume> Create();
 
 	private:
 		glm::vec3 mCenter;

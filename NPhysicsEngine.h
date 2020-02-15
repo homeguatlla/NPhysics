@@ -12,6 +12,9 @@ namespace NPhysics
 	class NPhysicsEngine
 	{
 	public:
+		NPhysicsEngine();
+		~NPhysicsEngine() = default;
+
 		void AddParticle(std::shared_ptr<Particle> particle);
 		void RegisterParticleForceGenerator(std::shared_ptr<Particle> particle, std::shared_ptr<IForceGenerator<Particle>> forceGenerator);
 		void Update(real duration);
@@ -19,6 +22,7 @@ namespace NPhysics
 		void AddRigidBody(std::shared_ptr<RigidBody> body, std::shared_ptr<IBoundingVolume> volume);
 		void RegisterRigidBodyForceGenerator(std::shared_ptr<RigidBody> body, std::shared_ptr<IBoundingVolume> volume, std::shared_ptr<IForceGenerator<RigidBody>> forceGenerator);
 
+		[[deprecated("Each IBoundingVolume should implement its own inertia tensor matrix")]]
 		static glm::mat3 GetInertiaTensorMatrix(real mass, const glm::vec3& size)
 		{
 			real dx = size.x * size.x;

@@ -159,6 +159,9 @@
     <ClInclude Include="source\bvh\BoundingVolumeIntersectionResolverMap.h">
       <Filter>Archivos de encabezado\bvh</Filter>
     </ClInclude>
+    <ClInclude Include="source\InstantiableObject.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -232,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="source\bvh\BoundingVolumeIntersectionResolverMap.cpp">
       <Filter>Archivos de origen\bvh</Filter>
+    </ClCompile>
+    <ClCompile Include="source\InstantiableObject.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

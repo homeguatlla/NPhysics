@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SphereBoundingVolume.h"
 #include "../BoundingVolumeIntersectionResolverMap.h"
+#include <glm\gtx\transform.hpp>
 
 namespace NPhysics
 {
@@ -78,5 +79,17 @@ namespace NPhysics
 
 		assert(mergeFunction);
 		return mergeFunction(*this, *volume.get());
+	}
+	const glm::mat3 SphereBoundingVolume::GetInertiaTensorMatrix(float mass) const
+	{
+		real value = (2.0f/5.0f) * (mass * mRadius * mRadius);
+		
+		glm::mat3 inertiaTensorMatrix = glm::scale(glm::vec3(value, value, value));
+
+		return inertiaTensorMatrix;
+	}
+	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::Create()
+	{
+		return std::make_shared<SphereBoundingVolume>();
 	}
 }
