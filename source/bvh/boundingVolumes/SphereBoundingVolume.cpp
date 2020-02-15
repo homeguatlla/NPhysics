@@ -52,11 +52,12 @@ namespace NPhysics
 	{
 		auto intersectionFunction = BoundingVolumeIntersectionResolverMap::GetInstance().LookupOverlappingFunction(
 			typeid(*this).name(), 
-			typeid(volume).name());
+			typeid(*volume).name());
 	
 		assert(intersectionFunction);
 
-		return intersectionFunction(shared_from_this(), volume);
+		std::shared_ptr<const IBoundingVolume> thisVolume = std::make_shared<SphereBoundingVolume>(*this);
+		return intersectionFunction(thisVolume, volume);
 	}
 
 	real SphereBoundingVolume::GetVolume() const
@@ -73,10 +74,10 @@ namespace NPhysics
 	{
 		auto mergeFunction = BoundingVolumeIntersectionResolverMap::GetInstance().LookupMergeFunction(
 			typeid(*this).name(),
-			typeid(volume).name());
+			typeid(*volume).name());
 
 		assert(mergeFunction);
-
-		return mergeFunction(shared_from_this(), volume);
+		std::shared_ptr<const IBoundingVolume> thisVolume = std::make_shared<SphereBoundingVolume>(*this);
+		return mergeFunction(thisVolume, volume);
 	}
 }

@@ -7,7 +7,7 @@ void BoundingVolumeIntersectionResolverMap::AddEntry(const std::string& type1, c
 {
 	auto key = std::make_pair(type1, type2);
 	BoundingVolumeIntersectionResolverMap::ResolverEntryMap::iterator mapEntry = mBoundingVolumeIntersectionResolvers.find(key);
-	if (mapEntry != mBoundingVolumeIntersectionResolvers.end())
+	if (mapEntry == mBoundingVolumeIntersectionResolvers.end())
 	{
 		ResolverEntry resolverEntry;
 		resolverEntry.overlappingFunction = overlappingFunction;

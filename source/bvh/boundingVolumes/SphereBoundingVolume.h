@@ -5,7 +5,7 @@
 
 namespace NPhysics
 {
-	class SphereBoundingVolume : public IBoundingVolume, std::enable_shared_from_this<SphereBoundingVolume>
+	class SphereBoundingVolume : public IBoundingVolume
 	{
 	public:
 		SphereBoundingVolume();
