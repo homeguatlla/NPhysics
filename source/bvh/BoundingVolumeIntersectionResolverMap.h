@@ -13,8 +13,8 @@ namespace NPhysics
 	class BoundingVolumeIntersectionResolverMap
 	{
 	public:
-		using OverlappingFunctionPtr = std::function<bool(std::shared_ptr<const IBoundingVolume>, std::shared_ptr<const IBoundingVolume>)>;
-		using MergeFunctionPtr = std::function<std::shared_ptr<IBoundingVolume>(std::shared_ptr<const IBoundingVolume>, std::shared_ptr<const IBoundingVolume>)>;
+		using OverlappingFunctionPtr = std::function<bool(const IBoundingVolume&, const IBoundingVolume&)>;
+		using MergeFunctionPtr = std::function<std::shared_ptr<IBoundingVolume>(const IBoundingVolume&, const IBoundingVolume&)>;
 
 	private:
 		typedef struct ResolverEntry

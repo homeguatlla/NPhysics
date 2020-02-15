@@ -56,8 +56,8 @@ namespace NPhysics
 	
 		assert(intersectionFunction);
 
-		std::shared_ptr<const IBoundingVolume> thisVolume = std::make_shared<SphereBoundingVolume>(*this);
-		return intersectionFunction(thisVolume, volume);
+		std::shared_ptr<IBoundingVolume> thisVolume = std::make_shared<SphereBoundingVolume>(*this);
+		return intersectionFunction(*thisVolume.get(), *volume.get());
 	}
 
 	real SphereBoundingVolume::GetVolume() const
@@ -77,7 +77,6 @@ namespace NPhysics
 			typeid(*volume).name());
 
 		assert(mergeFunction);
-		std::shared_ptr<const IBoundingVolume> thisVolume = std::make_shared<SphereBoundingVolume>(*this);
-		return mergeFunction(thisVolume, volume);
+		return mergeFunction(*this, *volume.get());
 	}
 }

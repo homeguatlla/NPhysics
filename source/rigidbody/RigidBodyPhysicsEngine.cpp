@@ -13,10 +13,10 @@ namespace NPhysics
 		BoundingVolumeIntersectionResolverMap::GetInstance().AddEntry(
 			typeid(SphereBoundingVolume).name(),
 			typeid(SphereBoundingVolume).name(),
-			[](std::shared_ptr<const IBoundingVolume> volume1, std::shared_ptr<const IBoundingVolume> volume2) {
+			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
 				return NMath::IsOverlapping(volume1, volume2);
 			},
-			[](std::shared_ptr<const IBoundingVolume> volume1, std::shared_ptr<const IBoundingVolume> volume2) {
+			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
 				return NMath::MergeBoundingVolumes(volume1, volume2);
 			});
 		mBoundingVolumeHierarchyRoot = std::make_shared<BoundingVolumeHierarchyNode>();

@@ -67,19 +67,19 @@ namespace NPhysics
 			return glm::vec3(attitude, heading, bank);
 		}
 
-		static bool IsOverlapping(std::shared_ptr<const IBoundingVolume> volume1, std::shared_ptr<const IBoundingVolume> volume2)
+		static bool IsOverlapping(const IBoundingVolume& volume1, const IBoundingVolume& volume2)
 		{
-			auto sphere1 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume1);
-			auto sphere2 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume2);
-			real distance = glm::distance(sphere1->GetCenter(), sphere2->GetCenter());
-			return distance < sphere1->GetRadius() + sphere2->GetRadius();
+			auto sphere1 = dynamic_cast<const SphereBoundingVolume&>(volume1);
+			auto sphere2 = dynamic_cast<const SphereBoundingVolume&>(volume2);
+			real distance = glm::distance(sphere1.GetCenter(), sphere2.GetCenter());
+			return distance < sphere1.GetRadius() + sphere2.GetRadius();
 		}
 
-		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(std::shared_ptr<const IBoundingVolume> volume1, std::shared_ptr<const IBoundingVolume> volume2)
+		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const IBoundingVolume& volume1, const IBoundingVolume& volume2)
 		{
-			auto sphere1 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume1);
-			auto sphere2 = std::dynamic_pointer_cast<const SphereBoundingVolume>(volume2);
-			auto newVolume = SphereBoundingVolume(*sphere1.get(), *sphere2.get());
+			auto sphere1 = dynamic_cast<const SphereBoundingVolume&>(volume1);
+			auto sphere2 = dynamic_cast<const SphereBoundingVolume&>(volume2);
+			auto newVolume = SphereBoundingVolume(sphere1, sphere2);
 
 			return std::make_shared<SphereBoundingVolume>(newVolume);
 		}
