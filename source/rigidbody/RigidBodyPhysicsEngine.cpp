@@ -6,6 +6,8 @@
 #include "../bvh/boundingVolumes/SphereBoundingVolume.h"
 #include "../utils/Math.h"
 
+#include <iostream>
+
 namespace NPhysics
 {
 	RigidBodyPhysicsEngine::RigidBodyPhysicsEngine()
@@ -50,5 +52,15 @@ namespace NPhysics
 			body->Integrate(duration);
 			//std::cout << "velocity: " << particle->GetVelocity().x << ", " << particle->GetVelocity().y << ", " << particle->GetVelocity().z << "\n";
 		}
+
+		CheckCollisions();
+	}
+
+	void RigidBodyPhysicsEngine::CheckCollisions()
+	{
+		std::vector<std::shared_ptr<PotentialContact>> potentialContacts;
+		mBoundingVolumeHierarchyRoot->GetPotentialContacts(potentialContacts, MAX_CONTACTS);
+
+		std::cout << "Num potential contacts " << potentialContacts.size() << "\n";
 	}
 }
