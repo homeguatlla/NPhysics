@@ -69,8 +69,8 @@ namespace NPhysics
 	{
 		assert(node && node->IsLeaf());
 
-		auto&& parent = node->GetParent().lock();
-		auto&& childrenToPromote = parent->GetChildren(0) == node ? parent->GetChildren(1) : parent->GetChildren(0);
+		auto parent = node->GetParent().lock();
+		auto childrenToPromote = parent->GetChildren(0) == node ? parent->GetChildren(1) : parent->GetChildren(0);
 			
 		if (childrenToPromote->IsLeaf())
 		{
