@@ -61,6 +61,6 @@ namespace NPhysics
 		std::vector<std::shared_ptr<PotentialContact>> potentialContacts;
 		mBoundingVolumeHierarchyRoot->GetPotentialContacts(potentialContacts, MAX_CONTACTS);
 
-		std::cout << "Num potential contacts " << potentialContacts.size() << "\n";
+		//std::cout << "Num potential contacts " << potentialContacts.size() << "\n";
 	}
 }

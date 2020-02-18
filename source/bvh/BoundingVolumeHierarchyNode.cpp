@@ -7,7 +7,7 @@
 namespace NPhysics
 {
 	BoundingVolumeHierarchyNode::BoundingVolumeHierarchyNode(
-		std::shared_ptr<BoundingVolumeHierarchyNode> parent,
+		std::weak_ptr<BoundingVolumeHierarchyNode> parent,
 		std::shared_ptr<PhysicsObject> object,
 		std::shared_ptr<IBoundingVolume> volume) :
 		mParent{ parent },
@@ -63,6 +63,27 @@ namespace NPhysics
 				mChildren[childIndex]->Insert(object, volume);
 			}
 		}
+	}
+
+	void BoundingVolumeHierarchyNode::Remove(std::shared_ptr<BoundingVolumeHierarchyNode> node)
+	{
+		assert(node && node->IsLeaf());
+
+		auto&& parent = node->GetParent().lock();
+		auto&& childrenToPromote = parent->GetChildren(0) == node ? parent->GetChildren(1) : parent->GetChildren(0);
+			
+		if (childrenToPromote->IsLeaf())
+		{
+			parent->mPhysicsObject = childrenToPromote->GetPhysicsObject();
+			parent->mChildren[0] = nullptr;
+			parent->mChildren[1] = nullptr;
+		}
+		else
+		{
+			parent = childrenToPromote;
+		}			
+		node = nullptr;
+		RecalculateBoundingVolume();
 	}
 
 	bool BoundingVolumeHierarchyNode::IsOverlapping(const std::shared_ptr<BoundingVolumeHierarchyNode> node) const
@@ -134,6 +155,29 @@ namespace NPhysics
 		return count;
 	}
 
+	bool BoundingVolumeHierarchyNode::Find(const std::shared_ptr<PhysicsObject> object, const std::shared_ptr<IBoundingVolume> volume, std::shared_ptr<BoundingVolumeHierarchyNode>& nodeFound)
+	{
+		if (IsLeaf())
+		{
+			nodeFound = shared_from_this();
+			return mPhysicsObject == object;
+		}
+		else
+		{
+			bool found = false;
+			if (mChildren[0]->GetBoundingVolume()->IsOverlapping(volume))
+			{
+				found = mChildren[0]->Find(object, volume, nodeFound);
+			}
+			if (!found && mChildren[1]->GetBoundingVolume()->IsOverlapping(volume))
+			{
+				found = mChildren[1]->Find(object, volume, nodeFound);
+			}
+
+			return found;
+		}
+	}
+
 	void BoundingVolumeHierarchyNode::RecalculateBoundingVolume()
 	{
 		if (!IsLeaf())
@@ -142,7 +186,7 @@ namespace NPhysics
 			// Recurse up the tree
 			if (HasParent())
 			{
-				mParent->RecalculateBoundingVolume();
+				mParent.lock()->RecalculateBoundingVolume();
 			}
 		}
 	}
