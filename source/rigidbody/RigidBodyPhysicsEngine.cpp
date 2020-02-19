@@ -16,21 +16,47 @@ namespace NPhysics
 			typeid(SphereBoundingVolume).name(),
 			typeid(SphereBoundingVolume).name(),
 			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
-				return NMath::IsOverlapping(volume1, volume2);
+				auto sphere1 = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				auto sphere2 = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				return NMath::IsOverlapping(sphere1, sphere2);
 			},
 			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
-				return NMath::MergeBoundingVolumes(volume1, volume2);
+				auto sphere1 = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				auto sphere2 = dynamic_cast<const SphereBoundingVolume&>(volume2);
+
+				return NMath::MergeBoundingVolumes(sphere1, sphere2);
+			},
+			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
+				auto sphere1 = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				auto sphere2 = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				return NMath::Contains(sphere1, sphere2);
 			});
 		mBoundingVolumeHierarchyRoot = std::make_shared<BoundingVolumeHierarchyNode>();
 	}
 
 	void NPhysics::RigidBodyPhysicsEngine::AddRigidBody(std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume)
 	{
-		bool found = std::find(mBodies.begin(), mBodies.end(), body) != mBodies.end();
+		if (body->IsStatic())
+		{
+			AddRigidBody(mStaticBodies, body, volume);
+		}
+		else
+		{
+			AddRigidBody(mDynamicBodies, body, volume);
+		}
+	}
+
+	void NPhysics::RigidBodyPhysicsEngine::AddRigidBody(BodiesVector& bodiesVector, std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume)
+	{
+		auto found = std::find_if(
+			bodiesVector.begin(),
+			bodiesVector.end(),
+			[&body](const std::pair<std::shared_ptr<RigidBody>, std::shared_ptr<IBoundingVolume>>& element)
+			{ return element.first == body; }) != bodiesVector.end();
 
 		if (!found)
 		{
-			mBodies.push_back(body);
+			bodiesVector.push_back(std::make_pair(body, volume));
 			mBoundingVolumeHierarchyRoot->Insert(body, volume);
 		}
 	}
@@ -47,13 +73,29 @@ namespace NPhysics
 	{
 		mRegistry.UpdateForces(duration);
 
-		for (auto body : mBodies)
+		/*for (auto body : mStaticBodies)
 		{
-			body->Integrate(duration);
+			body.first->Integrate(duration);
 			//std::cout << "velocity: " << particle->GetVelocity().x << ", " << particle->GetVelocity().y << ", " << particle->GetVelocity().z << "\n";
+		}*/
+
+		for (auto body : mDynamicBodies)
+		{
+			body.first->Integrate(duration);
 		}
 
+		UpdateBoundingVolumeHierarchy();
+
 		CheckCollisions();
+	}
+
+	void RigidBodyPhysicsEngine::UpdateBoundingVolumeHierarchy()
+	{
+		for (auto body : mDynamicBodies)
+		{
+			body.second->SetPosition(body.first->GetPosition());
+			mBoundingVolumeHierarchyRoot->UpdateBoundingVolume(body.first, body.second);
+		}
 	}
 
 	void RigidBodyPhysicsEngine::CheckCollisions()
@@ -61,6 +103,6 @@ namespace NPhysics
 		std::vector<std::shared_ptr<PotentialContact>> potentialContacts;
 		mBoundingVolumeHierarchyRoot->GetPotentialContacts(potentialContacts, MAX_CONTACTS);
 
-		//std::cout << "Num potential contacts " << potentialContacts.size() << "\n";
+		std::cout << "Num potential contacts " << potentialContacts.size() << "\n";
 	}
 }

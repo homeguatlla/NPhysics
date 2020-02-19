@@ -77,6 +77,7 @@ namespace NPhysics
 			parent->mPhysicsObject = childrenToPromote->GetPhysicsObject();
 			parent->mChildren[0] = nullptr;
 			parent->mChildren[1] = nullptr;
+			parent->mVolume = childrenToPromote->GetBoundingVolume();
 		}
 		else
 		{
@@ -178,6 +179,21 @@ namespace NPhysics
 			}
 
 			return found;
+		}
+	}
+
+	void BoundingVolumeHierarchyNode::UpdateBoundingVolume(
+		const std::shared_ptr<PhysicsObject> object,
+		const std::shared_ptr<IBoundingVolume> volume)
+	{
+		std::shared_ptr<BoundingVolumeHierarchyNode> nodeFound;
+		if (Find(object, volume, nodeFound))
+		{
+			if (!nodeFound->GetBoundingVolume()->Contains(volume))
+			{
+				Remove(nodeFound);
+				Insert(object, volume);
+			}
 		}
 	}
 

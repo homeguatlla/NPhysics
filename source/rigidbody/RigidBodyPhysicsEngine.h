@@ -12,6 +12,8 @@ namespace NPhysics
 	class RigidBodyPhysicsEngine
 	{
 		const unsigned int MAX_CONTACTS { 1000 };
+		using BodiesVector = std::vector<std::pair<std::shared_ptr<RigidBody>, std::shared_ptr<IBoundingVolume>>>;
+
 	public:
 		RigidBodyPhysicsEngine();
 
@@ -20,10 +22,15 @@ namespace NPhysics
 		void Update(real duration);
 
 	private:
+		void AddRigidBody(BodiesVector& bodiesVector, std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume);
+		void UpdateBoundingVolumeHierarchy();
 		void CheckCollisions();
 
 	private:
-		std::vector<std::shared_ptr<RigidBody>> mBodies;
+		
+		BodiesVector mStaticBodies;
+		BodiesVector mDynamicBodies;
+
 		ForceRegistry<RigidBody> mRegistry;
 		std::shared_ptr<BoundingVolumeHierarchyNode> mBoundingVolumeHierarchyRoot;
 	};

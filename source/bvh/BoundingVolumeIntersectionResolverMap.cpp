@@ -3,7 +3,13 @@
 
 namespace NPhysics
 {
-void BoundingVolumeIntersectionResolverMap::AddEntry(const std::string& type1, const std::string& type2, OverlappingFunctionPtr overlappingFunction, MergeFunctionPtr mergeFunction, bool isSymmetric)
+void BoundingVolumeIntersectionResolverMap::AddEntry(
+	const std::string& type1, 
+	const std::string& type2, 
+	OverlappingFunctionPtr overlappingFunction, 
+	MergeFunctionPtr mergeFunction, 
+	ContainsFunctionPtr containsFunction, 
+	bool isSymmetric)
 {
 	auto key = std::make_pair(type1, type2);
 	BoundingVolumeIntersectionResolverMap::ResolverEntryMap::iterator mapEntry = mBoundingVolumeIntersectionResolvers.find(key);
@@ -12,6 +18,7 @@ void BoundingVolumeIntersectionResolverMap::AddEntry(const std::string& type1, c
 		ResolverEntry resolverEntry;
 		resolverEntry.overlappingFunction = overlappingFunction;
 		resolverEntry.mergeFunction = mergeFunction;
+		resolverEntry.containsFunction = containsFunction;
 
 		mBoundingVolumeIntersectionResolvers[key] = resolverEntry;
 		if (isSymmetric)
@@ -59,6 +66,19 @@ BoundingVolumeIntersectionResolverMap::MergeFunctionPtr BoundingVolumeIntersecti
 	if (FindResolverEntry(type1, type2, entry))
 	{
 		return entry.mergeFunction;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+BoundingVolumeIntersectionResolverMap::ContainsFunctionPtr BoundingVolumeIntersectionResolverMap::LookupContainsFunction(const std::string& type1, const std::string& type2)
+{
+	ResolverEntry entry;
+	if (FindResolverEntry(type1, type2, entry))
+	{
+		return entry.containsFunction;
 	}
 	else
 	{

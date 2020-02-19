@@ -92,4 +92,13 @@ namespace NPhysics
 	{
 		return std::make_shared<SphereBoundingVolume>();
 	}
+	bool SphereBoundingVolume::Contains(std::shared_ptr<IBoundingVolume> volume) const
+	{
+		auto containsFunction = BoundingVolumeIntersectionResolverMap::GetInstance().LookupContainsFunction(
+			typeid(*this).name(),
+			typeid(*volume).name());
+
+		assert(containsFunction);
+		return containsFunction(*this, *volume.get());
+	}
 }
