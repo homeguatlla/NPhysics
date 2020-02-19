@@ -7,7 +7,7 @@ namespace NPhysics
 	class PhysicsObject
 	{
 	public:
-		PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity);
+		PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, bool isStatic);
 		void SetAcceleration(const glm::vec3& acceleration);
 		void SetDamping(real damping);
 		void SetMass(real mass);
@@ -26,6 +26,8 @@ namespace NPhysics
 		glm::vec3 GetVelocity() const { return mVelocity; }
 		glm::vec3 GetAcceleration() const { return mAcceleration; }
 		glm::vec3 GetRotation() const { return DoGetRotation(); }
+
+		bool IsStatic() const { return mIsStatic; }
 
 	private:
 		virtual void DoResetForceAccumulated() = 0;
@@ -52,6 +54,8 @@ namespace NPhysics
 		real mInverseMass;
 
 		glm::vec3 mForceAccumulated;
+
+		bool mIsStatic;
 	};
 };
 

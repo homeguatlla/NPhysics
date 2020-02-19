@@ -69,8 +69,8 @@ namespace NPhysics
 	{
 		assert(node && node->IsLeaf());
 
-		auto parent = node->GetParent().lock();
-		auto childrenToPromote = parent->GetChildren(0) == node ? parent->GetChildren(1) : parent->GetChildren(0);
+		auto parent = node->mParent.lock();
+		auto childrenToPromote = parent->mChildren[0] == node ? parent->mChildren[1] : parent->mChildren[0];
 			
 		if (childrenToPromote->IsLeaf())
 		{
@@ -80,7 +80,10 @@ namespace NPhysics
 		}
 		else
 		{
-			parent = childrenToPromote;
+			parent->mChildren[0] = childrenToPromote->mChildren[0];
+			childrenToPromote->mChildren[0]->mParent = parent;
+			parent->mChildren[1] = childrenToPromote->mChildren[1];
+			childrenToPromote->mChildren[1]->mParent = parent;
 		}			
 		node = nullptr;
 		RecalculateBoundingVolume();

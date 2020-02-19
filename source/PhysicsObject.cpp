@@ -4,12 +4,13 @@
 namespace NPhysics
 {
 
-	PhysicsObject::PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity) :
+	PhysicsObject::PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, bool isStatic) :
 		mPosition(initialPosition),
 		mVelocity(initialVelocity),
 		mAcceleration(0.0f),
 		mDamping(0.995f),
-		mInverseMass(0.0f) //by default inmovable particle
+		mInverseMass(0.0f), //by default inmovable particle
+		mIsStatic(isStatic)
 	{
 	}
 

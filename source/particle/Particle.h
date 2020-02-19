@@ -8,7 +8,7 @@ namespace NPhysics {
 	class Particle : public PhysicsObject
 	{
 	public:
-		explicit Particle(const glm::vec3& initialPosition, const glm::vec3& initialVelocity);
+		explicit Particle(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, bool isStatic);
 		~Particle() = default;
 
 		void Integrate(real duration);

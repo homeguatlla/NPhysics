@@ -5,8 +5,8 @@
 
 namespace NPhysics
 {
-	NPhysics::Particle::Particle(const glm::vec3& initialPosition, const glm::vec3& initialVelocity) :
-		PhysicsObject(initialPosition, initialVelocity)
+	NPhysics::Particle::Particle(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, bool isStatic) :
+		PhysicsObject(initialPosition, initialVelocity, isStatic)
 	{
 	}
 
