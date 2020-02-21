@@ -162,6 +162,9 @@
     <ClInclude Include="source\InstantiableObject.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="source\bvh\boundingVolumes\BoxBoundingVolume.h">
+      <Filter>Archivos de encabezado\bvh\boundingVolumes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="source\InstantiableObject.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\bvh\boundingVolumes\BoxBoundingVolume.cpp">
+      <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

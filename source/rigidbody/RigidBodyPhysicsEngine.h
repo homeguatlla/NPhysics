@@ -25,6 +25,7 @@ namespace NPhysics
 		void AddRigidBody(BodiesVector& bodiesVector, std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume);
 		void UpdateBoundingVolumeHierarchy();
 		void CheckCollisions();
+		void RegisterCollisionBoundingVolumesSupported();
 
 	private:
 		

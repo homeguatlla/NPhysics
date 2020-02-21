@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include "../bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "../bvh/boundingVolumes/BoxBoundingVolume.h"
 
 namespace NPhysics
 {
@@ -73,6 +74,16 @@ namespace NPhysics
 			return distance < sphere1.GetRadius() + sphere2.GetRadius();
 		}
 
+		static bool IsOverlapping(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		{
+			return false;
+		}
+
+		static bool IsOverlapping(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		{
+			return false;
+		}
+
 		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 		{
 			auto newVolume = SphereBoundingVolume(sphere1, sphere2);
@@ -80,11 +91,33 @@ namespace NPhysics
 			return std::make_shared<SphereBoundingVolume>(newVolume);
 		}
 
+		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		{
+			auto newVolume = BoxBoundingVolume(box1, box2);
+
+			return std::make_shared<BoxBoundingVolume>(newVolume);
+		}
+
+		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		{
+			return std::make_shared<BoxBoundingVolume>();
+		}
+
 		//volume1 contains volume2
 		static bool Contains(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 		{
 			real distance = glm::distance(sphere1.GetCenter(), sphere2.GetCenter());
 			return distance < sphere1.GetRadius() - sphere2.GetRadius();
+		}
+
+		static bool Contains(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		{
+			return false;
+		}
+
+		static bool Contains(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		{
+			return false;
 		}
 	};
 };

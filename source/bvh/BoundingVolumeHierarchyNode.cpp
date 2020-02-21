@@ -121,9 +121,17 @@ namespace NPhysics
 		//if we're both at leaf nodes, then we have a potential contact
 		if (IsLeaf() && other->IsLeaf())
 		{
-			auto contact = std::make_shared<PotentialContact>(mPhysicsObject, other->GetPhysicsObject());
-			contacts.push_back(contact);
-			return 1;
+			//at least one of the two objects have to be dynamic
+			if (!mPhysicsObject->IsStatic() || !other->GetPhysicsObject()->IsStatic())
+			{
+				auto contact = std::make_shared<PotentialContact>(mPhysicsObject, other->GetPhysicsObject());
+				contacts.push_back(contact);
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 
 		//Determine which node to descend into. If either is a leaf, then we descend the other.
