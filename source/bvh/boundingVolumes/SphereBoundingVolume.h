@@ -37,6 +37,7 @@ namespace NPhysics
 	private:
 		glm::vec3 mCenter;
 		real mRadius;
+		glm::mat4 mTransformation;
 	};
 };
 

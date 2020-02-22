@@ -40,14 +40,8 @@
     <Filter Include="Archivos de encabezado\rigidbody\forceGenerators">
       <UniqueIdentifier>{94c2e277-03d0-4a3f-82f1-5bd202876385}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de encabezado\rigidbody\collisionProcessing">
-      <UniqueIdentifier>{3fc004d3-cf71-4440-9742-3436919c98d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\rigidbody\forceGenerators">
       <UniqueIdentifier>{ee48d13b-1f1d-4946-aa01-8ccf1bff0647}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\rigidbody\collisionProcessing">
-      <UniqueIdentifier>{79eb7580-624e-4e4d-96cb-9300f6435685}</UniqueIdentifier>
     </Filter>
     <Filter Include="Archivos de encabezado\utils">
       <UniqueIdentifier>{4d74ec79-6fe6-4aeb-96dd-e9ac03e861ca}</UniqueIdentifier>
@@ -168,6 +162,12 @@
     <ClInclude Include="source\collision\CollisionResolver.h">
       <Filter>Archivos de encabezado\collision</Filter>
     </ClInclude>
+    <ClInclude Include="source\collision\Contact.h">
+      <Filter>Archivos de encabezado\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="source\collision\ContactResolver.h">
+      <Filter>Archivos de encabezado\collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -249,6 +249,12 @@
       <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
     </ClCompile>
     <ClCompile Include="source\collision\CollisionResolver.cpp">
+      <Filter>Archivos de origen\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="source\collision\Contact.cpp">
+      <Filter>Archivos de origen\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="source\collision\ContactResolver.cpp">
       <Filter>Archivos de origen\collision</Filter>
     </ClCompile>
   </ItemGroup>

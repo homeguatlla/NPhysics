@@ -21,7 +21,6 @@ namespace NPhysics
 
 	private:
 		void RegisterCollisionBoundingVolumesSupported();
-		void CheckCollisions();
 
 	private:
 		std::shared_ptr<BoundingVolumeHierarchyNode> mBoundingVolumeHierarchyRoot;

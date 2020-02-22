@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "RigidBodyPhysicsEngine.h"
 #include "RigidBody.h"
-#include "../bvh/boundingVolumes/SphereBoundingVolume.h"
-#include "../bvh/boundingVolumes/BoxBoundingVolume.h"
-#include "../utils/Math.h"
+#include "../bvh/boundingVolumes/IBoundingVolume.h"
 
 #include <iostream>
 

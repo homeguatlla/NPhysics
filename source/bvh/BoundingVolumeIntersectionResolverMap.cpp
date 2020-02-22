@@ -8,7 +8,8 @@ void BoundingVolumeIntersectionResolverMap::AddEntry(
 	const std::string& type2, 
 	OverlappingFunctionPtr overlappingFunction, 
 	MergeFunctionPtr mergeFunction, 
-	ContainsFunctionPtr containsFunction, 
+	ContainsFunctionPtr containsFunction,
+	CollisionResolverFunctionPtr collisionResolverFunction,
 	bool isSymmetric)
 {
 	auto key = std::make_pair(type1, type2);
@@ -19,6 +20,7 @@ void BoundingVolumeIntersectionResolverMap::AddEntry(
 		resolverEntry.overlappingFunction = overlappingFunction;
 		resolverEntry.mergeFunction = mergeFunction;
 		resolverEntry.containsFunction = containsFunction;
+		resolverEntry.collisionResolverFunction = collisionResolverFunction;
 
 		mBoundingVolumeIntersectionResolvers[key] = resolverEntry;
 		if (isSymmetric)
@@ -32,7 +34,10 @@ void BoundingVolumeIntersectionResolverMap::RemoveEntry(const std::string & type
 {
 }
 
-bool BoundingVolumeIntersectionResolverMap::FindResolverEntry(const std::string& type1, const std::string& type2, ResolverEntry& entry)
+bool BoundingVolumeIntersectionResolverMap::FindResolverEntry(
+	const std::string& type1, 
+	const std::string& type2, 
+	ResolverEntry& entry)
 {
 	auto key = std::make_pair(type1, type2);
 	ResolverEntryMap::iterator mapEntry = mBoundingVolumeIntersectionResolvers.find(key);
@@ -47,7 +52,9 @@ bool BoundingVolumeIntersectionResolverMap::FindResolverEntry(const std::string&
 	}
 }
 
-BoundingVolumeIntersectionResolverMap::OverlappingFunctionPtr BoundingVolumeIntersectionResolverMap::LookupOverlappingFunction(const std::string & type1, const std::string & type2)
+BoundingVolumeIntersectionResolverMap::OverlappingFunctionPtr BoundingVolumeIntersectionResolverMap::LookupOverlappingFunction(
+	const std::string & type1, 
+	const std::string & type2)
 {
 	ResolverEntry entry;
 	if (FindResolverEntry(type1, type2, entry))
@@ -60,7 +67,9 @@ BoundingVolumeIntersectionResolverMap::OverlappingFunctionPtr BoundingVolumeInte
 	}
 }
 
-BoundingVolumeIntersectionResolverMap::MergeFunctionPtr BoundingVolumeIntersectionResolverMap::LookupMergeFunction(const std::string& type1, const std::string& type2)
+BoundingVolumeIntersectionResolverMap::MergeFunctionPtr BoundingVolumeIntersectionResolverMap::LookupMergeFunction(
+	const std::string& type1, 
+	const std::string& type2)
 {
 	ResolverEntry entry;
 	if (FindResolverEntry(type1, type2, entry))
@@ -73,12 +82,29 @@ BoundingVolumeIntersectionResolverMap::MergeFunctionPtr BoundingVolumeIntersecti
 	}
 }
 
-BoundingVolumeIntersectionResolverMap::ContainsFunctionPtr BoundingVolumeIntersectionResolverMap::LookupContainsFunction(const std::string& type1, const std::string& type2)
+BoundingVolumeIntersectionResolverMap::ContainsFunctionPtr BoundingVolumeIntersectionResolverMap::LookupContainsFunction(
+	const std::string& type1, 
+	const std::string& type2)
 {
 	ResolverEntry entry;
 	if (FindResolverEntry(type1, type2, entry))
 	{
 		return entry.containsFunction;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+BoundingVolumeIntersectionResolverMap::CollisionResolverFunctionPtr BoundingVolumeIntersectionResolverMap::LookupCollisionResolverFunction(
+	const std::string& type1, 
+	const std::string& type2)
+{
+	ResolverEntry entry;
+	if (FindResolverEntry(type1, type2, entry))
+	{
+		return entry.collisionResolverFunction;
 	}
 	else
 	{

@@ -3,6 +3,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include "../bvh/boundingVolumes/SphereBoundingVolume.h"
 #include "../bvh/boundingVolumes/BoxBoundingVolume.h"
+#include "../collision/Contact.h"
 
 namespace NPhysics
 {
@@ -118,6 +119,21 @@ namespace NPhysics
 		static bool Contains(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
 		{
 			return false;
+		}
+
+		static std::shared_ptr<Contact> ResolveCollision(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		{
+			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
+		}
+
+		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		{
+			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
+		}
+
+		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		{
+			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
 		}
 	};
 };

@@ -124,7 +124,10 @@ namespace NPhysics
 			//at least one of the two objects have to be dynamic
 			if (!mPhysicsObject->IsStatic() || !other->GetPhysicsObject()->IsStatic())
 			{
-				auto contact = std::make_shared<PotentialContact>(mPhysicsObject, other->GetPhysicsObject());
+				auto contact = std::make_shared<PotentialContact>(
+					std::make_pair(mPhysicsObject, mVolume), 
+					std::make_pair(other->GetPhysicsObject(), other->GetBoundingVolume()));
+
 				contacts.push_back(contact);
 				return 1;
 			}

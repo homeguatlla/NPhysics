@@ -165,6 +165,8 @@
     <ClInclude Include="source\bvh\boundingVolumes\IBoundingVolume.h" />
     <ClInclude Include="source\bvh\boundingVolumes\SphereBoundingVolume.h" />
     <ClInclude Include="source\collision\CollisionResolver.h" />
+    <ClInclude Include="source\collision\Contact.h" />
+    <ClInclude Include="source\collision\ContactResolver.h" />
     <ClInclude Include="source\collision\PotentialContact.h" />
     <ClInclude Include="source\ForceRegistry.h" />
     <ClInclude Include="source\IForceGenerator.h" />
@@ -201,6 +203,8 @@
     <ClCompile Include="source\bvh\boundingVolumes\BoxBoundingVolume.cpp" />
     <ClCompile Include="source\bvh\boundingVolumes\SphereBoundingVolume.cpp" />
     <ClCompile Include="source\collision\CollisionResolver.cpp" />
+    <ClCompile Include="source\collision\Contact.cpp" />
+    <ClCompile Include="source\collision\ContactResolver.cpp" />
     <ClCompile Include="source\collision\PotentialContact.cpp" />
     <ClCompile Include="source\InstantiableObject.cpp" />
     <ClCompile Include="source\particle\collisionProcessing\ParticleCable.cpp" />

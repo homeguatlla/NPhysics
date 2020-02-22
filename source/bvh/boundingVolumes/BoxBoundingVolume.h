@@ -27,6 +27,7 @@ namespace NPhysics
 	private:
 		glm::vec3 mCenter;
 		glm::vec3 mSize;
+		glm::mat4 mTransformation;
 	};
 };
 
