@@ -16,6 +16,7 @@ namespace NPhysics
 
 	private:
 		std::vector<std::shared_ptr<PotentialContact>>& mPotentialContacts;
+		std::vector<std::shared_ptr<Contact>>& mContacts;
 	};
 };
 

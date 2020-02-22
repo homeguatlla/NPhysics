@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PotentialContact.h"
 #include "../bvh/BoundingVolumeIntersectionResolverMap.h"
+#include "../bvh/boundingVolumes/IBoundingVolume.h"
 
 namespace NPhysics
 {
@@ -9,13 +10,16 @@ namespace NPhysics
 		mObjects.push_back(data1);
 		mObjects.push_back(data2);
 	}
-	std::shared_ptr<Contact> PotentialContact::Resolve()
+	std::shared_ptr<Contact> PotentialContact::Resolve() const
 	{
+		auto volume1 = mObjects[0].second;
+		auto volume2 = mObjects[1].second;
+
 		auto resolveCollisionFunction = BoundingVolumeIntersectionResolverMap::GetInstance().LookupCollisionResolverFunction(
-			typeid(mObjects[0].second).name(),
-			typeid(mObjects[1].second).name());
+			typeid(*volume1).name(),
+			typeid(*volume2).name());
 
 		assert(resolveCollisionFunction);
-		return resolveCollisionFunction(*mObjects[0].second.get(), *mObjects[1].second.get());
+		return resolveCollisionFunction(*volume1.get(), *volume2.get());
 	}
 }

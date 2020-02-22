@@ -13,7 +13,11 @@ namespace NPhysics
 	{
 		for (const auto& potentialContact : mPotentialContacts)
 		{
-			potentialContact->Resolve();
+			auto contact = potentialContact->Resolve();
+			if (contact)
+			{
+				mContacts.push_back(contact);
+			}
 		}
 	}
 }
