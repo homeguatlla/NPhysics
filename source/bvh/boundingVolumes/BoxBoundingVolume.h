@@ -7,7 +7,7 @@ namespace NPhysics
 	{
 	public:
 		BoxBoundingVolume();
-		BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size);
+		BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::mat4& transformationOffset = {});
 		BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2);
 
 		~BoxBoundingVolume() = default;
@@ -20,6 +20,7 @@ namespace NPhysics
 		real GetVolume() const override;
 		const glm::mat3 GetInertiaTensorMatrix(float mass) const override;
 		void SetPosition(const glm::vec3& position) override;
+		glm::vec3 GetPosition() const override { return mCenter; }
 
 		glm::vec3 GetMinPoint() const { return mCenter - mSize * 0.5f; }
 		glm::vec3 GetMaxPoint() const { return mCenter + mSize * 0.5f; }

@@ -5,6 +5,7 @@
 namespace NPhysics
 {
 	class PotentialContact;
+	class Contact;
 
 	class ContactResolver
 	{
@@ -15,8 +16,8 @@ namespace NPhysics
 		void Resolve();
 
 	private:
-		std::vector<std::shared_ptr<PotentialContact>>& mPotentialContacts;
-		std::vector<std::shared_ptr<Contact>>& mContacts;
+		std::vector<std::shared_ptr<PotentialContact>> mPotentialContacts;
+		std::vector<std::shared_ptr<Contact>> mContacts;
 	};
 };
 

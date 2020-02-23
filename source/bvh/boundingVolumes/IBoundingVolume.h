@@ -15,8 +15,7 @@ namespace NPhysics
 		virtual real GetVolume() const = 0;
 		virtual const glm::mat3 GetInertiaTensorMatrix(float mass) const = 0;
 		virtual void SetPosition(const glm::vec3& position) = 0;
-
-
+		virtual glm::vec3 GetPosition() const = 0;
 	};
 };
 

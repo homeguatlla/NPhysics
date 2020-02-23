@@ -2,6 +2,7 @@
 #include "SphereBoundingVolume.h"
 #include "../BoundingVolumeIntersectionResolverMap.h"
 #include <glm\gtx\transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 namespace NPhysics
 {
@@ -11,17 +12,25 @@ namespace NPhysics
 	{
 	}
 
-	SphereBoundingVolume::SphereBoundingVolume(const glm::vec3& center, real radius) :
+	SphereBoundingVolume::SphereBoundingVolume(const glm::vec3& center, real radius, const glm::mat4& transformationOffset) :
 		mCenter{center},
 		mRadius{ radius }
 	{
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::decompose(transformationOffset, scale, rotation, translation, skew, perspective);
+
+		mCenter = mCenter + translation;
 	}
 
 	SphereBoundingVolume::SphereBoundingVolume(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 	{
 		//https://stackoverflow.com/questions/33532860/merge-two-spheres-to-get-a-new-one
 
-		auto distanceBetweenSpheres = glm::distance(sphere1.GetCenter(), sphere2.GetCenter());
+		auto distanceBetweenSpheres = glm::distance(sphere1.GetPosition(), sphere2.GetPosition());
 		
 		//If the spheres enclose each other:
 		bool sphere1EnclosesSphere2 = distanceBetweenSpheres + sphere2.GetRadius() < sphere1.GetRadius();
@@ -32,12 +41,12 @@ namespace NPhysics
 			if (sphere1.GetRadius() > sphere2.GetRadius())
 			{
 				mRadius = sphere1.GetRadius();
-				mCenter = sphere1.GetCenter();
+				mCenter = sphere1.GetPosition();
 			}
 			else
 			{
 				mRadius = sphere2.GetRadius();
-				mCenter = sphere2.GetCenter();
+				mCenter = sphere2.GetPosition();
 			}
 		}
 		else
@@ -45,7 +54,7 @@ namespace NPhysics
 			mRadius = (sphere1.GetRadius() + sphere2.GetRadius() + distanceBetweenSpheres) * 0.5f;
 			//linear interpolation
 			float lambda = (mRadius - sphere1.GetRadius()) / distanceBetweenSpheres;
-			mCenter = sphere1.GetCenter() + (sphere2.GetCenter() - sphere1.GetCenter()) * lambda;
+			mCenter = sphere1.GetPosition() + (sphere2.GetPosition() - sphere1.GetPosition()) * lambda;
 		}
 	}
 
@@ -88,6 +97,7 @@ namespace NPhysics
 
 		return inertiaTensorMatrix;
 	}
+
 	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::Create()
 	{
 		return std::make_shared<SphereBoundingVolume>();

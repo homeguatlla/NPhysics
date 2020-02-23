@@ -71,7 +71,7 @@ namespace NPhysics
 
 		static bool IsOverlapping(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 		{
-			real distance = glm::distance(sphere1.GetCenter(), sphere2.GetCenter());
+			real distance = glm::distance(sphere1.GetPosition(), sphere2.GetPosition());
 			return distance < sphere1.GetRadius() + sphere2.GetRadius();
 		}
 
@@ -107,7 +107,7 @@ namespace NPhysics
 		//volume1 contains volume2
 		static bool Contains(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 		{
-			real distance = glm::distance(sphere1.GetCenter(), sphere2.GetCenter());
+			real distance = glm::distance(sphere1.GetPosition(), sphere2.GetPosition());
 			return distance < sphere1.GetRadius() - sphere2.GetRadius();
 		}
 
@@ -121,9 +121,29 @@ namespace NPhysics
 			return false;
 		}
 
+		//sphere 1 collides with sphere2
 		static std::shared_ptr<Contact> ResolveCollision(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 		{
-			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
+			glm::vec3 position1 = sphere1.GetPosition();
+			glm::vec3 position2 = sphere2.GetPosition();
+
+			//Find the vector between positions
+			glm::vec3 midline = position1 - position2;
+			real size = glm::length(midline);
+
+			if (size > 0.0f && size < sphere1.GetRadius() + sphere2.GetRadius())
+			{
+				glm::vec3 normal = midline / size;
+				glm::vec3 point = position2 + normal * sphere2.GetRadius();
+				real penetration = sphere1.GetRadius() + sphere2.GetRadius() - size;
+
+				return std::make_shared<Contact>(
+					point, 
+					normal, 
+					penetration);
+			}
+
+			return nullptr;
 		}
 
 		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)

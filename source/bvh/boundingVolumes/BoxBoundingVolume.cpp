@@ -2,7 +2,7 @@
 #include "BoxBoundingVolume.h"
 #include "../BoundingVolumeIntersectionResolverMap.h"
 #include "glm/gtx/transform.hpp"
-
+#include <glm/gtx/matrix_decompose.hpp>
 #include <algorithm>
 
 namespace NPhysics
@@ -11,10 +11,18 @@ namespace NPhysics
 	{
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size) : 
+	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::mat4& transformationOffset) :
 		mCenter(center), 
 		mSize(size)
 	{
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::decompose(transformationOffset, scale, rotation, translation, skew, perspective);
+
+		mCenter = mCenter + translation;
 	}
 
 	BoxBoundingVolume::BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)

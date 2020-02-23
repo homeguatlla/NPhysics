@@ -7,6 +7,9 @@ namespace NPhysics
 	{
 	public:
 		Contact(const glm::vec3& point, const glm::vec3& normal, real penetration);
+		glm::vec3 GetPoint() const { return mPoint; }
+		glm::vec3 GetNormal() const { return mNormal; }
+		real GetPenetration() const { return mPenetration; }
 
 	private:
 		//Holds the position of the contact in world coordinates
