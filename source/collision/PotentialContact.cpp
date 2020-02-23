@@ -2,6 +2,7 @@
 #include "PotentialContact.h"
 #include "../bvh/BoundingVolumeIntersectionResolverMap.h"
 #include "../bvh/boundingVolumes/IBoundingVolume.h"
+#include "Contact.h"
 
 namespace NPhysics
 {
@@ -20,6 +21,10 @@ namespace NPhysics
 			typeid(*volume2).name());
 
 		assert(resolveCollisionFunction);
-		return resolveCollisionFunction(*volume1.get(), *volume2.get());
+		auto contact = resolveCollisionFunction(*volume1.get(), *volume2.get());
+
+		contact->SetBodies(mObjects[0].first, mObjects[1].first);
+
+		return contact;
 	}
 }
