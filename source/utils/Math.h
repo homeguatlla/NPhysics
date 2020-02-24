@@ -69,6 +69,19 @@ namespace NPhysics
 			return glm::vec3(attitude, heading, bank);
 		}
 
+		//v1 must be normalized and cannot be zero
+		static glm::mat3 CreateOrthonormalBasis(const glm::vec3& v1)
+		{
+			assert(v1 == glm::vec3(0.0f));
+
+			glm::vec3 v2 = v1.x > v1.y ? glm::vec3(v1.z, 0.0f, -v1.x) : glm::vec3(0.0f, -v1.z, v1.y);
+			v2 = glm::normalize(v2);
+
+			glm::vec3 v3 = glm::cross(v1, v2);
+
+			return glm::mat3(v1, v2, v3);
+		}
+
 		static bool IsOverlapping(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
 		{
 			real distance = glm::distance(sphere1.GetPosition(), sphere2.GetPosition());
