@@ -15,6 +15,7 @@ namespace NPhysics
 		real GetPenetration() const { return mPenetration; }
 
 		void SetBodies(std::shared_ptr<PhysicsObject> body1, std::shared_ptr<PhysicsObject> body2);
+		std::shared_ptr<PhysicsObject> GetBody(unsigned int index);
 
 	private:
 		//Holds the position of the contact in world coordinates

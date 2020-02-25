@@ -14,4 +14,11 @@ namespace NPhysics
 		mBodies[0] = body1;
 		mBodies[1] = body2;
 	}
+
+	std::shared_ptr<PhysicsObject> Contact::GetBody(unsigned int index)
+	{
+		assert(index >= 0 && index < 2);
+
+		return mBodies[index];
+	}
 }

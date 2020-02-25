@@ -1,4 +1,5 @@
 #pragma once
+#include<glm/glm.hpp>
 #include <vector>
 #include <memory>
 
@@ -14,6 +15,13 @@ namespace NPhysics
 		virtual ~ContactResolver() = default;
 
 		void Resolve();
+	private:
+		real CalculateFrictionLessImpulse(const std::shared_ptr<Contact>& contact);
+		real CalculateFrictionLessImpulsePerBody(
+			const glm::vec3& relativeContactPosition,
+			const glm::vec3& normal,
+			const glm::mat3& inverseTensorMatrix,
+			real inverseMass);
 
 	private:
 		std::vector<std::shared_ptr<PotentialContact>> mPotentialContacts;

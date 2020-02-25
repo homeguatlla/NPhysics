@@ -22,6 +22,7 @@ namespace NPhysics
 		void AddForceAtBodyPoint(const glm::vec3& force, const glm::vec3& point);
 
 		void SetInertiaTensorMatrix(const glm::mat3& matrix);
+		glm::mat3 GetInverseInertiaTensorWorldMatrix() const { return mInverseInertiaTensorWorld; }
 
 		void Integrate(real duration);
 

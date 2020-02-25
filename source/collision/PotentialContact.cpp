@@ -11,7 +11,8 @@ namespace NPhysics
 		mObjects.push_back(data1);
 		mObjects.push_back(data2);
 	}
-	std::shared_ptr<Contact> PotentialContact::Resolve() const
+
+	void PotentialContact::Resolve(std::vector<std::shared_ptr<Contact>>& contacts) const
 	{
 		auto volume1 = mObjects[0].second;
 		auto volume2 = mObjects[1].second;
@@ -25,6 +26,6 @@ namespace NPhysics
 
 		contact->SetBodies(mObjects[0].first, mObjects[1].first);
 
-		return contact;
+		contacts.push_back(contact);
 	}
 }

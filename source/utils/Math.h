@@ -72,7 +72,7 @@ namespace NPhysics
 		//v1 must be normalized and cannot be zero
 		static glm::mat3 CreateOrthonormalBasis(const glm::vec3& v1)
 		{
-			assert(v1 == glm::vec3(0.0f));
+			assert(v1 != glm::vec3(0.0f));
 
 			glm::vec3 v2 = v1.x > v1.y ? glm::vec3(v1.z, 0.0f, -v1.x) : glm::vec3(0.0f, -v1.z, v1.y);
 			v2 = glm::normalize(v2);
