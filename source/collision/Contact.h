@@ -17,6 +17,8 @@ namespace NPhysics
 		void SetBodies(std::shared_ptr<PhysicsObject> body1, std::shared_ptr<PhysicsObject> body2);
 		std::shared_ptr<PhysicsObject> GetBody(unsigned int index);
 
+		glm::mat3 GetWorldToContactMatrix() const { return mWorldToContactMatrix; }
+
 	private:
 		//Holds the position of the contact in world coordinates
 		glm::vec3 mPoint;
@@ -30,5 +32,8 @@ namespace NPhysics
 		real mPenetration;
 
 		std::shared_ptr<PhysicsObject> mBodies[2];
+
+		glm::mat3 mContactLocalMatrix;
+		glm::mat3 mWorldToContactMatrix;
 	};
 };

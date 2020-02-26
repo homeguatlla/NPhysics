@@ -22,6 +22,11 @@ namespace NPhysics
 			const glm::vec3& normal,
 			const glm::mat3& inverseTensorMatrix,
 			real inverseMass);
+		glm::vec3 CalculateLocalVelocity(
+			const glm::vec3& relativeContactPosition,
+			const glm::vec3& bodyVelocity,
+			const glm::vec3& bodyRotation,
+			const glm::mat3& fromWorldToContactMatrix);
 
 	private:
 		std::vector<std::shared_ptr<PotentialContact>> mPotentialContacts;

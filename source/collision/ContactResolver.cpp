@@ -31,6 +31,7 @@ namespace NPhysics
 	real ContactResolver::CalculateFrictionLessImpulse(const std::shared_ptr<Contact>& contact)
 	{
 		real velocity = 0.0f;
+		glm::vec3 localVelocity(0.0f);
 
 		for (int i = 0; i < 2; ++i)
 		{
@@ -43,6 +44,13 @@ namespace NPhysics
 					contact->GetNormal(),
 					body->GetInverseInertiaTensorWorldMatrix(),
 					body->GetInverseMass());
+
+				//vel body1 - vel body2
+				localVelocity += (1.0f - 2.0f * i) * CalculateLocalVelocity(
+					relativeContactPosition,
+					body->GetVelocity(),
+					body->GetRotation(),
+					contact->GetWorldToContactMatrix());
 			}
 		}
 
@@ -67,5 +75,20 @@ namespace NPhysics
 		deltaVelocity += inverseMass;
 
 		return deltaVelocity;
+	}
+
+	glm::vec3 ContactResolver::CalculateLocalVelocity(
+		const glm::vec3& relativeContactPosition, 
+		const glm::vec3& bodyVelocity,
+		const glm::vec3& bodyRotation,
+		const glm::mat3& fromWorldToContactMatrix)
+	{
+		glm::vec3 velocity = glm::cross(bodyRotation, relativeContactPosition); //due to angular component
+		velocity += bodyVelocity; //due to linear component
+
+		//transform velocity to a contact basis
+		velocity = fromWorldToContactMatrix * velocity;
+
+		return velocity;
 	}
 }
