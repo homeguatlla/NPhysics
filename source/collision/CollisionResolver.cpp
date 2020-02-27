@@ -30,7 +30,7 @@ namespace NPhysics
 
 		ContactResolver contactResolver(potentialContacts);
 
-		contactResolver.Resolve();
+		contactResolver.Resolve(duration);
 	}
 
 	void CollisionResolver::UpdateCollider(std::shared_ptr<PhysicsObject> body, std::shared_ptr<IBoundingVolume> collider)
