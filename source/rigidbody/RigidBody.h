@@ -33,6 +33,8 @@ namespace NPhysics
 
 		void SetRotation(const glm::vec3& initialRotation);
 		glm::vec3 GetRotation() const;
+		void SetOrientation(const glm::quat& orientation);
+		glm::quat GetOrientation() const { return mOrientation; }
 
 		void SetAngularDamping(float damping);
 

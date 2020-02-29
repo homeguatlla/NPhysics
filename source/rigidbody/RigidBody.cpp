@@ -58,6 +58,12 @@ namespace NPhysics
 		ResetForceAndTorqueAccumulated();
 	}
 
+	void RigidBody::SetOrientation(const glm::quat& orientation)
+	{
+		mOrientation = orientation;
+		CalculateDerivedData();
+	}
+
 	void RigidBody::SetRotation(const glm::vec3& initialRotation)
 	{
 		mOrientation = NMath::FromEulerAnglesToQuaternion(initialRotation);

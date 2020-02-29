@@ -2,6 +2,7 @@
 #include<glm/glm.hpp>
 #include <vector>
 #include <memory>
+#include <functional>
 
 namespace NPhysics
 {
@@ -11,18 +12,27 @@ namespace NPhysics
 	class ContactResolver
 	{
 	public:
-		ContactResolver(std::vector<std::shared_ptr<PotentialContact>>& potentialContacts);
+		ContactResolver(
+			std::vector<std::shared_ptr<PotentialContact>>& potentialContacts, 
+			int numIterationsPerContactWhenResolvingInterpenetration = 4,
+			int numIterationsPerContactWhenResolvingVelocity = 4);
 		virtual ~ContactResolver() = default;
 
 		void Resolve(float elapsedTime);
 
 	private:
-		void ResolveInterpenetration(const std::shared_ptr<Contact>& contact, float elapsedTime);
-		void ResolveVelocities(const std::shared_ptr<Contact>& contact, float elapsedTime);
+		void ResolveInterpenetration(float elapsedTime);
+		void ResolveVelocities(float elapsedTime);
+		std::shared_ptr<Contact> FindContactWithLargerPenetration();
+		std::shared_ptr<Contact> FindContactWithLargerDesiredDeltaVelocity();
+		void PerformActionOnEachContact(std::function<void(const std::shared_ptr<Contact> & c)> action);
 
 	private:
 		std::vector<std::shared_ptr<PotentialContact>> mPotentialContacts;
 		std::vector<std::shared_ptr<Contact>> mContacts;
+
+		int mNumIterationsPerContactWhenResolvingInterpenetration;
+		int mNumIterationsPerContactWhenResolvingVelocity;
 	};
 };
 
