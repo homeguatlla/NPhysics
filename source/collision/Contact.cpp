@@ -10,6 +10,8 @@ namespace NPhysics
 		mPoint(point),
 		mNormal(normal),
 		mPenetration(penetration),
+		mRestitution(1.0f),
+		mFriction(0.0f),
 		mBodies { nullptr, nullptr }
 	{
 	}
@@ -99,8 +101,8 @@ namespace NPhysics
 				glm::vec3 deltaPosition = contactResolved->GetLinearChange(bodyResolvedIndex) +
 					glm::cross(contactResolved->GetAngularChange(bodyResolvedIndex), mRelativeContactPosition[bodyIndex]);
 
-				real sign = 1.0f - 2.0f * bodyIndex;
-				mPenetration += sign * glm::dot(deltaPosition, mNormal);
+				real sign = 1.0f - 2.0f * bodyIndex; 
+				mPenetration -= sign * glm::dot(deltaPosition, mNormal);
 			});
 	}
 
@@ -238,13 +240,11 @@ namespace NPhysics
 			if (body)
 			{
 				//Calculate inertia
-				inertiaAngularVelocity.push_back(
-					CalculateInertiaAngularVelocity(
-						mRelativeContactPosition[i],
-						mNormal,
-						body->GetInverseInertiaTensorWorldMatrix())
-				);
-				inertiaLinearVelocity.push_back(CalculateInertiaLinearVelocity(body->GetInverseMass()));
+				inertiaAngularVelocity[i] = CalculateInertiaAngularVelocity( 
+					mRelativeContactPosition[i],
+					mNormal,
+					body->GetInverseInertiaTensorWorldMatrix());
+				inertiaLinearVelocity[i] = CalculateInertiaLinearVelocity(body->GetInverseMass());
 				totalInertia += inertiaAngularVelocity[i] + inertiaLinearVelocity[i];
 			}
 		}

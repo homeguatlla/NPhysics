@@ -74,7 +74,7 @@ namespace NPhysics
 		{
 			assert(v1 != glm::vec3(0.0f));
 
-			glm::vec3 v2 = v1.x > v1.y ? glm::vec3(v1.z, 0.0f, -v1.x) : glm::vec3(0.0f, -v1.z, v1.y);
+			glm::vec3 v2 = glm::abs(v1.x) > glm::abs(v1.y) ? glm::vec3(v1.z, 0.0f, -v1.x) : glm::vec3(0.0f, -v1.z, v1.y);
 			v2 = glm::normalize(v2);
 
 			glm::vec3 v3 = glm::cross(v1, v2);

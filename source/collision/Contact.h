@@ -17,6 +17,9 @@ namespace NPhysics
 		real GetPenetration() const { return mPenetration; }
 		real GetDesiredDeltaVelocity() const { return mDesiredDeltaVelocity; }
 
+		void SetRestitution(real restitution) { mRestitution = restitution; }
+		void SetFriction(real friction) { mFriction = friction; }
+
 		void SetBodies(std::shared_ptr<PhysicsObject> body1, std::shared_ptr<PhysicsObject> body2);
 		std::shared_ptr<PhysicsObject> GetBody(unsigned int index);
 

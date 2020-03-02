@@ -25,6 +25,8 @@ namespace NPhysics
 		auto contact = resolveCollisionFunction(*volume1.get(), *volume2.get());
 
 		contact->SetBodies(mObjects[0].first, mObjects[1].first);
+		contact->SetRestitution(0.1f);
+		contact->SetFriction(0.0f);
 
 		contacts.push_back(contact);
 	}
