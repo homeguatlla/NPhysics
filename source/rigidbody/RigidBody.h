@@ -2,7 +2,9 @@
 #include "../../framework.h"
 #include "../PhysicsObject.h"
 #include <glm/gtx/quaternion.hpp>
+#include "../collision/Contact.h"
 #include <glm/glm.hpp>
+#include <functional>
 
 namespace NPhysics
 {
@@ -30,7 +32,6 @@ namespace NPhysics
 
 		void DoResetForceAccumulated() override;
 
-
 		void SetRotation(const glm::vec3& initialRotation);
 		glm::vec3 GetRotation() const;
 		void SetOrientation(const glm::quat& orientation);
@@ -38,9 +39,15 @@ namespace NPhysics
 
 		void SetAngularDamping(float damping);
 
+		void RegisterCollisionEnterHandler(std::function<void(const Contact& contact)> callback) { mCollisionEnterHandler = callback; }
+		void RegisterCollisionExitHandler(std::function<void(const Contact& contact)> callback) { mCollisionExitHandler = callback; }
+		void OnCollisionEnter(const Contact& contact);
+		void OnCollisionExit(const Contact& contact);
+
 	private:
 		void DoSetPosition(const glm::vec3& position) override;
 		void DoSetRotation(const glm::vec3& rotation) override;
+		virtual glm::vec3 DoGetRotation() const override;
 
 		void CalculateDerivedData();
 		glm::mat4 CalculateTransformationMatrix(const glm::vec3& position, const glm::quat& orientation);
@@ -49,6 +56,7 @@ namespace NPhysics
 		
 		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
 		void ResetForceAndTorqueAccumulated();
+		
 	private:
 		//Holds the angular orientation of the rigid body in world space
 		glm::quat mOrientation;
@@ -75,8 +83,8 @@ namespace NPhysics
 		//Holds the amount of damping applied to angular motion.
 		real mAngularDamping;
 
-		// Heredado vía PhysicsObject
-		virtual glm::vec3 DoGetRotation() const override;
+		std::function<void(const Contact& contact)> mCollisionEnterHandler;
+		std::function<void(const Contact& contact)> mCollisionExitHandler;
 	};
 };
 

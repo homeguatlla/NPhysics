@@ -36,6 +36,9 @@ namespace NPhysics
 		glm::vec3 GetRotationChange(int bodyIndex);
 		glm::vec3 GetVelocityChange(int bodyIndex);
 
+		void NotifyCollisionEnter();
+		void NotifyCollisionExit();
+
 	private:
 		
 		real CalculateInertiaAngularVelocity(

@@ -144,6 +144,30 @@ namespace NPhysics
 		return mVelocityChange[bodyIndex];
 	}
 
+	void Contact::NotifyCollisionEnter()
+	{
+		for (int i = 0; i < 2; ++i)
+		{
+			std::shared_ptr<RigidBody> body = std::static_pointer_cast<RigidBody>(mBodies[i]);
+			if (body)
+			{
+				body->OnCollisionEnter(*this);
+			}
+		}
+	}
+
+	void Contact::NotifyCollisionExit()
+	{
+		for (int i = 0; i < 2; ++i)
+		{
+			std::shared_ptr<RigidBody> body = std::static_pointer_cast<RigidBody>(mBodies[i]);
+			if (body)
+			{
+				body->OnCollisionExit(*this);
+			}
+		}
+	}
+
 	void Contact::ApplyPositionChanges()
 	{
 		std::vector<real> inertiaAngularVelocity = { 0.0f, 0.0f };

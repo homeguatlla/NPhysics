@@ -6,11 +6,13 @@
 
 namespace NPhysics
 {
-	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity, bool isStatic) : 
+	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity, bool isStatic) :
 		PhysicsObject(position, initialVelocity, isStatic),
 		mAngularVelocity(angularVelocity),
 		mAngularDamping(0.995f),
-		mTransformationMatrix(1.0f)
+		mTransformationMatrix(1.0f),
+		mCollisionEnterHandler(nullptr),
+		mCollisionExitHandler(nullptr)
 	{
 		CalculateDerivedData();
 	}
@@ -78,6 +80,22 @@ namespace NPhysics
 	void RigidBody::SetAngularDamping(float damping)
 	{
 		mAngularDamping = damping;
+	}
+
+	void RigidBody::OnCollisionEnter(const Contact& contact)
+	{
+		if (mCollisionEnterHandler)
+		{
+			mCollisionEnterHandler(contact);
+		}
+	}
+
+	void RigidBody::OnCollisionExit(const Contact& contact)
+	{
+		if (mCollisionExitHandler)
+		{
+			mCollisionExitHandler(contact);
+		}
 	}
 
 	void RigidBody::ResetForceAndTorqueAccumulated()

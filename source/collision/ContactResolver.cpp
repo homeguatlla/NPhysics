@@ -30,6 +30,7 @@ namespace NPhysics
 		PerformActionOnEachContact(
 			[&elapsedTime](const std::shared_ptr<Contact>& contact) {
 				contact->Calculate(elapsedTime);
+				contact->NotifyCollisionEnter();
 			});
 
 		if (!mContacts.empty())
@@ -37,6 +38,13 @@ namespace NPhysics
 			ResolveInterpenetration(elapsedTime);
 			ResolveVelocities(elapsedTime);
 		}
+
+		//Notify about a collision
+		PerformActionOnEachContact(
+			[&elapsedTime](const std::shared_ptr<Contact>& contact) {
+				//notify both objects about a collision
+				contact->NotifyCollisionExit();
+			});
 	}
 
 	void ContactResolver::ResolveInterpenetration(float elapsedTime)
