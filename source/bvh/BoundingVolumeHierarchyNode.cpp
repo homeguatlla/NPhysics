@@ -202,8 +202,17 @@ namespace NPhysics
 		{
 			if (!nodeFound->GetBoundingVolume()->Contains(volume))
 			{
-				Remove(nodeFound);
-				Insert(object, volume);
+				if (nodeFound->HasParent())
+				{
+					Remove(nodeFound);
+					Insert(object, volume);
+				}
+				else
+				{
+					//is root
+					nodeFound->mVolume = volume;
+					nodeFound->mPhysicsObject = object;
+				}
 			}
 		}
 	}

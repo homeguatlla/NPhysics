@@ -5,6 +5,8 @@
 #include "../bvh/boundingVolumes/BoxBoundingVolume.h"
 #include "../collision/Contact.h"
 
+#include <glm/gtc/epsilon.hpp>
+
 namespace NPhysics
 {
 	class NMath
@@ -67,6 +69,13 @@ namespace NPhysics
 			bank = atan2(2 * q.x * q.w - 2 * q.y * q.z, -sqx + sqy - sqz + sqw);
 
 			return glm::vec3(attitude, heading, bank);
+		}
+
+		static bool EpsilonEqual(const glm::vec3& v1, const glm::vec3& v2, const float epsilon)
+		{
+			const glm::vec3 epsilon3(epsilon);
+			//return glm::epsilonEqual<glm::vec3>(v1, v2, epsilon3);
+			return glm::all(glm::lessThan(glm::abs(v1 - v2), epsilon3));
 		}
 
 		//v1 must be normalized and cannot be zero

@@ -2,7 +2,7 @@
 #include "RigidBodyPhysicsEngine.h"
 #include "RigidBody.h"
 #include "../bvh/boundingVolumes/IBoundingVolume.h"
-
+#include "../utils/Math.h"
 #include <iostream>
 
 namespace NPhysics
@@ -56,16 +56,26 @@ namespace NPhysics
 		{
 			body.first->Integrate(duration);
 		}
+		UpdateBoundingVolumeHierarchy();
 
 		mCollisionResolver.Update(duration);
+
+		UpdateBoundingVolumeHierarchy();
 	}
 
 	void RigidBodyPhysicsEngine::UpdateBoundingVolumeHierarchy()
 	{
 		for (auto body : mDynamicBodies)
 		{
-			body.second->SetPosition(body.first->GetPosition());
-			mCollisionResolver.UpdateCollider(body.first, body.second);
+			glm::vec3 position1 = body.second->GetPosition();
+			glm::vec3 position2 = body.first->GetPosition();
+			
+			bool hasChanged = !NMath::EpsilonEqual(position1, position2, glm::epsilon<float>());
+			if (hasChanged)
+			{
+				body.second->SetPosition(body.first->GetPosition());
+				mCollisionResolver.UpdateCollider(body.first, body.second);
+			}
 		}
 	}
 }

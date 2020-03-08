@@ -55,6 +55,7 @@ namespace NPhysics
 
 		glm::vec3 mForceAccumulated;
 
+		//Holds if the body is static or dynamic. If it's static will never be afected by collisions
 		bool mIsStatic;
 	};
 };

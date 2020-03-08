@@ -116,7 +116,7 @@ namespace NPhysics
 
 				real sign = 1.0f - 2.0f * bodyIndex;
 				mLocalVelocity += sign * mWorldToContactMatrix * deltaVelocity;
-				CalculateDesiredDeltaVelocity();
+				mDesiredDeltaVelocity = CalculateDesiredDeltaVelocity();
 			});
 	}
 

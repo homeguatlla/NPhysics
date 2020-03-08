@@ -7,6 +7,8 @@
 #include "../utils/Math.h"
 #include "ContactResolver.h"
 
+#include <iostream>
+
 namespace NPhysics
 {
 	CollisionResolver::CollisionResolver()
@@ -28,9 +30,11 @@ namespace NPhysics
 		mBoundingVolumeHierarchyRoot->GetPotentialContacts(potentialContacts, MAX_CONTACTS);
 		//std::cout << "Num potential contacts " << potentialContacts.size() << "\n";
 
-		ContactResolver contactResolver(potentialContacts);
-
-		contactResolver.Resolve(duration);
+		if (!potentialContacts.empty())
+		{
+			ContactResolver contactResolver(potentialContacts);
+			contactResolver.Resolve(duration);
+		}
 	}
 
 	void CollisionResolver::UpdateCollider(std::shared_ptr<PhysicsObject> body, std::shared_ptr<IBoundingVolume> collider)
