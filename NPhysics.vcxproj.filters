@@ -168,6 +168,9 @@
     <ClInclude Include="source\collision\ContactResolver.h">
       <Filter>Archivos de encabezado\collision</Filter>
     </ClInclude>
+    <ClInclude Include="source\bvh\boundingVolumes\PlaneBoundingVolume.h">
+      <Filter>Archivos de encabezado\bvh\boundingVolumes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -256,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="source\collision\ContactResolver.cpp">
       <Filter>Archivos de origen\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="source\bvh\boundingVolumes\PlaneBoundingVolume.cpp">
+      <Filter>Archivos de origen\bvh\boundingVolumes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
