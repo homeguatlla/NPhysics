@@ -112,7 +112,6 @@ namespace NPhysics
 	void RigidBody::SetInertiaTensorMatrix(const glm::mat3& matrix)
 	{
 		mInverseInertiaTensor = glm::inverse(matrix);
-		CalculateDerivedData();
 	}
 
 	void RigidBody::DoSetPosition(const glm::vec3& position)
