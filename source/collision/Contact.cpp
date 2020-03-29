@@ -244,7 +244,7 @@ namespace NPhysics
 				mVelocityChange[i] = impulseWorld * body->GetInverseMass() * sign;
 
 				body->SetRotation(mRotationChange[i]);
-				body->SetInitialVelocity(mVelocityChange[i]);
+				body->AddVelocity(mVelocityChange[i]);
 			}
 		}
 	}

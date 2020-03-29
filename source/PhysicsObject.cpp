@@ -53,6 +53,12 @@ namespace NPhysics
 	{
 		mVelocity = velocity;
 	}
+
+	void PhysicsObject::AddVelocity(const glm::vec3& velocity)
+	{
+		mVelocity += velocity;
+	}
+
 	real PhysicsObject::GetMass() const
 	{
 		if (mInverseMass == 0.0f)

@@ -16,6 +16,7 @@ namespace NPhysics
 		void SetRotation(const glm::vec3& rotation);
 
 		void SetInitialVelocity(const glm::vec3& velocity);
+		void AddVelocity(const glm::vec3& velocity);
 
 		bool HasFiniteMass() const { return mInverseMass > 0.0f; }
 
