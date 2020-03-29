@@ -70,7 +70,7 @@ namespace NPhysics
 			glm::vec3 position1 = body.second->GetPosition();
 			glm::vec3 position2 = body.first->GetPosition();
 			
-			bool hasChanged = !NMath::EpsilonEqual(position1, position2, glm::epsilon<float>());
+			bool hasChanged = !NMath::IsNearlyEqual(position1, position2, glm::epsilon<float>());
 			if (hasChanged)
 			{
 				body.second->SetPosition(body.first->GetPosition());

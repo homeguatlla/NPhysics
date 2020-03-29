@@ -195,7 +195,7 @@ namespace NPhysics
 				angular[i] = CalculateLimitedAngular(mRelativeContactPosition[i], mNormal, angular[i]);
 				linear[i] = totalMove - angular[i];
 
-				if (angular[i] == 0.0f)
+				if (NMath::IsNearlyEqual(angular[i], 0.0f))
 				{
 					mAngularChange[i] = glm::vec3(0.0f);
 				}
@@ -236,7 +236,7 @@ namespace NPhysics
 					//TODO to implement.
 				}
 
-				glm::vec3 impulseWorld = mWorldToContactMatrix * impulseLocalContact;
+				glm::vec3 impulseWorld = impulseLocalContact * mWorldToContactMatrix;
 
 				//split impulse into linear and rotational components
 				glm::vec3 impulseTorque = glm::cross(mRelativeContactPosition[i], impulseWorld);
