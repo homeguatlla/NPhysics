@@ -6,8 +6,8 @@
 
 namespace NPhysics
 {
-	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity, bool isStatic) :
-		PhysicsObject(position, initialVelocity, isStatic),
+	RigidBody::RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity, PhysicsType type) :
+		PhysicsObject(position, initialVelocity, type),
 		mAngularVelocity(angularVelocity),
 		mAngularDamping(0.995f),
 		mTransformationMatrix(1.0f),

@@ -9,7 +9,7 @@ namespace NPhysics
 {
 	void NPhysics::RigidBodyPhysicsEngine::AddRigidBody(std::shared_ptr<RigidBody> body, const std::shared_ptr<IBoundingVolume> volume)
 	{
-		if (body->IsStatic())
+		if (body->GetType() == PhysicsType::kStatic)
 		{
 			AddRigidBody(mStaticBodies, body, volume);
 		}
@@ -38,8 +38,11 @@ namespace NPhysics
 	{
 		assert(body);
 
-		AddRigidBody(body, volume);
-		mRegistry.Add(body, forceGenerator);
+		if (body->GetType() == PhysicsType::kDynamic)
+		{
+			AddRigidBody(body, volume);
+			mRegistry.Add(body, forceGenerator);
+		}
 	}
 
 	void RigidBodyPhysicsEngine::Update(real duration)
@@ -56,6 +59,7 @@ namespace NPhysics
 		{
 			body.first->Integrate(duration);
 		}
+
 		UpdateBoundingVolumeHierarchy();
 
 		mCollisionResolver.Update(duration);

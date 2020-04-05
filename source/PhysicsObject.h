@@ -4,10 +4,21 @@
 
 namespace NPhysics
 {
+	enum class PhysicsType
+	{
+		//Static is an object with infinite mass. It can't be moved. But other objects can collide with it.
+		kStatic = 0,
+		//Kinematic is an object which can be moved, and is affected by collisions. But, it can't be target of external forces different of the 
+		//ones produced by collisions. For instance, can't be affected by gravity. A force can't be applied to it.
+		kKinematic = 1,
+		//Dynamic is an object that can be moved, affected by collisions and target of external forces.
+		kDynamic = 2
+	};
+
 	class PhysicsObject
 	{
 	public:
-		PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, bool isStatic);
+		PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, PhysicsType type);
 		void SetAcceleration(const glm::vec3& acceleration);
 		void SetDamping(real damping);
 		void SetMass(real mass);
@@ -28,7 +39,7 @@ namespace NPhysics
 		glm::vec3 GetAcceleration() const { return mAcceleration; }
 		glm::vec3 GetRotation() const { return DoGetRotation(); }
 
-		bool IsStatic() const { return mIsStatic; }
+		PhysicsType GetType() const { return mType; }
 
 	private:
 		virtual void DoResetForceAccumulated() = 0;
@@ -56,8 +67,8 @@ namespace NPhysics
 
 		glm::vec3 mForceAccumulated;
 
-		//Holds if the body is static or dynamic. If it's static will never be afected by collisions
-		bool mIsStatic;
+		//Holds if the body is static or dynamic or kinematic.
+		PhysicsType mType;
 	};
 };
 

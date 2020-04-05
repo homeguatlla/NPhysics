@@ -122,7 +122,7 @@ namespace NPhysics
 		if (IsLeaf() && other->IsLeaf())
 		{
 			//at least one of the two objects have to be dynamic
-			if (!mPhysicsObject->IsStatic() || !other->GetPhysicsObject()->IsStatic())
+			if (mPhysicsObject->GetType() == PhysicsType::kDynamic || other->GetPhysicsObject()->GetType() == PhysicsType::kDynamic )
 			{
 				auto contact = std::make_shared<PotentialContact>(
 					std::make_pair(mPhysicsObject, mVolume), 

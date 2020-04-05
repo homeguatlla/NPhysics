@@ -12,7 +12,7 @@ namespace NPhysics
 	class RigidBody : public PhysicsObject
 	{
 	public:
-		explicit RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity, bool isStatic);
+		explicit RigidBody(const glm::vec3& position, const glm::vec3& angularVelocity, const glm::vec3& initialVelocity, PhysicsType type);
 
 		//Adds the given force to the center of mass of the rigid body.
 		//The force is expressed int world coordinates.
