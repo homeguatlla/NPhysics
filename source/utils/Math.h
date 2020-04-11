@@ -109,7 +109,16 @@ namespace NPhysics
 
 		static bool IsOverlapping(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
 		{
-			return false;
+			auto transformation = box.GetTransformation();
+			auto transformationInverse = glm::inverse(transformation);
+
+			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
+			auto size = (box.GetMaxPoint() - box.GetMinPoint()) * 0.5f;
+			bool outInX = glm::abs(centerInBoxSpace.x) - sphere.GetRadius() > size.x;
+			bool outInY = glm::abs(centerInBoxSpace.y) - sphere.GetRadius() > size.y;
+			bool outInZ = glm::abs(centerInBoxSpace.z) - sphere.GetRadius() > size.z;
+
+			return !(outInX || outInY || outInZ);
 		}
 
 		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)

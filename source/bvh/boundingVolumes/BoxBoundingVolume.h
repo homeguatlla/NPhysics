@@ -22,6 +22,7 @@ namespace NPhysics
 		void SetPosition(const glm::vec3& position) override;
 		glm::vec3 GetPosition() const override { return mCenter; }
 
+		glm::mat4 GetTransformation() const { return mTransformation; }
 		glm::vec3 GetMinPoint() const { return mCenter - mSize * 0.5f; }
 		glm::vec3 GetMaxPoint() const { return mCenter + mSize * 0.5f; }
 

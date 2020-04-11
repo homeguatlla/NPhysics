@@ -23,6 +23,14 @@ namespace NPhysics
 		glm::decompose(transformationOffset, scale, rotation, translation, skew, perspective);
 
 		mCenter = mCenter + translation;
+
+		//TODO review this in order to have not only offset but also the parent transformation
+		//mLocalTransformation = transformationOffset;
+		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
+		mTransformation = glm::rotate(mTransformation, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		mTransformation = glm::rotate(mTransformation, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		mTransformation = glm::rotate(mTransformation, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		mTransformation = glm::scale(mTransformation, scale);
 	}
 
 	BoxBoundingVolume::BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
