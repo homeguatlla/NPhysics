@@ -7,7 +7,7 @@ namespace NPhysics
 	{
 	public:
 		BoxBoundingVolume();
-		BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::mat4& transformationOffset = {});
+		BoxBoundingVolume(const glm::mat4& transformation, const glm::mat4& localTransformation = {glm::mat4(1.0f)});
 		BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2);
 
 		~BoxBoundingVolume() = default;
@@ -25,11 +25,13 @@ namespace NPhysics
 		glm::mat4 GetTransformation() const { return mTransformation; }
 		glm::vec3 GetMinPoint() const { return mCenter - mSize * 0.5f; }
 		glm::vec3 GetMaxPoint() const { return mCenter + mSize * 0.5f; }
+		glm::vec3 GetSize() const { return mSize; }
 
 	private:
 		glm::vec3 mCenter;
 		glm::vec3 mSize;
 		glm::mat4 mTransformation;
+		glm::mat4 mLocalTransformation;
 	};
 };
 

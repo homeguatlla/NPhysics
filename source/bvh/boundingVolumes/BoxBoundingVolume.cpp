@@ -11,26 +11,23 @@ namespace NPhysics
 	{
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::mat4& transformationOffset) :
-		mCenter(center), 
-		mSize(size)
+	BoxBoundingVolume::BoxBoundingVolume(const glm::mat4& transformation, const glm::mat4& localTransformation) 
 	{
 		glm::vec3 scale;
 		glm::quat rotation;
 		glm::vec3 translation;
 		glm::vec3 skew;
 		glm::vec4 perspective;
-		glm::decompose(transformationOffset, scale, rotation, translation, skew, perspective);
 
+		glm::decompose(transformation, scale, rotation, translation, skew, perspective);
+		mCenter = translation;
+		mSize = scale;
+		glm::decompose(localTransformation, scale, rotation, translation, skew, perspective);
 		mCenter = mCenter + translation;
-
-		//TODO review this in order to have not only offset but also the parent transformation
-		//mLocalTransformation = transformationOffset;
-		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
-		mTransformation = glm::rotate(mTransformation, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		mTransformation = glm::rotate(mTransformation, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		mTransformation = glm::rotate(mTransformation, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		mTransformation = glm::scale(mTransformation, scale);
+		mSize *= scale;
+		mTransformation = transformation;
+		mTransformation *= localTransformation;
+		mLocalTransformation = localTransformation;
 	}
 
 	BoxBoundingVolume::BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
@@ -50,7 +47,12 @@ namespace NPhysics
 			std::max(max1.z, max2.z));
 
 		mSize = maxPoint - minPoint;
-		mCenter = (minPoint + mSize) * 0.5f;
+		mCenter = minPoint + mSize * 0.5f;
+
+		//recalculate transformations.
+		auto transformation = glm::translate(glm::mat4(1.0f), mCenter);
+		transformation = glm::scale(transformation, mSize);
+		mLocalTransformation = glm::mat4(1.0f);
 	}
 
 	bool BoxBoundingVolume::IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const
