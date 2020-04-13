@@ -4,12 +4,14 @@
 #include "NPhysicsEngine.h"
 #include "source/InstantiableObject.h"
 #include "source/bvh/boundingVolumes/SphereBoundingVolume.h"
+#include "source/bvh/boundingVolumes/BoxBoundingVolume.h"
 
 namespace NPhysics
 {
 	NPhysicsEngine::NPhysicsEngine()
 	{
 		InstantiableObject::RegisterBoundingVolume<SphereBoundingVolume>();
+		InstantiableObject::RegisterBoundingVolume<BoxBoundingVolume>();
 	}
 
 	void NPhysicsEngine::AddParticle(std::shared_ptr<Particle> particle)

@@ -98,24 +98,69 @@ namespace NPhysics
 			typeid(BoxBoundingVolume).name(),
 			typeid(SphereBoundingVolume).name(),
 			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
-				auto box = dynamic_cast<const BoxBoundingVolume&>(volume1);
-				auto sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				BoxBoundingVolume box;
+				SphereBoundingVolume sphere;
+
+				if (typeid(volume1) == typeid(BoxBoundingVolume))
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume1);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				}
+				else
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume2);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				}
+				
 				return NMath::IsOverlapping(box, sphere);
 			},
 			[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
-				auto box = dynamic_cast<const BoxBoundingVolume&>(volume1);
-				auto sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				BoxBoundingVolume box;
+				SphereBoundingVolume sphere;
+
+				if (typeid(volume1) == typeid(BoxBoundingVolume))
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume1);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				}
+				else
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume2);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				}
 
 				return NMath::MergeBoundingVolumes(box, sphere);
 			},
 				[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
-				auto box = dynamic_cast<const BoxBoundingVolume&>(volume1);
-				auto sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				BoxBoundingVolume box;
+				SphereBoundingVolume sphere;
+
+				if (typeid(volume1) == typeid(BoxBoundingVolume))
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume1);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				}
+				else
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume2);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				}
 				return NMath::Contains(box, sphere);
 			},
 				[](const IBoundingVolume& volume1, const IBoundingVolume& volume2) {
-				auto box = dynamic_cast<const BoxBoundingVolume&>(volume1);
-				auto sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				BoxBoundingVolume box;
+				SphereBoundingVolume sphere;
+
+				if (typeid(volume1) == typeid(BoxBoundingVolume))
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume1);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+				}
+				else
+				{
+					box = dynamic_cast<const BoxBoundingVolume&>(volume2);
+					sphere = dynamic_cast<const SphereBoundingVolume&>(volume1);
+				}
 				return NMath::ResolveCollision(box, sphere);
 			}, true);
 	}

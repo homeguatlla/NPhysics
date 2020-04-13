@@ -212,7 +212,39 @@ namespace NPhysics
 
 		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
 		{
-			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
+			auto size = box.GetSize();
+			auto transformation = box.GetTransformation();
+			//we don't want the sphere be afected by the box scale
+			transformation = glm::scale(transformation, 1.0f / size);
+
+			auto transformationInverse = glm::inverse(transformation);
+			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
+
+			auto halfSize = size * 0.5f;
+			glm::vec3 contactPoint;
+
+			contactPoint.x = glm::max(glm::min(halfSize.x, centerInBoxSpace.x), -halfSize.x);
+			contactPoint.y = glm::max(glm::min(halfSize.y, centerInBoxSpace.y), -halfSize.y);
+			contactPoint.z = glm::max(glm::min(halfSize.z, centerInBoxSpace.z), -halfSize.z);
+
+			real distance2 = glm::distance2(contactPoint, glm::vec3(centerInBoxSpace));
+
+			if (distance2 <= sphere.GetRadius() * sphere.GetRadius())
+			{
+				auto contactPointWorld = glm::vec3(transformation * glm::vec4(contactPoint, 1.0f));
+				glm::vec3 normal = sphere.GetPosition() - contactPointWorld;
+				normal = glm::normalize(normal);
+				real penetration = sphere.GetRadius() - glm::sqrt(distance2);
+
+				return std::make_shared<Contact>(
+					contactPointWorld,
+					normal,
+					penetration);
+			}
+			else
+			{
+				return nullptr;
+			}			
 		}
 	};
 };

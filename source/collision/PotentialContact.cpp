@@ -23,11 +23,13 @@ namespace NPhysics
 
 		assert(resolveCollisionFunction);
 		auto contact = resolveCollisionFunction(*volume1.get(), *volume2.get());
+		if (contact != nullptr)
+		{
+			contact->SetBodies(mObjects[0].first, mObjects[1].first);
+			contact->SetRestitution(1.0f);
+			contact->SetFriction(0.0f);
 
-		contact->SetBodies(mObjects[0].first, mObjects[1].first);
-		contact->SetRestitution(1.0f);
-		contact->SetFriction(0.0f);
-
-		contacts.push_back(contact);
+			contacts.push_back(contact);
+		}
 	}
 }
