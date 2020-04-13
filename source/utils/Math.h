@@ -142,9 +142,7 @@ namespace NPhysics
 
 		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
 		{
-			auto transformation = glm::translate(glm::mat4(1.0f), sphere.GetPosition());
-			transformation = glm::scale(transformation, glm::vec3(sphere.GetRadius() * 2));
-			auto box2 = BoxBoundingVolume(transformation);
+			auto box2 = BoxBoundingVolume(sphere.GetPosition(), glm::vec3(sphere.GetRadius() * 2));
 			auto newVolume = BoxBoundingVolume(box, box2);
 
 			return std::make_shared<BoxBoundingVolume>(newVolume);

@@ -7,27 +7,20 @@
 
 namespace NPhysics
 {
-	BoxBoundingVolume::BoxBoundingVolume() : mCenter(0.0f), mSize(0.0f)
+	BoxBoundingVolume::BoxBoundingVolume() : mCenter(0.0f), mSize(1.0f)
 	{
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const glm::mat4& transformation, const glm::mat4& localTransformation) 
+	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size) : 
+		mCenter{center},
+		mSize{size}
 	{
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
+	}
 
-		glm::decompose(transformation, scale, rotation, translation, skew, perspective);
-		mCenter = translation;
-		mSize = scale;
-		glm::decompose(localTransformation, scale, rotation, translation, skew, perspective);
-		mCenter = mCenter + translation;
-		mSize *= scale;
+	BoxBoundingVolume::BoxBoundingVolume(const glm::mat4& transformation)
+	{
 		mTransformation = transformation;
-		mTransformation *= localTransformation;
-		mLocalTransformation = localTransformation;
+		UpdateData();
 	}
 
 	BoxBoundingVolume::BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
@@ -52,7 +45,6 @@ namespace NPhysics
 		//recalculate transformations.
 		auto transformation = glm::translate(glm::mat4(1.0f), mCenter);
 		transformation = glm::scale(transformation, mSize);
-		mLocalTransformation = glm::mat4(1.0f);
 	}
 
 	bool BoxBoundingVolume::IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const
@@ -113,5 +105,34 @@ namespace NPhysics
 	void BoxBoundingVolume::SetPosition(const glm::vec3& position)
 	{
 		mCenter = position;
+	}
+
+	void BoxBoundingVolume::SetTransformation(const glm::mat4& transformation)
+	{
+		mTransformation = transformation;
+		UpdateData();
+	}
+
+	void BoxBoundingVolume::SetSize(const glm::vec3& size)
+	{
+		mSize = size;
+	}
+
+	std::shared_ptr<IBoundingVolume> BoxBoundingVolume::Create()
+	{
+		return std::make_shared<BoxBoundingVolume>();
+	}
+
+	void BoxBoundingVolume::UpdateData()
+	{
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+
+		glm::decompose(mTransformation, scale, rotation, translation, skew, perspective);
+		mCenter = translation;
+		mSize *= scale;
 	}
 }

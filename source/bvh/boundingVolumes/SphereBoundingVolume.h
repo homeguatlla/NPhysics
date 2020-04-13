@@ -10,7 +10,7 @@ namespace NPhysics
 	{
 	public:
 		SphereBoundingVolume();
-		SphereBoundingVolume(const glm::vec3& center, real radius, const glm::mat4& transformationOffset = {});
+		SphereBoundingVolume(const glm::vec3& center, float radius);
 		SphereBoundingVolume(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2);
 
 		~SphereBoundingVolume() = default;
@@ -31,12 +31,19 @@ namespace NPhysics
 		void SetRadius(real radius) { mRadius = radius; }
 		void SetCenter(const glm::vec3& center) { mCenter = center; }
 		
+		void SetTransformation(const glm::mat4& transformation) override;
+		glm::mat4 GetTransformation() const override { return mTransformation; }
+
 		static std::string GetClassName() { return std::string("SphereBoundingVolume"); }
 		static std::shared_ptr<IBoundingVolume> Create();
 
 	private:
+		void UpdateData();
+
+	private:
 		glm::vec3 mCenter;
 		real mRadius;
+		glm::mat4 mTransformation;
 	};
 };
 

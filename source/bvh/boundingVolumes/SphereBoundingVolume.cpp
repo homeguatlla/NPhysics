@@ -8,22 +8,14 @@ namespace NPhysics
 {
 	SphereBoundingVolume::SphereBoundingVolume() : 
 		mCenter { glm::vec3(0.0f) },
-		mRadius { 0.0f }
+		mRadius { 1.0f }
 	{
 	}
 
-	SphereBoundingVolume::SphereBoundingVolume(const glm::vec3& center, real radius, const glm::mat4& transformationOffset) :
-		mCenter{center},
-		mRadius{ radius }
+	SphereBoundingVolume::SphereBoundingVolume(const glm::vec3& center, float radius) : 
+		mCenter{center}, 
+		mRadius{radius}
 	{
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
-		glm::decompose(transformationOffset, scale, rotation, translation, skew, perspective);
-
-		mCenter = mCenter + translation;
 	}
 
 	SphereBoundingVolume::SphereBoundingVolume(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
@@ -98,6 +90,12 @@ namespace NPhysics
 		return inertiaTensorMatrix;
 	}
 
+	void SphereBoundingVolume::SetTransformation(const glm::mat4& transformation)
+	{
+		mTransformation = transformation;
+		UpdateData();
+	}
+
 	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::Create()
 	{
 		return std::make_shared<SphereBoundingVolume>();
@@ -111,5 +109,18 @@ namespace NPhysics
 
 		assert(containsFunction);
 		return containsFunction(*this, *volume.get());
+	}
+
+	void SphereBoundingVolume::UpdateData()
+	{
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+
+		glm::decompose(mTransformation, scale, rotation, translation, skew, perspective);
+		mCenter = translation;
+		mRadius *= glm::max(scale.x, glm::max(scale.y, scale.z));
 	}
 }
