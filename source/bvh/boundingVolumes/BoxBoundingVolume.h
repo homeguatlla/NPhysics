@@ -27,7 +27,7 @@ namespace NPhysics
 		void SetTransformation(const glm::mat4& transformation) override;
 		void SetSize(const glm::vec3& size);
 
-		glm::mat4 GetTransformation() const override { return mTransformation; }
+		glm::mat4 GetTransformation() const override;
 		glm::vec3 GetMinPoint() const { return mCenter - mSize * 0.5f; }
 		glm::vec3 GetMaxPoint() const { return mCenter + mSize * 0.5f; }
 		glm::vec3 GetSize() const { return mSize; }

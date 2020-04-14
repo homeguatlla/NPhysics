@@ -15,9 +15,10 @@ namespace NPhysics
 		mCenter{center},
 		mSize{size}
 	{
+		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const glm::mat4& transformation)
+	BoxBoundingVolume::BoxBoundingVolume(const glm::mat4& transformation) : mCenter{ 0.0f }, mSize{ 1.0f }
 	{
 		mTransformation = transformation;
 		UpdateData();
@@ -104,7 +105,9 @@ namespace NPhysics
 
 	void BoxBoundingVolume::SetPosition(const glm::vec3& position)
 	{
+		mTransformation = glm::translate(mTransformation, -mCenter);
 		mCenter = position;
+		mTransformation = glm::translate(mTransformation, mCenter);
 	}
 
 	void BoxBoundingVolume::SetTransformation(const glm::mat4& transformation)
@@ -116,6 +119,11 @@ namespace NPhysics
 	void BoxBoundingVolume::SetSize(const glm::vec3& size)
 	{
 		mSize = size;
+	}
+
+	glm::mat4 BoxBoundingVolume::GetTransformation() const
+	{
+		return mTransformation;
 	}
 
 	std::shared_ptr<IBoundingVolume> BoxBoundingVolume::Create()
@@ -134,5 +142,13 @@ namespace NPhysics
 		glm::decompose(mTransformation, scale, rotation, translation, skew, perspective);
 		mCenter = translation;
 		mSize *= scale;
+
+		mTransformation = glm::translate(glm::mat4(1.0f), translation);
+		mTransformation = glm::rotate(mTransformation, rotation.x, glm::vec3(1.0f, 0.0, 0.0f));
+		mTransformation = glm::rotate(mTransformation, rotation.y, glm::vec3(0.0f, 1.0, 0.0f));
+		mTransformation = glm::rotate(mTransformation, rotation.z, glm::vec3(0.0f, 0.0, 1.0f));
+
+		//don't scale due to this transformation will be used to transform other colliders to the coordinates local system
+		//of this collider, we don't want the other collider be scaled, we wont it conserves its size.
 	}
 }

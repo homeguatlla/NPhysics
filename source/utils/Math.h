@@ -112,9 +112,6 @@ namespace NPhysics
 		{
 			auto size = box.GetSize();
 			auto transformation = box.GetTransformation();
-			//we don't want the sphere be afected by the box scale
-			transformation = glm::scale(transformation, 1.0f / size);
-
 			auto transformationInverse = glm::inverse(transformation);
 			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
 			
@@ -164,9 +161,6 @@ namespace NPhysics
 		{
 			auto size = box.GetSize();
 			auto transformation = box.GetTransformation();
-			//we don't want the sphere be afected by the box scale
-			transformation = glm::scale(transformation, 1.0f / size);
-
 			auto transformationInverse = glm::inverse(transformation);
 			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
 			
@@ -212,9 +206,6 @@ namespace NPhysics
 		{
 			auto size = box.GetSize();
 			auto transformation = box.GetTransformation();
-			//we don't want the sphere be afected by the box scale
-			transformation = glm::scale(transformation, 1.0f / size);
-
 			auto transformationInverse = glm::inverse(transformation);
 			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
 
@@ -230,7 +221,7 @@ namespace NPhysics
 			if (distance2 <= sphere.GetRadius() * sphere.GetRadius())
 			{
 				auto contactPointWorld = glm::vec3(transformation * glm::vec4(contactPoint, 1.0f));
-				glm::vec3 normal = sphere.GetPosition() - contactPointWorld;
+				glm::vec3 normal = contactPointWorld - sphere.GetPosition();
 				normal = glm::normalize(normal);
 				real penetration = sphere.GetRadius() - glm::sqrt(distance2);
 
