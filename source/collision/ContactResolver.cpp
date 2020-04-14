@@ -55,7 +55,7 @@ namespace NPhysics
 		{
 			auto contactToResolve = FindContactWithLargerPenetration();
 			if (contactToResolve->GetPenetration() < 0.0f || 
-				glm::epsilonEqual(contactToResolve->GetPenetration(), 0.0f, glm::epsilon<float>()))
+				glm::epsilonEqual(contactToResolve->GetPenetration(), 0.0f, EPSILON2))
 			{
 				//All interpenetrations have been resolved. No objects colliding.
 				break;
@@ -80,7 +80,7 @@ namespace NPhysics
 		{
 			auto contactToResolve = FindContactWithLargerDesiredDeltaVelocity();
 			if (contactToResolve->GetDesiredDeltaVelocity() < 0.0f || 
-				glm::epsilonEqual(contactToResolve->GetDesiredDeltaVelocity(), 0.0f, glm::epsilon<float>()))
+				glm::epsilonEqual(contactToResolve->GetDesiredDeltaVelocity(), 0.0f, EPSILON2))
 			{
 				//All velocities have been resolved. No objects colliding.
 				break;

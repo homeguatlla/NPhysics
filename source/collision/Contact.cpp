@@ -185,7 +185,7 @@ namespace NPhysics
 		for (int i = 0; i < 2; ++i)
 		{
 			std::shared_ptr<RigidBody> body = std::static_pointer_cast<RigidBody>(mBodies[i]);
-			if (body)
+			if (body && body->GetType() != PhysicsType::kStatic)
 			{
 				real sign = 1.0f - 2.0f * i;
 				angular[i] = sign * mPenetration * (inertiaAngularVelocity[i] / totalInertia);
@@ -222,7 +222,7 @@ namespace NPhysics
 		for (int i = 0; i < 2; ++i)
 		{
 			std::shared_ptr<RigidBody> body = std::static_pointer_cast<RigidBody>(mBodies[i]);
-			if (body)
+			if (body && body->GetType() != PhysicsType::kStatic)
 			{
 				real sign = 1.0f - 2.0f * i;
 				glm::mat3 inverseInertiaTensorMatrix = body->GetInverseInertiaTensorWorldMatrix();
@@ -242,7 +242,7 @@ namespace NPhysics
 				glm::vec3 impulseTorque = glm::cross(mRelativeContactPosition[i], impulseWorld);
 				mRotationChange[i] = inverseInertiaTensorMatrix * impulseTorque;
 				mVelocityChange[i] = impulseWorld * body->GetInverseMass() * sign;
-
+				
 				body->SetRotation(mRotationChange[i]);
 				body->AddVelocity(mVelocityChange[i]);
 			}

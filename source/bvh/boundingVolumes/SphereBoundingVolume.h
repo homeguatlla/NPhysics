@@ -23,7 +23,7 @@ namespace NPhysics
 		bool Contains(std::shared_ptr<IBoundingVolume> volume) const override;
 		const glm::mat3 GetInertiaTensorMatrix(float mass) const override;
 
-		void SetPosition(const glm::vec3& position) override { mCenter = position; }
+		void SetPosition(const glm::vec3& position) override;
 		glm::vec3 GetPosition() const override { return mCenter; }
 
 		real GetRadius() const { return mRadius; }
