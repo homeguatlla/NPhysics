@@ -12,7 +12,10 @@ namespace NPhysics
 		mPenetration(penetration),
 		mRestitution(1.0f),
 		mFriction(0.0f),
-		mBodies { nullptr, nullptr }
+		mBodies { nullptr, nullptr },
+		mDesiredDeltaVelocity {0.0f },
+		mDeltaVelocity {0.0f},
+		mIsDeltaVelocityCalculated{false}
 	{
 	}
 
@@ -168,6 +171,7 @@ namespace NPhysics
 		}
 	}
 
+
 	void Contact::ApplyPositionChanges()
 	{
 		std::vector<real> inertiaAngularVelocity = { 0.0f, 0.0f };
@@ -176,7 +180,6 @@ namespace NPhysics
 		
 		//Calculate inertia velocities
 		totalInertia = CalculateInertiaVelocity(inertiaLinearVelocity, inertiaAngularVelocity);
-		mDeltaVelocity = totalInertia;
 
 		real angular[2] = { 0.0f, 0.0f };
 		real linear[2] = { 0.0f, 0.0f };		
@@ -219,6 +222,26 @@ namespace NPhysics
 
 	void Contact::ApplyVelocityChange()
 	{
+		//This step is already done when ApplyingPositionChanges, but if there is not a change of position
+		//the delta velocity will not be calculated and we need it to calculate the velocity changes
+		if (!mIsDeltaVelocityCalculated)
+		{
+			std::vector<real> inertiaAngularVelocity = { 0.0f, 0.0f };
+			std::vector<real> inertiaLinearVelocity = { 0.0f, 0.0f };
+			
+			CalculateInertiaVelocity(inertiaLinearVelocity, inertiaAngularVelocity);
+		}
+
+		glm::vec3 impulseLocalContact;
+		if (mFriction == 0.0f)
+		{
+			impulseLocalContact = CalculateFrictionlessImpulse();
+		}
+		else
+		{
+			//TODO to implement.
+		}
+
 		for (int i = 0; i < 2; ++i)
 		{
 			std::shared_ptr<RigidBody> body = std::static_pointer_cast<RigidBody>(mBodies[i]);
@@ -226,16 +249,6 @@ namespace NPhysics
 			{
 				real sign = 1.0f - 2.0f * i;
 				glm::mat3 inverseInertiaTensorMatrix = body->GetInverseInertiaTensorWorldMatrix();
-				glm::vec3 impulseLocalContact;
-				if (mFriction == 0.0f)
-				{
-					impulseLocalContact = CalculateFrictionlessImpulse();
-				}
-				else
-				{
-					//TODO to implement.
-				}
-
 				glm::vec3 impulseWorld = impulseLocalContact * mWorldToContactMatrix;
 
 				//split impulse into linear and rotational components
@@ -272,6 +285,9 @@ namespace NPhysics
 				totalInertia += inertiaAngularVelocity[i] + inertiaLinearVelocity[i];
 			}
 		}
+
+		mDeltaVelocity = totalInertia;
+		mIsDeltaVelocityCalculated = true;
 
 		return totalInertia;
 	}

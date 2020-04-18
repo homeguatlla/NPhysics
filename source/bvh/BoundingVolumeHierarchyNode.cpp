@@ -18,20 +18,15 @@ namespace NPhysics
 
 	unsigned int BoundingVolumeHierarchyNode::GetPotentialContacts(std::vector<std::shared_ptr<PotentialContact>>& contacts, unsigned int limit)
 	{
-		if (IsLeaf() || limit == 0)
+		if (IsLeaf() || 
+			limit == 0 || 
+			(mChildren[0] == nullptr && mChildren[1] == nullptr))
 		{
 			return 0;
 		}
 		else
 		{
-			if (mChildren[0] == nullptr && mChildren[1] == nullptr)
-			{
-				return 0;
-			}
-			else
-			{
-				return mChildren[0]->GetPotentialContactsWith(mChildren[1], contacts, limit, true);
-			}
+			return mChildren[0]->GetPotentialContactsWith(mChildren[1], contacts, limit, true);
 		}
 	}
 
@@ -194,25 +189,22 @@ namespace NPhysics
 	}
 
 	void BoundingVolumeHierarchyNode::UpdateBoundingVolume(
+		std::shared_ptr<BoundingVolumeHierarchyNode> node,
 		const std::shared_ptr<PhysicsObject> object,
 		const std::shared_ptr<IBoundingVolume> volume)
 	{
-		std::shared_ptr<BoundingVolumeHierarchyNode> nodeFound;
-		if (Find(object, volume, nodeFound))
+		if (!node->GetBoundingVolume()->Contains(volume))
 		{
-			if (!nodeFound->GetBoundingVolume()->Contains(volume))
+			if (node->HasParent())
 			{
-				if (nodeFound->HasParent())
-				{
-					Remove(nodeFound);
-					Insert(object, volume);
-				}
-				else
-				{
-					//is root
-					nodeFound->mVolume = volume;
-					nodeFound->mPhysicsObject = object;
-				}
+				Remove(node);
+				Insert(object, volume);
+			}
+			else
+			{
+				//is root
+				node->mVolume = volume;
+				node->mPhysicsObject = object;
 			}
 		}
 	}

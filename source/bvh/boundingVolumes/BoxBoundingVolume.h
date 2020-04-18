@@ -8,8 +8,7 @@ namespace NPhysics
 	{
 	public:
 		BoxBoundingVolume();
-		BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size);
-		BoxBoundingVolume(const glm::mat4& transformation);
+		BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::vec3& rotation = { glm::vec3(0) });
 		BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2);
 
 		~BoxBoundingVolume() = default;
@@ -24,25 +23,29 @@ namespace NPhysics
 		glm::vec3 GetPosition() const override { return mCenter; }
 
 		void SetPosition(const glm::vec3& position) override;
-		void SetTransformation(const glm::mat4& transformation) override;
 		void SetSize(const glm::vec3& size);
+		void SetRotation(const glm::vec3& rotation);
 
 		glm::mat4 GetTransformation() const override;
-		glm::vec3 GetMinPoint() const { return mCenter - mSize * 0.5f; }
-		glm::vec3 GetMaxPoint() const { return mCenter + mSize * 0.5f; }
-		glm::vec3 GetSize() const { return mSize; }
-		
+		glm::vec3 GetMinPoint() const { return mMinPoint; }
+		glm::vec3 GetMaxPoint() const { return mMaxPoint;  }
+		glm::vec3 GetSize() const { return mSize; }		
 
 		static std::string GetClassName() { return std::string("BoxBoundingVolume"); }
 		static std::shared_ptr<IBoundingVolume> Create();
 
 	private:
-		void UpdateData();
+		void CalculateMinMaxPoints();
+		void CalculateTransformation();
 
 	private:
 		glm::vec3 mCenter;
 		glm::vec3 mSize;
+		glm::vec3 mRotation;
+
 		glm::mat4 mTransformation;
+		glm::vec3 mMinPoint;
+		glm::vec3 mMaxPoint;
 	};
 };
 

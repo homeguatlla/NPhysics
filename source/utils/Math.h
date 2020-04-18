@@ -105,7 +105,34 @@ namespace NPhysics
 
 		static bool IsOverlapping(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
 		{
-			return false;
+			glm::vec3 axis11 = glm::normalize(box1.GetTransformation()[0]);
+			glm::vec3 axis12 = glm::normalize(box1.GetTransformation()[1]);
+			glm::vec3 axis13 = glm::normalize(box1.GetTransformation()[2]);
+
+			glm::vec3 axis21 = glm::normalize(box2.GetTransformation()[0]);
+			glm::vec3 axis22 = glm::normalize(box2.GetTransformation()[1]);
+			glm::vec3 axis23 = glm::normalize(box2.GetTransformation()[2]);
+
+			bool isOverlapping = 
+				OverlapOnAxis(box1, box2, axis11) &&
+				OverlapOnAxis(box1, box2, axis12) &&
+				OverlapOnAxis(box1, box2, axis13) &&
+
+				OverlapOnAxis(box1, box2, axis21) &&
+				OverlapOnAxis(box1, box2, axis22) &&
+				OverlapOnAxis(box1, box2, axis23) &&
+
+				OverlapOnAxis(box1, box2, glm::cross(axis11, axis21)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis11, axis22)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis11, axis23)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis12, axis21)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis12, axis22)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis12, axis23)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis13, axis21)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis13, axis22)) &&
+				OverlapOnAxis(box1, box2, glm::cross(axis13, axis23));
+
+			return isOverlapping;
 		}
 
 		static bool IsOverlapping(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
@@ -202,7 +229,7 @@ namespace NPhysics
 			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
 		}
 
-		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere, float sign)
 		{
 			auto size = box.GetSize();
 			auto transformation = box.GetTransformation();
@@ -227,13 +254,51 @@ namespace NPhysics
 
 				return std::make_shared<Contact>(
 					contactPointWorld,
-					normal,
+					normal * sign,
 					penetration);
 			}
 			else
 			{
 				return nullptr;
 			}			
+		}
+
+		static bool OverlapOnAxis(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2, const glm::vec3& axis)
+		{
+			real distance1 = TransformToAxis(box1, axis);
+			real distance2 = TransformToAxis(box2, axis);
+
+			if (NMath::IsNearlyEqual(distance1, 0.0f) || NMath::IsNearlyEqual(distance2, 0.0f))
+			{
+				return true;
+			}
+
+			glm::vec3 center = box2.GetPosition() - box1.GetPosition();
+			real distanceBoxes = glm::abs(glm::dot(center, axis));
+
+			bool isOverlapping = distanceBoxes < distance1 + distance2;
+
+			if (!isOverlapping)
+			{
+				int kk = 0;
+				++kk;
+			}
+			return isOverlapping;
+		}
+
+		static inline real TransformToAxis(const BoxBoundingVolume& box, const glm::vec3& axis)
+		{
+			auto transformation = box.GetTransformation();
+			glm::vec3 halfSize = box.GetSize() * 0.5f;
+
+			glm::vec4 axis0 = transformation[0];
+			glm::vec4 axis1 = transformation[1];
+			glm::vec4 axis2 = transformation[2];
+
+			return
+				halfSize.x * glm::abs(glm::dot(glm::vec4(axis, 0.0f), transformation[0])) +
+				halfSize.y * glm::abs(glm::dot(glm::vec4(axis, 0.0f), transformation[1])) +
+				halfSize.z * glm::abs(glm::dot(glm::vec4(axis, 0.0f), transformation[2]));
 		}
 	};
 };

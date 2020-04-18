@@ -8,7 +8,8 @@ namespace NPhysics
 {
 	SphereBoundingVolume::SphereBoundingVolume() : 
 		mCenter { glm::vec3(0.0f) },
-		mRadius { 1.0f }
+		mRadius { 1.0f },
+		mTransformation { 1.0f }
 	{
 	}
 
@@ -98,12 +99,6 @@ namespace NPhysics
 		mTransformation = glm::translate(mTransformation, mCenter);
 	}
 
-	void SphereBoundingVolume::SetTransformation(const glm::mat4& transformation)
-	{
-		mTransformation = transformation;
-		UpdateData();
-	}
-
 	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::Create()
 	{
 		return std::make_shared<SphereBoundingVolume>();
@@ -117,23 +112,5 @@ namespace NPhysics
 
 		assert(containsFunction);
 		return containsFunction(*this, *volume.get());
-	}
-
-	void SphereBoundingVolume::UpdateData()
-	{
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::decompose(mTransformation, scale, rotation, translation, skew, perspective);
-		mCenter = translation;
-		mRadius *= glm::max(scale.x, glm::max(scale.y, scale.z));
-
-		mTransformation = glm::translate(glm::mat4(1.0f), translation);
-		mTransformation = glm::rotate(mTransformation, rotation.x, glm::vec3(1.0f, 0.0, 0.0f));
-		mTransformation = glm::rotate(mTransformation, rotation.y, glm::vec3(0.0f, 1.0, 0.0f));
-		mTransformation = glm::rotate(mTransformation, rotation.z, glm::vec3(0.0f, 0.0, 1.0f));
 	}
 }

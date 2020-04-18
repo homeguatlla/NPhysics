@@ -4,24 +4,21 @@
 #include "glm/gtx/transform.hpp"
 #include <glm/gtx/matrix_decompose.hpp>
 #include <algorithm>
+#include <vector>
 
 namespace NPhysics
 {
-	BoxBoundingVolume::BoxBoundingVolume() : mCenter(0.0f), mSize(1.0f)
+	BoxBoundingVolume::BoxBoundingVolume() : mCenter(0.0f), mSize(1.0f), mRotation(0.0f), mTransformation(1.0f)
 	{
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size) : 
+	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::vec3& rotation) : 
 		mCenter{center},
-		mSize{size}
+		mSize{size},
+		mRotation(rotation)
 	{
-		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
-	}
-
-	BoxBoundingVolume::BoxBoundingVolume(const glm::mat4& transformation) : mCenter{ 0.0f }, mSize{ 1.0f }
-	{
-		mTransformation = transformation;
-		UpdateData();
+		CalculateTransformation();
+		CalculateMinMaxPoints();
 	}
 
 	BoxBoundingVolume::BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
@@ -40,12 +37,12 @@ namespace NPhysics
 			std::max(max1.y, max2.y),
 			std::max(max1.z, max2.z));
 
-		mSize = maxPoint - minPoint;
+		mSize = (maxPoint - minPoint);
 		mCenter = minPoint + mSize * 0.5f;
 
 		//recalculate transformations.
-		auto transformation = glm::translate(glm::mat4(1.0f), mCenter);
-		transformation = glm::scale(transformation, mSize);
+		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
+		CalculateMinMaxPoints();
 	}
 
 	bool BoxBoundingVolume::IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const
@@ -108,17 +105,20 @@ namespace NPhysics
 		mTransformation = glm::translate(mTransformation, -mCenter);
 		mCenter = position;
 		mTransformation = glm::translate(mTransformation, mCenter);
-	}
-
-	void BoxBoundingVolume::SetTransformation(const glm::mat4& transformation)
-	{
-		mTransformation = transformation;
-		UpdateData();
+		CalculateMinMaxPoints();
 	}
 
 	void BoxBoundingVolume::SetSize(const glm::vec3& size)
 	{
 		mSize = size;
+		CalculateMinMaxPoints();
+	}
+
+	void BoxBoundingVolume::SetRotation(const glm::vec3& rotation)
+	{
+		mRotation = rotation;
+		CalculateTransformation();
+		CalculateMinMaxPoints();
 	}
 
 	glm::mat4 BoxBoundingVolume::GetTransformation() const
@@ -131,24 +131,42 @@ namespace NPhysics
 		return std::make_shared<BoxBoundingVolume>();
 	}
 
-	void BoxBoundingVolume::UpdateData()
+	void BoxBoundingVolume::CalculateTransformation()
 	{
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
+		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
+		mTransformation = glm::rotate(mTransformation, mRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		mTransformation = glm::rotate(mTransformation, mRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		mTransformation = glm::rotate(mTransformation, mRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	}
 
-		glm::decompose(mTransformation, scale, rotation, translation, skew, perspective);
-		mCenter = translation;
-		mSize *= scale;
+	void BoxBoundingVolume::CalculateMinMaxPoints()
+	{
+		std::vector<glm::vec3> points;
+		glm::vec3 halfSize = mSize * 0.5f;
 
-		mTransformation = glm::translate(glm::mat4(1.0f), translation);
-		mTransformation = glm::rotate(mTransformation, rotation.x, glm::vec3(1.0f, 0.0, 0.0f));
-		mTransformation = glm::rotate(mTransformation, rotation.y, glm::vec3(0.0f, 1.0, 0.0f));
-		mTransformation = glm::rotate(mTransformation, rotation.z, glm::vec3(0.0f, 0.0, 1.0f));
+		points.push_back(glm::vec3(-halfSize.x, -halfSize.y, -halfSize.z));
+		points.push_back(glm::vec3(-halfSize.x, -halfSize.y, halfSize.z));
+		points.push_back(glm::vec3(-halfSize.x, halfSize.y, -halfSize.z));
+		points.push_back(glm::vec3(-halfSize.x, halfSize.y, halfSize.z));
+		points.push_back(glm::vec3(halfSize.x, -halfSize.y, -halfSize.z));
+		points.push_back(glm::vec3(halfSize.x, -halfSize.y, halfSize.z));
+		points.push_back(glm::vec3(halfSize.x, halfSize.y, -halfSize.z));
+		points.push_back(glm::vec3(halfSize.x, halfSize.y, halfSize.z));
 
-		//don't scale due to this transformation will be used to transform other colliders to the coordinates local system
-		//of this collider, we don't want the other collider be scaled, we wont it conserves its size.
+		mMinPoint = glm::vec3(std::numeric_limits<float>::max());
+		mMaxPoint = -glm::vec3(std::numeric_limits<float>::max());
+
+		for (auto&& point : points)
+		{
+			point = glm::vec3(mTransformation * glm::vec4(point, 1));
+			
+			mMinPoint.x = glm::min(mMinPoint.x, point.x);
+			mMinPoint.y = glm::min(mMinPoint.y, point.y);
+			mMinPoint.z = glm::min(mMinPoint.z, point.z);
+
+			mMaxPoint.x = glm::max(mMaxPoint.x, point.x);
+			mMaxPoint.y = glm::max(mMaxPoint.y, point.y);
+			mMaxPoint.z = glm::max(mMaxPoint.z, point.z);
+		}
 	}
 }

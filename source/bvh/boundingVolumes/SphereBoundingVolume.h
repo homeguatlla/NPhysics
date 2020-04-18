@@ -31,7 +31,6 @@ namespace NPhysics
 		void SetRadius(real radius) { mRadius = radius; }
 		void SetCenter(const glm::vec3& center) { mCenter = center; }
 		
-		void SetTransformation(const glm::mat4& transformation) override;
 		glm::mat4 GetTransformation() const override { return mTransformation; }
 
 		static std::string GetClassName() { return std::string("SphereBoundingVolume"); }

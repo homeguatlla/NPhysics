@@ -5,6 +5,7 @@
 #include "../bvh/boundingVolumes/SphereBoundingVolume.h"
 #include "../bvh/boundingVolumes/BoxBoundingVolume.h"
 #include "../utils/Math.h"
+#include "../PhysicsObject.h"
 #include "ContactResolver.h"
 
 #include <iostream>
@@ -39,7 +40,16 @@ namespace NPhysics
 
 	void CollisionResolver::UpdateCollider(std::shared_ptr<PhysicsObject> body, std::shared_ptr<IBoundingVolume> collider)
 	{
-		mBoundingVolumeHierarchyRoot->UpdateBoundingVolume(body, collider);
+		std::shared_ptr<BoundingVolumeHierarchyNode> foundNode;
+		//Find node in the bvh with its collider value (if not won't be found)
+		mBoundingVolumeHierarchyRoot->Find(body, collider, foundNode);
+		//once found or not, update collider with the changed position of the rigidbody
+		collider->SetPosition(body->GetPosition());
+		if (foundNode)
+		{
+			//finally if found, update the node with both body and collider updated.
+			mBoundingVolumeHierarchyRoot->UpdateBoundingVolume(foundNode, body, collider);
+		}
 	}
 
 	void CollisionResolver::RegisterCollisionBoundingVolumesSupported()
@@ -151,17 +161,22 @@ namespace NPhysics
 				BoxBoundingVolume box;
 				SphereBoundingVolume sphere;
 
+				float sign = 1;
 				if (typeid(volume1) == typeid(BoxBoundingVolume))
 				{
 					box = dynamic_cast<const BoxBoundingVolume&>(volume1);
 					sphere = dynamic_cast<const SphereBoundingVolume&>(volume2);
+					//box collides with sphere
 				}
 				else
 				{
 					box = dynamic_cast<const BoxBoundingVolume&>(volume2);
 					sphere = dynamic_cast<const SphereBoundingVolume&>(volume1);
+					//sphere collides with box
+					sign = -1;
 				}
-				return NMath::ResolveCollision(box, sphere);
+				
+				return NMath::ResolveCollision(box, sphere, sign);
 			}, true);
 	}
 }

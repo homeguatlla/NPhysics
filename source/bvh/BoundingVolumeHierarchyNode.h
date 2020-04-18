@@ -32,6 +32,7 @@ namespace NPhysics
 			const std::shared_ptr<IBoundingVolume> volume, 
 			std::shared_ptr<BoundingVolumeHierarchyNode>& nodeFound);
 		void UpdateBoundingVolume(
+			std::shared_ptr<BoundingVolumeHierarchyNode> node, 
 			const std::shared_ptr<PhysicsObject> object,
 			const std::shared_ptr<IBoundingVolume> volume);
 

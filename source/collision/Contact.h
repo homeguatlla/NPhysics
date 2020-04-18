@@ -97,6 +97,7 @@ namespace NPhysics
 		real mDesiredDeltaVelocity;
 		//Holds the total inertia velocity
 		real mDeltaVelocity;
+		bool mIsDeltaVelocityCalculated;
 
 		//Holds the world space position of the contact point relative to the center of each body.
 		glm::vec3 mRelativeContactPosition[2];

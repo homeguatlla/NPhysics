@@ -65,6 +65,11 @@ namespace NPhysics
 		mCollisionResolver.Update(duration);
 
 		UpdateBoundingVolumeHierarchy();
+
+		/*std::cout << "position (" << mDynamicBodies[0].first->GetPosition().x << ", " 
+			<< mDynamicBodies[0].first->GetPosition().y << ", "
+			<< mDynamicBodies[0].first->GetPosition().y << ")\n";
+			*/
 	}
 
 	void RigidBodyPhysicsEngine::UpdateBoundingVolumeHierarchy()
@@ -77,7 +82,7 @@ namespace NPhysics
 			bool hasChanged = !NMath::IsNearlyEqual(position1, position2, glm::epsilon<float>());
 			if (hasChanged)
 			{
-				body.second->SetPosition(body.first->GetPosition());
+				//body.second->SetPosition(body.first->GetPosition());
 				mCollisionResolver.UpdateCollider(body.first, body.second);
 			}
 		}
