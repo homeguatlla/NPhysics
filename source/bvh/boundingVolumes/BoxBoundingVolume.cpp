@@ -88,8 +88,9 @@ namespace NPhysics
 		return mSize.x * mSize.y * mSize.z;
 	}
 
-	const glm::mat3 BoxBoundingVolume::GetInertiaTensorMatrix(float mass) const
+	const glm::mat3 BoxBoundingVolume::GetInertiaTensorMatrix(float mass, bool isShell) const
 	{
+		//TODO replace formula if is a shell
 		real dx = mSize.x * mSize.x;
 		real dy = mSize.y * mSize.y;
 		real dz = mSize.z * mSize.z;

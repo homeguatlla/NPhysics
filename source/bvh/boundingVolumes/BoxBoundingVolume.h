@@ -19,7 +19,7 @@ namespace NPhysics
 		std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(std::shared_ptr<IBoundingVolume> volume) const override;
 		bool Contains(std::shared_ptr<IBoundingVolume> volume) const override;
 		real GetVolume() const override;
-		const glm::mat3 GetInertiaTensorMatrix(float mass) const override;
+		const glm::mat3 GetInertiaTensorMatrix(float mass, bool isShell) const override;
 		glm::vec3 GetPosition() const override { return mCenter; }
 
 		void SetPosition(const glm::vec3& position) override;

@@ -83,9 +83,10 @@ namespace NPhysics
 		assert(mergeFunction);
 		return mergeFunction(*this, *volume.get());
 	}
-	const glm::mat3 SphereBoundingVolume::GetInertiaTensorMatrix(float mass) const
+	const glm::mat3 SphereBoundingVolume::GetInertiaTensorMatrix(float mass, bool isShell) const
 	{
-		real value = (2.0f/5.0f) * (mass * mRadius * mRadius);
+		real k = isShell ? 2.0f / 3.0f : 2.0f / 5.0f;
+		real value = k * (mass * mRadius * mRadius);
 		
 		glm::mat3 inertiaTensorMatrix = glm::scale(glm::vec3(value, value, value));
 
