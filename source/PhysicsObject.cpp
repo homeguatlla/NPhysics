@@ -3,6 +3,7 @@
 
 namespace NPhysics
 {
+	unsigned int PhysicsObject::IDCounter = 0;
 
 	PhysicsObject::PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, PhysicsType type) :
 		mPosition(initialPosition),
@@ -12,6 +13,7 @@ namespace NPhysics
 		mInverseMass(0.0f), //by default inmovable particle
 		mType(type)
 	{
+		mId = IDCounter++;
 	}
 
 	void PhysicsObject::SetAcceleration(const glm::vec3& acceleration)

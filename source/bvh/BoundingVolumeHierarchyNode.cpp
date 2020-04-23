@@ -170,7 +170,7 @@ namespace NPhysics
 		if (IsLeaf())
 		{
 			nodeFound = shared_from_this();
-			return mPhysicsObject == object;
+			return mPhysicsObject->GetId() == object->GetId();
 		}
 		else
 		{

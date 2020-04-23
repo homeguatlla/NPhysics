@@ -17,6 +17,8 @@ namespace NPhysics
 
 	class PhysicsObject
 	{
+		static unsigned int IDCounter;
+
 	public:
 		PhysicsObject(const glm::vec3& initialPosition, const glm::vec3& initialVelocity, PhysicsType type);
 		void SetAcceleration(const glm::vec3& acceleration);
@@ -42,6 +44,7 @@ namespace NPhysics
 		glm::vec3 GetRotation() const { return DoGetRotation(); }
 
 		PhysicsType GetType() const { return mType; }
+		unsigned int GetId() const { return mId; }
 
 	private:
 		virtual void DoResetForceAccumulated() = 0;
@@ -51,6 +54,7 @@ namespace NPhysics
 		virtual void DoAddRotation(const glm::vec3& rotation) {}
 
 	protected:
+		unsigned int mId;
 
 		glm::vec3 mPosition;
 		glm::vec3 mVelocity;
