@@ -49,6 +49,11 @@ namespace NPhysics
 		DoSetRotation(rotation);
 	}
 
+	void PhysicsObject::AddRotation(const glm::vec3& rotation)
+	{
+		DoAddRotation(rotation);
+	}
+
 	void PhysicsObject::SetInitialVelocity(const glm::vec3& velocity)
 	{
 		mVelocity = velocity;

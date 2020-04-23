@@ -47,6 +47,7 @@ namespace NPhysics
 	private:
 		void DoSetPosition(const glm::vec3& position) override;
 		void DoSetRotation(const glm::vec3& rotation) override;
+		void DoAddRotation(const glm::vec3& rotation) override;
 		virtual glm::vec3 DoGetRotation() const override;
 
 		void CalculateDerivedData();

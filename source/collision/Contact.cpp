@@ -256,7 +256,7 @@ namespace NPhysics
 				mRotationChange[i] = inverseInertiaTensorMatrix * impulseTorque;
 				mVelocityChange[i] = impulseWorld * body->GetInverseMass() * sign;
 				
-				body->SetRotation(mRotationChange[i]);
+				body->AddRotation(mRotationChange[i]);
 				body->AddVelocity(mVelocityChange[i]);
 			}
 		}

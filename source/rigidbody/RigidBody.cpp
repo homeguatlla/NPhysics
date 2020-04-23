@@ -72,6 +72,11 @@ namespace NPhysics
 		CalculateDerivedData();
 	}
 
+	void RigidBody::DoAddRotation(const glm::vec3& rotation)
+	{
+		mOrientation = mOrientation * NMath::FromEulerAnglesToQuaternion(rotation);
+	}
+
 	glm::vec3 RigidBody::GetRotation() const
 	{
 		return NMath::FromQuatToEulerAngles(mOrientation);
