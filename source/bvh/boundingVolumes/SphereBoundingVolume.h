@@ -27,7 +27,7 @@ namespace NPhysics
 		glm::vec3 GetPosition() const override { return mCenter; }
 
 		real GetRadius() const { return mRadius; }
-
+		glm::vec3 GetSize() const override { return glm::vec3(mRadius*2.0f); }
 		void SetRadius(real radius) { mRadius = radius; }
 		void SetCenter(const glm::vec3& center) { mCenter = center; }
 		

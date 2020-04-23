@@ -29,7 +29,7 @@ namespace NPhysics
 		glm::mat4 GetTransformation() const override;
 		glm::vec3 GetMinPoint() const { return mMinPoint; }
 		glm::vec3 GetMaxPoint() const { return mMaxPoint;  }
-		glm::vec3 GetSize() const { return mSize; }		
+		glm::vec3 GetSize() const override { return mSize; }		
 
 		static std::string GetClassName() { return std::string("BoxBoundingVolume"); }
 		static std::shared_ptr<IBoundingVolume> Create();
