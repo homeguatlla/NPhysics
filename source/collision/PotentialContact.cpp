@@ -26,7 +26,7 @@ namespace NPhysics
 		if (contact != nullptr)
 		{
 			contact->SetBodies(mObjects[0].first, mObjects[1].first);
-			contact->SetRestitution(1.0f);
+			contact->SetRestitution(0.0f);
 			contact->SetFriction(0.0f);
 
 			contacts.push_back(contact);
