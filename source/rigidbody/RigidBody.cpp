@@ -11,6 +11,7 @@ namespace NPhysics
 		mAngularVelocity(angularVelocity),
 		mAngularDamping(0.995f),
 		mTransformationMatrix(1.0f),
+		mCoefficientOfRestitution(DEFAULT_COR),
 		mCollisionEnterHandler(nullptr),
 		mCollisionExitHandler(nullptr)
 	{

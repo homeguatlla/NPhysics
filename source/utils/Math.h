@@ -72,7 +72,7 @@ namespace NPhysics
 			return glm::vec3(attitude, heading, bank);
 		}
 
-		static bool IsNearlyEqual(const glm::vec3& v1, const glm::vec3& v2, const float epsilon)
+		static bool IsNearlyEqual(const glm::vec3& v1, const glm::vec3& v2, const float epsilon = 0.0001f)
 		{
 			const glm::vec3 epsilon3(epsilon);
 			//return glm::epsilonEqual<glm::vec3>(v1, v2, epsilon3);

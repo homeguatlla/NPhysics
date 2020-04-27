@@ -10,7 +10,7 @@ namespace NPhysics
 		mPoint(point),
 		mNormal(normal),
 		mPenetration(penetration),
-		mRestitution(1.0f),
+		mRestitution(DEFAULT_COR),
 		mFriction(0.0f),
 		mBodies { nullptr, nullptr },
 		mDesiredDeltaVelocity {0.0f },

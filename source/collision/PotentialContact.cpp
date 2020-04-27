@@ -2,6 +2,7 @@
 #include "PotentialContact.h"
 #include "../bvh/BoundingVolumeIntersectionResolverMap.h"
 #include "../bvh/boundingVolumes/IBoundingVolume.h"
+#include "../rigidbody/RigidBody.h"
 #include "Contact.h"
 
 namespace NPhysics
@@ -26,7 +27,10 @@ namespace NPhysics
 		if (contact != nullptr)
 		{
 			contact->SetBodies(mObjects[0].first, mObjects[1].first);
-			contact->SetRestitution(0.2f);
+			auto rigidbody1 = std::dynamic_pointer_cast<RigidBody>(mObjects[0].first);
+			auto rigidbody2 = std::dynamic_pointer_cast<RigidBody>(mObjects[1].first);
+			float cor = (rigidbody1->GetRestitution() + rigidbody2->GetRestitution()) * 0.5f;
+			contact->SetRestitution(cor);
 			contact->SetFriction(0.0f);
 
 			contacts.push_back(contact);

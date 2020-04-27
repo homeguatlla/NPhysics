@@ -39,6 +39,9 @@ namespace NPhysics
 
 		void SetAngularDamping(float damping);
 
+		void SetResitution(real cor) { mCoefficientOfRestitution = cor; }
+		real GetRestitution() const { return mCoefficientOfRestitution; }
+
 		void RegisterCollisionEnterHandler(std::function<void(const Contact& contact)> callback) { mCollisionEnterHandler = callback; }
 		void RegisterCollisionExitHandler(std::function<void(const Contact& contact)> callback) { mCollisionExitHandler = callback; }
 		void OnCollisionEnter(const Contact& contact);
@@ -83,6 +86,11 @@ namespace NPhysics
 
 		//Holds the amount of damping applied to angular motion.
 		real mAngularDamping;
+
+		//Holds the coefficient of restitution
+		//https://en.wikipedia.org/wiki/Coefficient_of_restitution for a table of values
+		//coeffitient from 0 to 1, 0 loss of energy, 1 conservative (elastic)
+		real mCoefficientOfRestitution;
 
 		std::function<void(const Contact& contact)> mCollisionEnterHandler;
 		std::function<void(const Contact& contact)> mCollisionExitHandler;

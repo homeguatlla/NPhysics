@@ -13,3 +13,4 @@ const real MAX_REAL = std::numeric_limits<float>::max();
 const real EPSILON = glm::epsilon<float>();
 const real EPSILON2 = 0.01f;
 const real EPSILON1 = 0.1f;
+const real DEFAULT_COR = 1.0f; // Coefficient of Restitution
