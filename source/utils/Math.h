@@ -7,6 +7,7 @@
 
 #include <glm/gtc/epsilon.hpp>
 #include <glm/gtx/transform.hpp>
+#include <iostream>
 
 namespace NPhysics
 {
@@ -214,7 +215,11 @@ namespace NPhysics
 				glm::vec3 normal = midline / size;
 				glm::vec3 point = position2 + normal * sphere2.GetRadius();
 				real penetration = sphere1.GetRadius() + sphere2.GetRadius() - size;
-
+				//TODO there is a case, when two spheres are coincident. 
+				//the normal is zero and cannot be calculated here because we need the current velocity
+				//of one of the spheres to know where it was coming and then calculate the normal in the 
+				//direction of the movement.
+				
 				return std::make_shared<Contact>(
 					point, 
 					normal, 
@@ -249,7 +254,18 @@ namespace NPhysics
 			{
 				auto contactPointWorld = glm::vec3(transformation * glm::vec4(contactPoint, 1.0f));
 				glm::vec3 normal = contactPointWorld - sphere.GetPosition();
+				if (IsNearlyEqual(normal, glm::vec3(0.0f)))
+				{
+					//normal zero: esto hace que se calcule mal los datos de la colisión
+					//hay que calcular la normal lo más aproximado posible, quizá aquí no porque no tienes todos los datos.
+					//Lo ideal seria tener la velocidad y -posicionar- el objeto un poco antes para que no coincidan en punto.
+					//pero igual se tendría que hacer en el contactResolver cuando ve que la normal devuelta es cero.
+					normal = box.GetPosition() - sphere.GetPosition();
+				}
 				normal = glm::normalize(normal);
+
+				//std::cout << "normal = " << normal.x << ", " << normal.y << ", " << normal.z << std::endl;
+
 				real penetration = sphere.GetRadius() - glm::sqrt(distance2);
 
 				return std::make_shared<Contact>(

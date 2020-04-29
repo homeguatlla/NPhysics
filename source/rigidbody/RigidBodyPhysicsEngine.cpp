@@ -55,7 +55,7 @@ namespace NPhysics
 			//std::cout << "velocity: " << particle->GetVelocity().x << ", " << particle->GetVelocity().y << ", " << particle->GetVelocity().z << "\n";
 		}*/
 
-		for (auto body : mDynamicBodies)
+		for (auto&& body : mDynamicBodies)
 		{
 			body.first->Integrate(duration);
 		}
@@ -74,7 +74,7 @@ namespace NPhysics
 
 	void RigidBodyPhysicsEngine::UpdateBoundingVolumeHierarchy()
 	{
-		for (auto body : mDynamicBodies)
+		for (auto&& body : mDynamicBodies)
 		{
 			glm::vec3 position1 = body.second->GetPosition();
 			glm::vec3 position2 = body.first->GetPosition();

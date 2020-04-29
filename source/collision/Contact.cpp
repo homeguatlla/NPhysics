@@ -17,6 +17,7 @@ namespace NPhysics
 		mDeltaVelocity {0.0f},
 		mIsDeltaVelocityCalculated{false}
 	{
+		assert(!NMath::IsNearlyEqual(normal, glm::vec3(0.0f)));
 	}
 
 	void Contact::SetBodies(std::shared_ptr<PhysicsObject> body1, std::shared_ptr<PhysicsObject> body2)
