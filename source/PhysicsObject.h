@@ -1,6 +1,7 @@
 #pragma once
 #include "../framework.h"
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace NPhysics
 {
@@ -45,6 +46,8 @@ namespace NPhysics
 
 		PhysicsType GetType() const { return mType; }
 		unsigned int GetId() const { return mId; }
+
+		virtual std::shared_ptr<PhysicsObject> Clone() = 0;
 
 	private:
 		virtual void DoResetForceAccumulated() = 0;

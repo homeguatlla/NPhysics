@@ -104,6 +104,28 @@ namespace NPhysics
 		}
 	}
 
+	std::shared_ptr<PhysicsObject> RigidBody::Clone()
+	{
+		auto object = std::make_shared<RigidBody>(mPosition, mAngularVelocity, mVelocity, mType);
+		object->SetAcceleration(mAcceleration);
+		object->SetDamping(mDamping);
+		object->SetAngularDamping(mAngularDamping);
+		object->SetInertiaTensorMatrix(glm::inverse(mInverseInertiaTensor));
+		if (HasFiniteMass())
+		{
+			object->SetMass(GetMass());
+		}
+		else
+		{
+			object->SetInfiniteMass();
+		}
+		object->SetOrientation(mOrientation);
+		object->SetResitution(mCoefficientOfRestitution);
+		object->SetRotation(GetRotation());
+
+		return object;
+	}
+
 	void RigidBody::ResetForceAndTorqueAccumulated()
 	{
 		mForceAccumulated = glm::vec3(0.0f);

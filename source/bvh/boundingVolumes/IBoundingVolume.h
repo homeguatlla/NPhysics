@@ -18,6 +18,7 @@ namespace NPhysics
 		virtual glm::vec3 GetPosition() const = 0;
 		virtual glm::mat4 GetTransformation() const = 0;
 		virtual glm::vec3 GetSize() const = 0;
+		virtual std::shared_ptr<IBoundingVolume> Clone() = 0;
 	};
 };
 

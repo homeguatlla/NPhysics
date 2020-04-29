@@ -100,6 +100,11 @@ namespace NPhysics
 		mTransformation = glm::translate(mTransformation, mCenter);
 	}
 
+	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::Clone()
+	{
+		return std::make_shared<SphereBoundingVolume>(mCenter, mRadius);
+	}
+
 	std::shared_ptr<IBoundingVolume> SphereBoundingVolume::Create()
 	{
 		return std::make_shared<SphereBoundingVolume>();

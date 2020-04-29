@@ -33,11 +33,10 @@ namespace NPhysics
 		
 		glm::mat4 GetTransformation() const override { return mTransformation; }
 
+		std::shared_ptr<IBoundingVolume> Clone() override;
+
 		static std::string GetClassName() { return std::string("SphereBoundingVolume"); }
 		static std::shared_ptr<IBoundingVolume> Create();
-
-	private:
-		void UpdateData();
 
 	private:
 		glm::vec3 mCenter;

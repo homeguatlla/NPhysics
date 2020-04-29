@@ -127,6 +127,11 @@ namespace NPhysics
 		return mTransformation;
 	}
 
+	std::shared_ptr<IBoundingVolume> BoxBoundingVolume::Clone()
+	{
+		return std::make_shared<BoxBoundingVolume>(mCenter, mSize, mRotation);
+	}
+
 	std::shared_ptr<IBoundingVolume> BoxBoundingVolume::Create()
 	{
 		return std::make_shared<BoxBoundingVolume>();

@@ -31,6 +31,8 @@ namespace NPhysics
 		glm::vec3 GetMaxPoint() const { return mMaxPoint;  }
 		glm::vec3 GetSize() const override { return mSize; }		
 
+		std::shared_ptr<IBoundingVolume> Clone() override;
+
 		static std::string GetClassName() { return std::string("BoxBoundingVolume"); }
 		static std::shared_ptr<IBoundingVolume> Create();
 

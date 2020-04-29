@@ -39,6 +39,24 @@ namespace NPhysics
 		mForceAccumulated += force;
 	}
 
+	std::shared_ptr<PhysicsObject> Particle::Clone()
+	{
+		auto object = std::make_shared<Particle>(mPosition, mVelocity);
+		object->SetAcceleration(mAcceleration);
+		object->SetDamping(mDamping);
+		if (HasFiniteMass())
+		{
+			object->SetMass(GetMass());
+		}
+		else
+		{
+			object->SetInfiniteMass();
+		}
+		object->SetRotation(GetRotation());
+
+		return object;
+	}
+
 	void Particle::DoResetForceAccumulated()
 	{
 		mForceAccumulated = glm::vec3(0.0f);

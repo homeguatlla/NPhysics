@@ -14,6 +14,8 @@ namespace NPhysics {
 		void Integrate(real duration);
 		void AddForce(const glm::vec3& force);
 
+		std::shared_ptr<PhysicsObject> Clone() override;
+
 	private:
 		void DoResetForceAccumulated() override;
 	};

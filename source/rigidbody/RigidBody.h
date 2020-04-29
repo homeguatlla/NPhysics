@@ -47,6 +47,8 @@ namespace NPhysics
 		void OnCollisionEnter(const Contact& contact);
 		void OnCollisionExit(const Contact& contact);
 
+		std::shared_ptr<PhysicsObject> Clone() override;
+
 	private:
 		void DoSetPosition(const glm::vec3& position) override;
 		void DoSetRotation(const glm::vec3& rotation) override;
