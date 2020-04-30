@@ -30,7 +30,7 @@ namespace NPhysics
 
 		void Calculate(float elapsedTime);
 		void UpdatePenetration(const std::shared_ptr<Contact>& contactResolved);
-		void UpdateLocalVelocity(const std::shared_ptr<Contact>& contactResolved);
+		void UpdateLocalVelocity(const std::shared_ptr<Contact>& contactResolved, real elapsedTime);
 		glm::vec3 GetLinearChange(int bodyIndex);
 		glm::vec3 GetAngularChange(int bodyIndex);
 		glm::vec3 GetRotationChange(int bodyIndex);
@@ -51,7 +51,7 @@ namespace NPhysics
 			const glm::vec3& bodyVelocity,
 			const glm::vec3& bodyRotation,
 			const glm::mat3& fromWorldToContactMatrix);
-		real CalculateDesiredDeltaVelocity();
+		real CalculateDesiredDeltaVelocity(real elapsedTime);
 		real CalculateLimitedAngular(const glm::vec3& relativePosition, const glm::vec3& normal, real angular);
 		void CalculateLocalVelocity();
 		glm::vec3 CalculateFrictionlessImpulse();

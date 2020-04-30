@@ -54,8 +54,8 @@ namespace NPhysics
 		while (iterations < mNumIterationsPerContactWhenResolvingInterpenetration)
 		{
 			auto contactToResolve = FindContactWithLargerPenetration();
-			if (contactToResolve->GetPenetration() < 0.0f || 
-				glm::epsilonEqual(contactToResolve->GetPenetration(), 0.0f, EPSILON2))
+			if (contactToResolve->GetPenetration() < 0.0f /*|| 
+				glm::epsilonEqual(contactToResolve->GetPenetration(), 0.0f, EPSILON2)*/)
 			{
 				//All interpenetrations have been resolved. No objects colliding.
 				break;
@@ -89,8 +89,8 @@ namespace NPhysics
 			contactToResolve->ApplyVelocityChange();
 
 			PerformActionOnEachContact(
-				[&contactToResolve](const std::shared_ptr<Contact>& contact) {
-					contact->UpdateLocalVelocity(contactToResolve);
+				[&contactToResolve, &elapsedTime](const std::shared_ptr<Contact>& contact) {
+					contact->UpdateLocalVelocity(contactToResolve, elapsedTime);
 				});
 
 			iterations++;

@@ -48,12 +48,35 @@ namespace NPhysics
 		CalculateLocalVelocity();
 
 		//desired velocity
-		mDesiredDeltaVelocity = CalculateDesiredDeltaVelocity();
+		mDesiredDeltaVelocity = CalculateDesiredDeltaVelocity(elapsedTime);
 	}
 
-	real Contact::CalculateDesiredDeltaVelocity()
+	real Contact::CalculateDesiredDeltaVelocity(real elapsedTime)
 	{
-		return -mLocalVelocity.x * (1.0f + mRestitution);
+		//reduce microvibrations when resting objects
+		real velocityLimit = 0.1f;
+		real velocityFromAcceleration = 0.0f;
+
+		for (int i = 0; i < 2; ++i)
+		{
+			std::shared_ptr<RigidBody> body = std::static_pointer_cast<RigidBody>(mBodies[i]);
+			if (body)
+			{
+				float sign = 1.0f - 2.0f * i;
+				velocityFromAcceleration += sign * glm::dot(body->GetLastFrameAcceleration(), mNormal) * elapsedTime;
+			}
+		}
+
+		//if the velocity is very slow, limit the restitution to avoid vibrations from one object over another
+		real restitution = mRestitution;
+		if (glm::abs(mLocalVelocity.x) < velocityLimit)
+		{
+			restitution = 0.0f;
+		}
+
+		return -mLocalVelocity.x - restitution * (mLocalVelocity.x - velocityFromAcceleration);
+		//without trying to avoid microvibrations 
+		//return -mLocalVelocity.x * (1.0f + mRestitution);
 	}
 
 	void Contact::CalculateLocalVelocity()
@@ -110,17 +133,17 @@ namespace NPhysics
 			});
 	}
 
-	void Contact::UpdateLocalVelocity(const std::shared_ptr<Contact>& contactResolved)
+	void Contact::UpdateLocalVelocity(const std::shared_ptr<Contact>& contactResolved, real elapsedTime)
 	{
 		PerformActionForEachBodyEqualToTheContact(
 			contactResolved,
-			[this, &contactResolved](int bodyIndex, int bodyResolvedIndex) {
+			[this, &contactResolved, &elapsedTime](int bodyIndex, int bodyResolvedIndex) {
 				glm::vec3 deltaVelocity = contactResolved->GetVelocityChange(bodyResolvedIndex) +
 					glm::cross(contactResolved->GetRotationChange(bodyResolvedIndex), mRelativeContactPosition[bodyIndex]);
 
 				real sign = 1.0f - 2.0f * bodyIndex;
 				mLocalVelocity += sign * mWorldToContactMatrix * deltaVelocity;
-				mDesiredDeltaVelocity = CalculateDesiredDeltaVelocity();
+				mDesiredDeltaVelocity = CalculateDesiredDeltaVelocity(elapsedTime);
 			});
 	}
 

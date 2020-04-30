@@ -42,6 +42,8 @@ namespace NPhysics
 		void SetResitution(real cor) { mCoefficientOfRestitution = cor; }
 		real GetRestitution() const { return mCoefficientOfRestitution; }
 
+		glm::vec3 GetLastFrameAcceleration() const { return mLastFrameAcceleration; }
+
 		void RegisterCollisionEnterHandler(std::function<void(const Contact& contact)> callback) { mCollisionEnterHandler = callback; }
 		void RegisterCollisionExitHandler(std::function<void(const Contact& contact)> callback) { mCollisionExitHandler = callback; }
 		void OnCollisionEnter(const Contact& contact);
