@@ -54,7 +54,10 @@ namespace NPhysics
 		while (iterations < mNumIterationsPerContactWhenResolvingInterpenetration)
 		{
 			auto contactToResolve = FindContactWithLargerPenetration();
-			if (contactToResolve->GetPenetration() < 0.0f /*|| 
+			if (contactToResolve->GetPenetration() <= 0.0f /*
+				este código se comenta debido a la modificacion de la velocidad para evitar las microcolisiones,
+				si lo dejamos, sigue haciendo microcolisiones.
+				|| 
 				glm::epsilonEqual(contactToResolve->GetPenetration(), 0.0f, EPSILON2)*/)
 			{
 				//All interpenetrations have been resolved. No objects colliding.
