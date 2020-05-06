@@ -82,7 +82,6 @@ namespace NPhysics
 			bool hasChanged = !NMath::IsNearlyEqual(position1, position2, glm::epsilon<float>());
 			if (hasChanged)
 			{
-				//body.second->SetPosition(body.first->GetPosition());
 				mCollisionResolver.UpdateCollider(body.first, body.second);
 			}
 		}

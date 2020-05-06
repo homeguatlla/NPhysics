@@ -45,6 +45,7 @@ namespace NPhysics
 		mBoundingVolumeHierarchyRoot->Find(body, collider, foundNode);
 		//once found or not, update collider with the changed position of the rigidbody
 		collider->SetPosition(body->GetPosition());
+
 		if (foundNode)
 		{
 			//finally if found, update the node with both body and collider updated.

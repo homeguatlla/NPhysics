@@ -32,7 +32,7 @@ namespace NPhysics
 
 	void BoundingVolumeHierarchyNode::Insert(const std::shared_ptr<PhysicsObject> object, const std::shared_ptr<IBoundingVolume> volume)
 	{
-		volume->SetPosition(object->GetPosition());
+		//volume->SetPosition(object->GetPosition() - volume->GetLocalTranslation());
 
 		//If we are a leaf, then the only option is to spawn two new children and place the new body in one
 		if (IsLeaf())

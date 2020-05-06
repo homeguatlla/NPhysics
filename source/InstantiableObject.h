@@ -12,7 +12,7 @@ namespace NPhysics
 	class InstantiableObject
 	{
 	private:
-		using BoundingVolumeFunction = std::function<std::shared_ptr<NPhysics::IBoundingVolume>(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation)>;
+		using BoundingVolumeFunction = std::function<std::shared_ptr<NPhysics::IBoundingVolume>(const glm::mat4& parentTransformation)>;
 	public:
 
 		template<class T>
@@ -21,7 +21,7 @@ namespace NPhysics
 			mBoundingVolumeFactory[T::GetClassName()] = std::bind<std::shared_ptr<IBoundingVolume>>(&T::Create);
 		}
 
-		static std::shared_ptr<NPhysics::IBoundingVolume> CreateBoundingVolume(const std::string& name, const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation);
+		static std::shared_ptr<NPhysics::IBoundingVolume> CreateBoundingVolume(const std::string& name, const glm::mat4& parentTransformation);
 
 	private:
 		static std::map<std::string, BoundingVolumeFunction> mBoundingVolumeFactory;

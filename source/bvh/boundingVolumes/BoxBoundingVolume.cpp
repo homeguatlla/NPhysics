@@ -2,26 +2,53 @@
 #include "BoxBoundingVolume.h"
 #include "../BoundingVolumeIntersectionResolverMap.h"
 #include "glm/gtx/transform.hpp"
-#include <glm/gtx/matrix_decompose.hpp>
 #include <algorithm>
 #include <vector>
 
 namespace NPhysics
 {
-	BoxBoundingVolume::BoxBoundingVolume() : mCenter(0.0f), mSize(1.0f), mRotation(0.0f), mTransformation(1.0f)
+	BoxBoundingVolume::BoxBoundingVolume() : 
+		mCenter(0.0f), 
+		mSize(1.0f), 
+		mLocalTransformationWithoutScale(1.0f),
+		mLocalTranslation(0.0f),
+		mLocalScale(1.0f),
+		mLocalRotation(0.0f),
+		mParentTranslation(0.0f),
+		mParentScale(1.0f),
+		mParentRotation(0.0f),
+		mTransformation(glm::mat4(1.0f)),
+		mIsDirty(true)
 	{
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const glm::vec3& center, const glm::vec3& size, const glm::vec3& rotation) : 
-		mCenter{center},
-		mSize{size},
-		mRotation(rotation)
+	BoxBoundingVolume::BoxBoundingVolume(
+		const glm::vec3& parentPosition, 
+		const glm::vec3& size, 
+		const glm::vec3& localTranslation, 
+		const glm::vec3& localScale, 
+		const glm::vec3& localRotation) :
+		mLocalTransformationWithoutScale(1.0f),
+		mLocalTranslation(localTranslation),
+		mLocalScale(localScale),
+		mLocalRotation(localRotation),
+		mParentTranslation(parentPosition),
+		mParentScale(1.0f),
+		mParentRotation(0.0f),
+		mTransformation(glm::mat4(1.0f)),
+		mIsDirty(true)
 	{
-		CalculateTransformation();
-		CalculateMinMaxPoints();
+		SetLocalTransformation(localTranslation, localScale, localRotation);
+		SetSize(size);
+		mIsDirty = true;
 	}
 
-	BoxBoundingVolume::BoxBoundingVolume(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+	BoxBoundingVolume::BoxBoundingVolume(BoxBoundingVolume& box1, BoxBoundingVolume& box2) :
+		mLocalTransformationWithoutScale(1.0f),
+		mLocalTranslation(0.0f),
+		mLocalScale(1.0f),
+		mLocalRotation(0.0f),
+		mIsDirty(true)
 	{
 		glm::vec3 min1 = box1.GetMinPoint();
 		glm::vec3 min2 = box2.GetMinPoint();
@@ -38,11 +65,11 @@ namespace NPhysics
 			std::max(max1.z, max2.z));
 
 		mSize = (maxPoint - minPoint);
-		mCenter = minPoint + mSize * 0.5f;
+		mParentTranslation = minPoint + mSize * 0.5f;
 
 		//recalculate transformations.
-		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
-		CalculateMinMaxPoints();
+		mLocalTransformationWithoutScale = glm::mat4(1.0f);
+		mIsDirty = true;
 	}
 
 	bool BoxBoundingVolume::IsOverlapping(std::shared_ptr<IBoundingVolume> volume) const
@@ -101,35 +128,88 @@ namespace NPhysics
 		return inertiaTensorMatrix;
 	}
 
+	glm::vec3 BoxBoundingVolume::GetPosition()
+	{
+		if (mIsDirty)
+		{
+			UpdateDirty();
+		}
+		return mCenter;
+	}
+
+	void BoxBoundingVolume::SetParentTranslation(const glm::vec3& translation)
+	{
+		//position = parentPosition
+		mParentTranslation = translation;
+		mIsDirty = true;
+	}
+
 	void BoxBoundingVolume::SetPosition(const glm::vec3& position)
 	{
-		mTransformation = glm::translate(mTransformation, -mCenter);
-		mCenter = position;
-		mTransformation = glm::translate(mTransformation, mCenter);
-		CalculateMinMaxPoints();
+		if (mIsDirty)
+		{
+			UpdateDirty();
+		}
+		auto offset = position - mCenter;
+		SetParentTranslation(mParentTranslation + glm::vec3(offset));
+		mIsDirty = true;
 	}
 
 	void BoxBoundingVolume::SetSize(const glm::vec3& size)
 	{
-		mSize = size;
-		CalculateMinMaxPoints();
+		//size is size parent(with its scale)
+		mSize = size * mLocalScale;
+		mIsDirty = true;
 	}
 
-	void BoxBoundingVolume::SetRotation(const glm::vec3& rotation)
+	void BoxBoundingVolume::SetLocalTransformation(const glm::vec3& translation, const glm::vec3& scale, const glm::vec3& rotation)
 	{
-		mRotation = rotation;
-		CalculateTransformation();
-		CalculateMinMaxPoints();
+		mLocalTranslation = translation;
+		mLocalScale = scale;
+		mLocalRotation = rotation;
+		CalculateLocalTransformationWithoutScale();
+		mIsDirty = true;
 	}
 
-	glm::mat4 BoxBoundingVolume::GetTransformation() const
+	glm::mat4 BoxBoundingVolume::GetTransformationWithoutScale()
 	{
+		if (mIsDirty)
+		{
+			UpdateDirty();
+		}
 		return mTransformation;
+	}
+
+	glm::vec3 BoxBoundingVolume::GetMinPoint()
+	{
+		if (mIsDirty)
+		{
+			UpdateDirty();
+		}
+		return mMinPoint;
+	}
+
+	glm::vec3 BoxBoundingVolume::GetMaxPoint()
+	{
+		if (mIsDirty)
+		{
+			UpdateDirty();
+		}
+		return mMaxPoint;
+	}
+
+
+	void BoxBoundingVolume::SetParentTransformation(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation)
+	{
+		mParentTranslation = position;
+		mParentScale = scale;
+		mParentRotation = rotation;
+		mIsDirty = true;
 	}
 
 	std::shared_ptr<IBoundingVolume> BoxBoundingVolume::Clone()
 	{
-		return std::make_shared<BoxBoundingVolume>(mCenter, mSize, mRotation);
+		return std::make_shared<BoxBoundingVolume>(mCenter, mSize, glm::vec3(0.0f));
 	}
 
 	std::shared_ptr<IBoundingVolume> BoxBoundingVolume::Create()
@@ -137,12 +217,33 @@ namespace NPhysics
 		return std::make_shared<BoxBoundingVolume>();
 	}
 
+	void BoxBoundingVolume::CalculateLocalTransformationWithoutScale()
+	{
+		mLocalTransformationWithoutScale = glm::translate(glm::mat4(1.0f), mLocalTranslation);
+		mLocalTransformationWithoutScale = glm::rotate(mLocalTransformationWithoutScale, mLocalRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		mLocalTransformationWithoutScale = glm::rotate(mLocalTransformationWithoutScale, mLocalRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		mLocalTransformationWithoutScale = glm::rotate(mLocalTransformationWithoutScale, mLocalRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+
+	void BoxBoundingVolume::UpdateDirty()
+	{
+		CalculateTransformation();
+		CalculateMinMaxPoints();
+		mCenter = mTransformation * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		mIsDirty = false;
+	}
+
 	void BoxBoundingVolume::CalculateTransformation()
 	{
-		mTransformation = glm::translate(glm::mat4(1.0f), mCenter);
-		mTransformation = glm::rotate(mTransformation, mRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		mTransformation = glm::rotate(mTransformation, mRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		mTransformation = glm::rotate(mTransformation, mRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		CalculateLocalTransformationWithoutScale();
+
+		auto parentRotation = glm::rotate(glm::mat4(1.0f), mParentRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		parentRotation = glm::rotate(parentRotation, mParentRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		parentRotation = glm::rotate(parentRotation, mParentRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		auto parentTranslation = glm::translate(glm::mat4(1.0f), mParentTranslation);
+
+		mTransformation = parentTranslation * parentRotation * mLocalTransformationWithoutScale;
 	}
 
 	void BoxBoundingVolume::CalculateMinMaxPoints()
@@ -161,11 +262,10 @@ namespace NPhysics
 
 		mMinPoint = glm::vec3(std::numeric_limits<float>::max());
 		mMaxPoint = -glm::vec3(std::numeric_limits<float>::max());
-
+		
 		for (auto&& point : points)
 		{
-			point = glm::vec3(mTransformation * glm::vec4(point, 1));
-			
+			point = mTransformation * glm::vec4(point, 1.0f);
 			mMinPoint.x = glm::min(mMinPoint.x, point.x);
 			mMinPoint.y = glm::min(mMinPoint.y, point.y);
 			mMinPoint.z = glm::min(mMinPoint.z, point.z);

@@ -98,21 +98,21 @@ namespace NPhysics
 			return glm::mat3(v1, v2, v3);
 		}
 
-		static bool IsOverlapping(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		static bool IsOverlapping(SphereBoundingVolume& sphere1, SphereBoundingVolume& sphere2)
 		{
 			real distance = glm::distance(sphere1.GetPosition(), sphere2.GetPosition());
 			return distance < sphere1.GetRadius() + sphere2.GetRadius();
 		}
 
-		static bool IsOverlapping(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		static bool IsOverlapping(BoxBoundingVolume& box1, BoxBoundingVolume& box2)
 		{
-			glm::vec3 axis11 = glm::normalize(box1.GetTransformation()[0]);
-			glm::vec3 axis12 = glm::normalize(box1.GetTransformation()[1]);
-			glm::vec3 axis13 = glm::normalize(box1.GetTransformation()[2]);
+			glm::vec3 axis11 = glm::normalize(box1.GetTransformationWithoutScale()[0]);
+			glm::vec3 axis12 = glm::normalize(box1.GetTransformationWithoutScale()[1]);
+			glm::vec3 axis13 = glm::normalize(box1.GetTransformationWithoutScale()[2]);
 
-			glm::vec3 axis21 = glm::normalize(box2.GetTransformation()[0]);
-			glm::vec3 axis22 = glm::normalize(box2.GetTransformation()[1]);
-			glm::vec3 axis23 = glm::normalize(box2.GetTransformation()[2]);
+			glm::vec3 axis21 = glm::normalize(box2.GetTransformationWithoutScale()[0]);
+			glm::vec3 axis22 = glm::normalize(box2.GetTransformationWithoutScale()[1]);
+			glm::vec3 axis23 = glm::normalize(box2.GetTransformationWithoutScale()[2]);
 
 			bool isOverlapping = 
 				OverlapOnAxis(box1, box2, axis11) &&
@@ -136,10 +136,10 @@ namespace NPhysics
 			return isOverlapping;
 		}
 
-		static bool IsOverlapping(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		static bool IsOverlapping(BoxBoundingVolume& box, SphereBoundingVolume& sphere)
 		{
 			auto size = box.GetSize();
-			auto transformation = box.GetTransformation();
+			auto transformation = box.GetTransformationWithoutScale();
 			auto transformationInverse = glm::inverse(transformation);
 			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
 			
@@ -151,21 +151,21 @@ namespace NPhysics
 			return !(outInX || outInY || outInZ);
 		}
 
-		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(SphereBoundingVolume& sphere1, SphereBoundingVolume& sphere2)
 		{
 			auto newVolume = SphereBoundingVolume(sphere1, sphere2);
 
 			return std::make_shared<SphereBoundingVolume>(newVolume);
 		}
 
-		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(BoxBoundingVolume& box1, BoxBoundingVolume& box2)
 		{
 			auto newVolume = BoxBoundingVolume(box1, box2);
 
 			return std::make_shared<BoxBoundingVolume>(newVolume);
 		}
 
-		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		static std::shared_ptr<IBoundingVolume> MergeBoundingVolumes(BoxBoundingVolume& box, SphereBoundingVolume& sphere)
 		{
 			auto box2 = BoxBoundingVolume(sphere.GetPosition(), glm::vec3(sphere.GetRadius() * 2));
 			auto newVolume = BoxBoundingVolume(box, box2);
@@ -174,21 +174,21 @@ namespace NPhysics
 		}
 
 		//volume1 contains volume2
-		static bool Contains(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		static bool Contains(SphereBoundingVolume& sphere1, SphereBoundingVolume& sphere2)
 		{
 			real distance = glm::distance(sphere1.GetPosition(), sphere2.GetPosition());
 			return distance < sphere1.GetRadius() - sphere2.GetRadius();
 		}
 
-		static bool Contains(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		static bool Contains(BoxBoundingVolume& box1, BoxBoundingVolume& box2)
 		{
 			return false;
 		}
 
-		static bool Contains(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere)
+		static bool Contains(BoxBoundingVolume& box, SphereBoundingVolume& sphere)
 		{
 			auto size = box.GetSize();
-			auto transformation = box.GetTransformation();
+			auto transformation = box.GetTransformationWithoutScale();
 			auto transformationInverse = glm::inverse(transformation);
 			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
 			
@@ -201,7 +201,7 @@ namespace NPhysics
 		}
 
 		//sphere 1 collides with sphere2
-		static std::shared_ptr<Contact> ResolveCollision(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2)
+		static std::shared_ptr<Contact> ResolveCollision(SphereBoundingVolume& sphere1, SphereBoundingVolume& sphere2)
 		{
 			glm::vec3 position1 = sphere1.GetPosition();
 			glm::vec3 position2 = sphere2.GetPosition();
@@ -229,15 +229,15 @@ namespace NPhysics
 			return nullptr;
 		}
 
-		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2)
+		static std::shared_ptr<Contact> ResolveCollision(BoxBoundingVolume& box1, BoxBoundingVolume& box2)
 		{
 			return std::make_shared<Contact>(glm::vec3(0.0f), glm::vec3(0.0f), 0.0f);
 		}
 
-		static std::shared_ptr<Contact> ResolveCollision(const BoxBoundingVolume& box, const SphereBoundingVolume& sphere, float sign)
+		static std::shared_ptr<Contact> ResolveCollision(BoxBoundingVolume& box, SphereBoundingVolume& sphere, float sign)
 		{
 			auto size = box.GetSize();
-			auto transformation = box.GetTransformation();
+			auto transformation = box.GetTransformationWithoutScale();
 			auto transformationInverse = glm::inverse(transformation);
 			auto centerInBoxSpace = transformationInverse * glm::vec4(sphere.GetPosition(), 1.0f);
 
@@ -279,7 +279,7 @@ namespace NPhysics
 			}			
 		}
 
-		static bool OverlapOnAxis(const BoxBoundingVolume& box1, const BoxBoundingVolume& box2, const glm::vec3& axis)
+		static bool OverlapOnAxis(BoxBoundingVolume& box1, BoxBoundingVolume& box2, const glm::vec3& axis)
 		{
 			real distance1 = TransformToAxis(box1, axis);
 			real distance2 = TransformToAxis(box2, axis);
@@ -302,9 +302,9 @@ namespace NPhysics
 			return isOverlapping;
 		}
 
-		static inline real TransformToAxis(const BoxBoundingVolume& box, const glm::vec3& axis)
+		static inline real TransformToAxis(BoxBoundingVolume& box, const glm::vec3& axis)
 		{
-			auto transformation = box.GetTransformation();
+			auto transformation = box.GetTransformationWithoutScale();
 			glm::vec3 halfSize = box.GetSize() * 0.5f;
 
 			glm::vec4 axis0 = transformation[0];

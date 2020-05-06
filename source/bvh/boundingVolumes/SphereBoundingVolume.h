@@ -10,8 +10,13 @@ namespace NPhysics
 	{
 	public:
 		SphereBoundingVolume();
-		SphereBoundingVolume(const glm::vec3& center, float radius);
-		SphereBoundingVolume(const SphereBoundingVolume& sphere1, const SphereBoundingVolume& sphere2);
+		SphereBoundingVolume(
+			const glm::vec3& parentPosition,
+			float radius,
+			const glm::vec3& translation = { glm::vec3(0.0f) },
+			const glm::vec3& scale = { glm::vec3(1.0f) },
+			const glm::vec3& rotation = {glm::vec3(0.0f)});
+		SphereBoundingVolume(SphereBoundingVolume& sphere1, SphereBoundingVolume& sphere2);
 
 		~SphereBoundingVolume() = default;
 
@@ -23,15 +28,27 @@ namespace NPhysics
 		bool Contains(std::shared_ptr<IBoundingVolume> volume) const override;
 		const glm::mat3 GetInertiaTensorMatrix(float mass, bool isShell) const override;
 
+		void SetParentTranslation(const glm::vec3& translation) override;
 		void SetPosition(const glm::vec3& position) override;
-		glm::vec3 GetPosition() const override { return mCenter; }
+		glm::vec3 GetPosition() override;
 
 		real GetRadius() const { return mRadius; }
+		glm::vec3 GetMinPoint() override;
+		glm::vec3 GetMaxPoint() override;
 		glm::vec3 GetSize() const override { return glm::vec3(mRadius*2.0f); }
-		void SetRadius(real radius) { mRadius = radius; }
+		glm::vec3 GetParentTranslation() const override { return mParentTranslation; }
+
+		void SetRadius(real radius);
 		void SetCenter(const glm::vec3& center) { mCenter = center; }
-		
-		glm::mat4 GetTransformation() const override { return mTransformation; }
+
+		void SetLocalTransformation(const glm::vec3& translation, const glm::vec3& scale, const glm::vec3& rotation) override;
+
+		glm::mat4 GetTransformationWithoutScale() override;
+
+		glm::vec3 GetLocalTranslation() const override { return mLocalTranslation; }
+		glm::vec3 GetLocalRotation() const override { return mLocalRotation; }
+
+		void SetParentTransformation(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation) override;
 
 		std::shared_ptr<IBoundingVolume> Clone() override;
 
@@ -39,9 +56,28 @@ namespace NPhysics
 		static std::shared_ptr<IBoundingVolume> Create();
 
 	private:
+		void CalculateMinMaxPoints();
+		void CalculateTransformation();
+		void CalculateLocalTransformationWithoutScale();
+		void UpdateDirty();
+
+	private:
 		glm::vec3 mCenter;
 		real mRadius;
+		glm::mat4 mLocalTransformationWithoutScale;
+		glm::vec3 mMinPoint;
+		glm::vec3 mMaxPoint;
+
+		glm::vec3 mLocalTranslation;
+		glm::vec3 mLocalScale;
+		glm::vec3 mLocalRotation;
+
+		glm::vec3 mParentTranslation;
+		glm::vec3 mParentRotation;
+		glm::vec3 mParentScale;
 		glm::mat4 mTransformation;
+
+		bool mIsDirty;
 	};
 };
 

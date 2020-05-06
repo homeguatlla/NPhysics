@@ -5,11 +5,11 @@ namespace NPhysics
 {
 	std::map<std::string, InstantiableObject::BoundingVolumeFunction> InstantiableObject::mBoundingVolumeFactory;
 
-	std::shared_ptr<NPhysics::IBoundingVolume> InstantiableObject::CreateBoundingVolume(const std::string& name, const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation)
+	std::shared_ptr<NPhysics::IBoundingVolume> InstantiableObject::CreateBoundingVolume(const std::string& name, const glm::mat4& parentTransformation)
 	{
 		if (mBoundingVolumeFactory.find(name) != mBoundingVolumeFactory.end())
 		{
-			return mBoundingVolumeFactory[name](position, scale, rotation);
+			return mBoundingVolumeFactory[name](parentTransformation);
 		}
 		else
 		{
