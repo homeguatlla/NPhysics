@@ -22,7 +22,7 @@ namespace NPhysics
 		void AddRigidBody(std::shared_ptr<RigidBody> body, std::shared_ptr<IBoundingVolume> volume);
 		void RegisterRigidBodyForceGenerator(std::shared_ptr<RigidBody> body, std::shared_ptr<IBoundingVolume> volume, std::shared_ptr<IForceGenerator<RigidBody>> forceGenerator);
 
-		[[deprecated("Each IBoundingVolume should implement its own inertia tensor matrix")]]
+		[[deprecated("Each IBoundingVolume should implement its own inertia tensor matrix.")]]
 		static glm::mat3 GetInertiaTensorMatrix(real mass, const glm::vec3& size)
 		{
 			real dx = size.x * size.x;
